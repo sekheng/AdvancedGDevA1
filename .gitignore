@@ -1,0 +1,58 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.sdf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+AI_Prog.opensdf
+Base/Debug/Base.tlog/Base.lastbuildstate
+Base/Debug/Base.tlog/CL.read.1.tlog
+Base/Debug/Base.tlog/CL.write.1.tlog
+Base/Debug/Base.tlog/cl.command.1.tlog
+Base/Debug/Base.tlog/link.command.1.tlog
+Base/Debug/Base.tlog/link.read.1.tlog
+Base/Debug/Base.tlog/link.write.1.tlog
+Base/Debug/vc120.idb
+Common/Debug/Common.tlog/CL.read.1.tlog
+Common/Debug/Common.tlog/CL.write.1.tlog
+Common/Debug/Common.tlog/Common.lastbuildstate
+Common/Debug/Common.tlog/Lib-link.read.1.tlog
+Common/Debug/Common.tlog/Lib-link.write.1.tlog
+Common/Debug/Common.tlog/cl.command.1.tlog
+Common/Debug/Common.tlog/lib.command.1.tlog
+Common/Debug/vc120.idb
+*.suo
+Base/Debug/Base.log
+Base/Debug/vc120.pdb
+Common/Debug/Common.log
+Debug/Base.ilk
+Debug/Base.pdb
+*.lastbuildstate
+*.tlog
+Debug/
+Release/
+NYP_Framework/Base/Debug/
+NYP_Framework/NYP_Framework.opensdf
