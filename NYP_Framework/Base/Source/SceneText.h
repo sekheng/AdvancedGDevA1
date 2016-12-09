@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "GenericEntity.h"
+#include "DetectMemoryLeak.h"
 
 class ShaderProgram;
 class SceneManager;

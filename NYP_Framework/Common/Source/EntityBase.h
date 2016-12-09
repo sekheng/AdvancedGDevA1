@@ -34,6 +34,16 @@ protected:
 
 	bool isDone;
 	bool m_bCollider;
+
+    //union Vector3Union
+    //{
+    //    int ActualValue;                        // ^^^^^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^ This is all Actual Value
+    //    short highBytes, lowBytes;     //  ^^^^^^^^ ^^^^^^^^ // This is highBytes
+    //                                                    //                                ^^^^^^^^ ^^^^^^^^ Low bytes
+    //    char data[4];                           // ^^^^^^^^ // This is data[0]
+
+    //};
+    //Vector3Union TryingIt;
 };
 
 #endif // ENTITY_BASE_H

@@ -16,22 +16,22 @@ void EntityManager::Update(double _dt)
 		(*it)->Update(_dt);
 	}
 
-	// Clean up entities that are done
-	it = entityList.begin();
-	while (it != end)
-	{
-		if ((*it)->IsDone())
-		{
-			// Delete if done
-			delete *it;
-			it = entityList.erase(it);
-		}
-		else
-		{
-			// Move on otherwise
-			++it;
-		}
-	}
+	//// Clean up entities that are done
+	//it = entityList.begin();
+	//while (it != end)
+	//{
+	//	if ((*it)->IsDone())
+	//	{
+	//		// Delete if done
+	//		delete *it;
+	//		it = entityList.erase(it);
+	//	}
+	//	else
+	//	{
+	//		// Move on otherwise
+	//		++it;
+	//	}
+	//}
 }
 
 // Render all entities

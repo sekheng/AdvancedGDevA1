@@ -5,9 +5,9 @@
 #include "RenderHelper.h"
 
 GroundEntity::GroundEntity(Mesh* _modelMesh1, Mesh* _modelMesh2) 
-	: position(0.0f, 0.0f, 0.0f)
+	: /*position(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
-	, size(1.0f, 1.0f, 1.0f)
+	,*/ size(1.0f, 1.0f, 1.0f)
 	, grids(10.0f, 0.0f, 10.0f)
 	, maxBoundary(1.0f, 1.0f, 1.0f)
 	, minBoundary(1.0f, 1.0f, 1.0f)
@@ -16,6 +16,8 @@ GroundEntity::GroundEntity(Mesh* _modelMesh1, Mesh* _modelMesh2)
 {
 	modelMesh[0] = _modelMesh1;
 	modelMesh[1] = _modelMesh2;
+    position.SetZero();
+    scale.Set(1, 1, 1);
 }
 
 GroundEntity::~GroundEntity()

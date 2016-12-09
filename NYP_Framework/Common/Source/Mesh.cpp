@@ -40,12 +40,24 @@ void Mesh::Render()
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	if(mode == DRAW_LINES)
-		glDrawElements(GL_LINES, indexSize, GL_UNSIGNED_INT, 0);
-	else if(mode == DRAW_TRIANGLE_STRIP)
-		glDrawElements(GL_TRIANGLE_STRIP, indexSize, GL_UNSIGNED_INT, 0);
-	else
-		glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+	//if(mode == DRAW_LINES)
+	//	glDrawElements(GL_LINES, indexSize, GL_UNSIGNED_INT, 0);
+	//else if(mode == DRAW_TRIANGLE_STRIP)
+	//	glDrawElements(GL_TRIANGLE_STRIP, indexSize, GL_UNSIGNED_INT, 0);
+	//else
+	//	glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+    switch (mode)
+    {
+    case DRAW_LINES:
+        	glDrawElements(GL_LINES, indexSize, GL_UNSIGNED_INT, 0);
+        break;
+    case DRAW_TRIANGLE_STRIP:
+        	glDrawElements(GL_TRIANGLE_STRIP, indexSize, GL_UNSIGNED_INT, 0);
+        break;
+    default:
+        glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+        break;
+    }
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -76,12 +88,24 @@ void Mesh::Render(unsigned offset, unsigned count)
 	//glDrawArrays(GL_TRIANGLES, offset, count);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-	if(mode == DRAW_LINES)
-		glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
-	else if(mode == DRAW_TRIANGLE_STRIP)
-		glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
-	else
-		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+	//if(mode == DRAW_LINES)
+	//	glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+	//else if(mode == DRAW_TRIANGLE_STRIP)
+	//	glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+	//else
+	//	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+    switch (mode)
+    {
+    case DRAW_LINES:
+        	glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+        break;
+    case DRAW_TRIANGLE_STRIP:
+        	glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+        break;
+    default:
+        	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+        break;
+    }
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);

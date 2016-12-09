@@ -4,6 +4,7 @@
 #include "SingletonTemplate.h"
 #include <list>
 #include "Vector3.h"
+#include "DetectMemoryLeak.h"
 
 class EntityBase;
 

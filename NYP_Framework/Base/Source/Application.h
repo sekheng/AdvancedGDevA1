@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include "timer.h"
+#include "DetectMemoryLeak.h"
 
 struct GLFWwindow;
 

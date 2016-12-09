@@ -154,7 +154,7 @@ void FPSCamera::Update(double dt)
 	}
 }
 
-Vector3 FPSCamera::GetCameraPos() const
+Vector3 &FPSCamera::GetCameraPos() 
 {
 	return position;
 }
@@ -163,7 +163,7 @@ void FPSCamera::SetCameraPos(Vector3 pos)
 {
 	position = pos;
 }
-Vector3 FPSCamera::GetCameraTarget() const
+Vector3 &FPSCamera::GetCameraTarget() 
 {
 	return target;
 }
@@ -171,7 +171,7 @@ void FPSCamera::SetCameraTarget(Vector3 target)
 {
 	this->target = target;
 }
-Vector3 FPSCamera::GetCameraUp() const
+Vector3 &FPSCamera::GetCameraUp() 
 {
 	return up;
 }

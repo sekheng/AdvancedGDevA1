@@ -16,13 +16,13 @@ public:
 	virtual void Update(double _dt);
 	virtual void Render();
 
-	inline void SetPosition(const Vector3& _value){ position = _value; };
-	inline Vector3 GetPosition(){ return position; };
+	//inline void SetPosition(const Vector3& _value){ position = _value; };
+	//inline Vector3 GetPosition(){ return position; };
 
 	float GetTerrainHeight(Vector3 position);
 
-	inline void SetScale(const Vector3& _value){ scale = _value; };
-	inline Vector3 GetScale(){ return scale; };
+	//inline void SetScale(const Vector3& _value){ scale = _value; };
+	//inline Vector3 GetScale(){ return scale; };
 
 	// size is included for completeness. we assume that the mesh has a size of 1.0X1.0 square units
 	// use scale to change the ground texture sizes
@@ -36,8 +36,8 @@ public:
 	Vector3 GetMinBoundary(void);
 
 private:
-	Vector3 position;
-	Vector3 scale;
+	//Vector3 position;
+	//Vector3 scale;
 	Vector3 size;
 	Vector3 grids;
 	Vector3 maxBoundary;
