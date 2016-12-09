@@ -47,6 +47,6 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(false);
-	EntityManager::GetInstance()->AddEntity(result);
+	//EntityManager::GetInstance()->AddEntity(result);
 	return result;
 }

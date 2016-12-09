@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "DetectMemoryLeak.h"
+#include <vector>
 
 class ShaderProgram;
 class SceneManager;
@@ -37,6 +38,8 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
+
+    std::vector<GenericEntity*> m_activeList;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };
