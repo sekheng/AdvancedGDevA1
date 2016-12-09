@@ -252,19 +252,20 @@ void CPlayerInfo::Update(double dt)
 		KeyboardController::GetInstance()->IsKeyDown('D'))
 	{
         Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        Vector3 normalizedView = viewVector.Normalized();
 		Vector3 rightUV(0,0,0);
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
-            attachedCamera->GetCameraPos() += viewVector.Normalized() * (float)m_dSpeed * (float)dt;
+            attachedCamera->GetCameraPos() += normalizedView * (float)m_dSpeed * (float)dt;
 		}
 		else if (KeyboardController::GetInstance()->IsKeyDown('S'))
 		{
-            attachedCamera->GetCameraPos() -= viewVector.Normalized() * (float)m_dSpeed * (float)dt;
+            attachedCamera->GetCameraPos() -= normalizedView * (float)m_dSpeed * (float)dt;
 		}
 		if (KeyboardController::GetInstance()->IsKeyDown('A'))
 		{
             if (rightUV.IsZero())
-                rightUV = (viewVector.Normalized()).Cross(attachedCamera->GetCameraUp());
+                rightUV = (normalizedView).Cross(attachedCamera->GetCameraUp());
 			rightUV.y = 0;
 			rightUV.Normalize();
             attachedCamera->GetCameraPos() -= rightUV * (float)m_dSpeed * (float)dt;
@@ -272,7 +273,7 @@ void CPlayerInfo::Update(double dt)
 		else if (KeyboardController::GetInstance()->IsKeyDown('D'))
 		{
             if (rightUV.IsZero())
-                rightUV = (viewVector.Normalized()).Cross(attachedCamera->GetCameraUp());
+                rightUV = (normalizedView).Cross(attachedCamera->GetCameraUp());
 			rightUV.y = 0;
 			rightUV.Normalize();
 			attachedCamera->GetCameraPos() += rightUV * (float)m_dSpeed * (float)dt;

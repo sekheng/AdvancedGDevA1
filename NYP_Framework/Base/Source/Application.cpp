@@ -71,7 +71,11 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", NULL, NULL);
+    const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());	//Obtain Width and Height values from the monitor;
+    m_window_height = mode->height;
+    m_window_width = mode->width;
+    
+    m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -111,14 +115,22 @@ void Application::Init()
 void Application::Run()
 {
 	SceneManager::GetInstance()->SetActiveScene("Start");
-	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+    // Active Window Detection
+    HWND hwnd = GetActiveWindow();
+    UpdateInput();
+    PostInputUpdate();
+    m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		glfwPollEvents();
-		UpdateInput();
-		
-		SceneManager::GetInstance()->Update(m_timer.getElapsedTime());
-		SceneManager::GetInstance()->Render();
+        if (hwnd == GetActiveWindow())
+        {
+            UpdateInput();
+
+            SceneManager::GetInstance()->Update(m_timer.getElapsedTime());
+            SceneManager::GetInstance()->Render();
+		    PostInputUpdate();
+        }
 
 		//Swap buffers
 		glfwSwapBuffers(m_window);
@@ -126,7 +138,6 @@ void Application::Run()
 
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 		
-		PostInputUpdate();
 	}
 	SceneManager::GetInstance()->Exit();
 }
@@ -142,9 +153,12 @@ void Application::Exit()
 void Application::UpdateInput()
 {
 	// Update Mouse Position
-	double mouse_currX, mouse_currY;
-	glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
-	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
+	//double mouse_currX, mouse_currY;
+	//glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
+    POINT mousePosition;
+    GetCursorPos(&mousePosition);
+
+    MouseController::GetInstance()->UpdateMousePosition(-mousePosition.x, -mousePosition.y);
 
 	// Update Keyboard Input
 	for (int i = 0; i < KeyboardController::MAX_KEYS; ++i)
@@ -156,11 +170,15 @@ void Application::PostInputUpdate()
 	// If mouse is centered, need to update the center position for next frame
 	if (MouseController::GetInstance()->GetKeepMouseCentered())
 	{
-		double mouse_currX, mouse_currY;
-		mouse_currX = m_window_width >> 1;
-		mouse_currY = m_window_height >> 1;
-		MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
-		glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
+		//double mouse_currX, mouse_currY;
+		//mouse_currX = m_window_width >> 1;
+		//mouse_currY = m_window_height >> 1;
+        POINT mousePosition;
+        GetCursorPos(&mousePosition);
+
+        MouseController::GetInstance()->UpdateMousePosition(-mousePosition.x, -mousePosition.y);
+		//glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
+        SetCursorPos(m_window_width / 2, m_window_height / 2);
 	}
 
 	// Call input systems to update at end of frame
