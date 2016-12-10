@@ -113,6 +113,21 @@ bool EntityBase::onNotify(EntityBase &zeEvent)
     return false;
 }
 
+bool EntityBase::onNotify(float &zeEvent)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(float &zeEvent1, float &zeEvent2)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(std::string &zeEvent)
+{
+    return false;
+}
+
 const std::string &EntityBase::getName()
 {
     return name_;

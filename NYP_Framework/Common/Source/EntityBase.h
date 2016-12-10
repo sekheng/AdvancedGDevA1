@@ -27,6 +27,10 @@ public:
 	// Check if this entity has a collider class parent
 
     virtual bool onNotify(EntityBase &zeEvent);
+    virtual bool onNotify(float &zeEvent);
+    virtual bool onNotify(float &zeEvent1, float &zeEvent2);
+    virtual bool onNotify(std::string &zeEvent);
+
     bool CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
     bool CheckOverlap(const Vector3 &thisMinAABB, const Vector3 &thisMaxAABB, const Vector3 &thatMinAABB, const Vector3 &thatMaxAABB);
 

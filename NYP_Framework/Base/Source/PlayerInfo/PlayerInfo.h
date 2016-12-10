@@ -2,6 +2,7 @@
 #include "Vector3.h"
 #include "../FPSCamera.h"
 #include "../GroundEntity.h"
+#include "../WeaponInfo/Weapon.h"
 
 class CPlayerInfo
 {
@@ -111,4 +112,5 @@ private:
 	double m_dFallAcceleration;
 
 	FPSCamera* attachedCamera;
+
 };

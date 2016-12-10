@@ -20,12 +20,15 @@ void GenericEntity::Update(double _dt)
 
 void GenericEntity::Render()
 {
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	modelStack.Translate(position.x, position.y, position.z);
-	modelStack.Scale(scale.x, scale.y, scale.z);
-	RenderHelper::RenderMesh(modelMesh);
-	modelStack.PopMatrix();
+    if (modelMesh)
+    {
+        MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+        modelStack.PushMatrix();
+        modelStack.Translate(position.x, position.y, position.z);
+        modelStack.Scale(scale.x, scale.y, scale.z);
+        RenderHelper::RenderMesh(modelMesh);
+        modelStack.PopMatrix();
+    }
 }
 
 // Set the maxAABB and minAABB

@@ -22,6 +22,9 @@
     <Filter Include="SpatialPartition">
       <UniqueIdentifier>{6d6ed5d6-7e59-4a4f-95e0-7dd90254c0fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WeaponInfo">
+      <UniqueIdentifier>{64b1eedf-8899-49c5-8b25-feb5479007a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="Source\SpatialPartition\QuadTree.cpp">
       <Filter>SpatialPartition</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Weapon.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -106,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="Source\SpatialPartition\QuadTree.h">
       <Filter>SpatialPartition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Weapon.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
