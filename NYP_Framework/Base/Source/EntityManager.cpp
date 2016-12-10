@@ -89,6 +89,11 @@ EntityManager::EntityManager()
 // Destructor
 EntityManager::~EntityManager()
 {
+    for (std::list<EntityBase*>::iterator it = entityList.begin(), end = entityList.end(); it != end; ++it)
+    {
+        delete *it;
+    }
+    entityList.clear();
 }
 
 // Check for overlap

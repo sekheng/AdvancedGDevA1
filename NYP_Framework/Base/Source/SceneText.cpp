@@ -153,6 +153,14 @@ void SceneText::Init()
 	}
 	textObj[0]->SetText("HELLO WORLD");
     spatialPartition = new QuadTree();
+    spatialPartition->SetScale(Vector3(100,100,100));
+    spatialPartition->SetPosition(Vector3(0, 1, 0));
+    QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
+    for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
+    {
+        zeQuadTree->m_objectList.push_back(*it);
+    }
+    zeQuadTree->Update(0);
 }
 
 void SceneText::Update(double dt)
@@ -255,10 +263,12 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
+    spatialPartition->Render();
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         (*it)->Render();
     }
+
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;

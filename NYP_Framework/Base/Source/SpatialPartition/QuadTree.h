@@ -2,6 +2,7 @@
 
 #include "EntityBase.h"
 #include <vector>
+#include "Mesh.h"
 
 class QuadTree : public EntityBase
 {
@@ -14,4 +15,7 @@ public:
 
     std::vector<QuadTree> otherTrees;
     std::vector<EntityBase*> m_objectList;
+    QuadTree *previousQuad;
+private:
+    static Mesh *debuggingModel;
 };
