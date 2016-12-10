@@ -13,6 +13,9 @@ QuadTree::QuadTree()
     if (!debuggingModel)
         debuggingModel = MeshBuilder::GetInstance()->GetMesh("GRIDMESH");
     m_bCollider = false;
+    static size_t zeQuadID = 0;
+    name_ = "QuadTree";
+    name_.append(std::to_string(zeQuadID++));
 }
 
 QuadTree::~QuadTree()
