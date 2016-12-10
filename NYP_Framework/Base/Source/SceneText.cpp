@@ -128,6 +128,20 @@ void SceneText::Init()
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
+
+    aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, -20.0f));
+    aCube->SetCollider(true);
+    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    m_activeList.push_back(aCube);
+    aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, 20.0f));
+    aCube->SetCollider(true);
+    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    m_activeList.push_back(aCube);
+    aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, 20.0f));
+    aCube->SetCollider(true);
+    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    m_activeList.push_back(aCube);
+
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -153,7 +167,7 @@ void SceneText::Init()
 	}
 	textObj[0]->SetText("HELLO WORLD");
     spatialPartition = new QuadTree();
-    spatialPartition->SetScale(Vector3(100,100,100));
+    spatialPartition->SetScale(Vector3(1000,1000,1000));
     spatialPartition->SetPosition(Vector3(0, 1, 0));
     QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
@@ -171,6 +185,7 @@ void SceneText::Update(double dt)
     {
         (*it)->Update(dt);
     }
+    spatialPartition->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))

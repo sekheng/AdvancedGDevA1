@@ -3,6 +3,8 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
+#define MAX_NUM_OBJ 4U
+
 Mesh* QuadTree::debuggingModel = nullptr;
 
 QuadTree::QuadTree()
@@ -10,6 +12,7 @@ QuadTree::QuadTree()
     previousQuad = nullptr;
     if (!debuggingModel)
         debuggingModel = MeshBuilder::GetInstance()->GetMesh("GRIDMESH");
+    m_bCollider = false;
 }
 
 QuadTree::~QuadTree()
@@ -21,12 +24,43 @@ QuadTree::~QuadTree()
 
 void QuadTree::Update(double dt)
 {
+   
     switch (otherTrees.empty())
     {
     case true:
-        for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+        if (m_objectList.size() > MAX_NUM_OBJ)
         {
-            (*it)->Update(dt);
+            //Just the following sentences gives me a huge headache.
+            QuadTree zeTree;
+            zeTree.SetScale(scale * 0.5f);
+            zeTree.SetPosition(position + Vector3(-scale.x * 0.25f, 10, scale.z * 0.25f));
+            otherTrees.push_back(zeTree);
+            zeTree.SetPosition(position + Vector3(-scale.x * 0.25f, 10, -scale.z * 0.25f));
+            otherTrees.push_back(zeTree);
+            zeTree.SetPosition(position + Vector3(scale.x * 0.25f, 10, -scale.z * 0.25f));
+            otherTrees.push_back(zeTree);
+            zeTree.SetPosition(position + Vector3(scale.x * 0.25f, 10, scale.z * 0.25f));
+            otherTrees.push_back(zeTree);
+
+            for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+            {
+                for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+                {
+                    if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                    {
+                        quadIt->m_objectList.push_back(*it);
+                        break;
+                    }
+                }
+            }
+            m_objectList.clear();
+        }
+        else
+        {
+            for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+            {
+                (*it)->Update(dt);
+            }
         }
         break;
     default:
@@ -41,11 +75,14 @@ void QuadTree::Render()
 {
     MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
     modelStack.PushMatrix();
+    //modelStack.Rotate(90, 1, 0, 0);
     modelStack.Translate(position.x, position.y, position.z);
-    modelStack.Rotate(90, 1, 0, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
-
     RenderHelper::RenderMesh(debuggingModel);
-
     modelStack.PopMatrix();
+
+    for (std::vector<QuadTree>::iterator it = otherTrees.begin(), end = otherTrees.end(); it != end; ++it)
+    {
+        it->Render();
+    }
 }

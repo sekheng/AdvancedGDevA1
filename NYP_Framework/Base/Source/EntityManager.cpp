@@ -96,30 +96,30 @@ EntityManager::~EntityManager()
     entityList.clear();
 }
 
-// Check for overlap
-bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
-{	
-
-	return false;
-}
-
-// Check if this entity's bounding sphere collided with that entity's bounding sphere 
-bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
-{
-
-	return false;
-}
-
-// Check if this entity collided with another entity, but both must have collider
-bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
-{
-
-	return false;
-}
-
-// Check if any Collider is colliding with another Collider
-bool EntityManager::CheckForCollision(void)
-{
-
-	return false;
-}
+//// Check for overlap
+//bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
+//{	
+//
+//	return false;
+//}
+//
+//// Check if this entity's bounding sphere collided with that entity's bounding sphere 
+//bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
+//{
+//
+//	return false;
+//}
+//
+//// Check if this entity collided with another entity, but both must have collider
+//bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
+//{
+//
+//	return false;
+//}
+//
+//// Check if any Collider is colliding with another Collider
+//bool EntityManager::CheckForCollision(void)
+//{
+//
+//	return false;
+//}
