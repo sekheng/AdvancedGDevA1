@@ -7,7 +7,7 @@
 GroundEntity::GroundEntity(Mesh* _modelMesh1, Mesh* _modelMesh2) 
 	: /*position(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
-	, scale(1.0f, 1.0f, 1.0f)
+	, size(1.0f, 1.0f, 1.0f)
 	, */grids(10.0f, 0.0f, 10.0f)
 	, maxBoundary(1.0f, 1.0f, 1.0f)
 	, minBoundary(1.0f, 1.0f, 1.0f)
@@ -40,15 +40,17 @@ void GroundEntity::Render()
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	// Since the ground textures are displayed with the centre as the reference point,
-	// we need to offset the tiles by half of the tile scale
-	modelStack.Translate(scale.x / 2, scale.z / 2, 0.0f);
+	// we need to offset the tiles by half of the tile size
+	//modelStack.Translate(size.x / 2, size.z / 2, 0.0f);
+    modelStack.Translate(0.5f, 0.5f, 0);
 	for (int x = 0; x < (int)grids.x; x++)
 	{
 		for (int z = 0; z < (int)grids.z; z++)
 		{
 			modelStack.PushMatrix();
 			// the y- and z- components are swapped because of the way that MVP is calculated inside RenderMesh
-			modelStack.Translate(x - (grids.x * scale.x) / 2, z - (grids.z * scale.z) / 2, 0.0f);
+			//modelStack.Translate(x - (grids.x * size.x) / 2, z - (grids.z * size.z) / 2, 0.0f);
+            modelStack.Translate(x - (grids.x * 0.5f), z - (grids.z * 0.5f), 0.f);
 			if (((x * (int)(grids.x - 1) + z) % 2) == 0)
 				RenderHelper::RenderMesh(modelMesh[0]);
 			else
@@ -69,10 +71,13 @@ Vector3 GroundEntity::GetMaxBoundary(void)
 { 
 	if (!m_bMaxBoundaryDefined)
 	{
-		maxBoundary = Vector3(	position.x + (grids.x*scale.x*scale.x) / 2.0f, 
-								position.y + (grids.y*scale.y*scale.y) / 2.0f, 
-								position.z + (grids.z*scale.z*scale.z) / 2.0f);
-		m_bMaxBoundaryDefined = true;
+		//maxBoundary = Vector3(	position.x + (grids.x*size.x*scale.x) / 2.0f, 
+		//						position.y + (grids.y*size.y*scale.y) / 2.0f, 
+		//						position.z + (grids.z*size.z*scale.z) / 2.0f);
+        maxBoundary = Vector3(	position.x + (grids.x*scale.x) / 2.0f, 
+        						position.y + (grids.y*scale.y) / 2.0f, 
+        						position.z + (grids.z*scale.z) / 2.0f);
+        m_bMaxBoundaryDefined = true;
 	}
 	return maxBoundary;
 };
@@ -80,9 +85,9 @@ Vector3 GroundEntity::GetMinBoundary(void)
 { 
 	if (!m_bMinBoundaryDefined)
 	{
-		minBoundary = Vector3(	position.x - (grids.x*scale.x*scale.x) / 2.0f, 
-								position.y - (grids.y*scale.y*scale.y) / 2.0f, 
-								position.z - (grids.z*scale.z*scale.z) / 2.0f);
+		minBoundary = Vector3(	position.x - (grids.x/**size.x*/*scale.x) / 2.0f, 
+								position.y - (grids.y/**size.y*/*scale.y) / 2.0f, 
+								position.z - (grids.z/**size.z*/*scale.z) / 2.0f);
 		m_bMinBoundaryDefined = true;
 	}
 	return minBoundary;
