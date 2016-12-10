@@ -26,8 +26,8 @@ public:
 
 	// size is included for completeness. we assume that the mesh has a size of 1.0X1.0 square units
 	// use scale to change the ground texture sizes
-	inline void SetSize(const Vector3& _value) { size = _value; };
-	inline Vector3 GetSize(){ return size; };
+	//inline void SetSize(const Vector3& _value) { size = _value; };
+	//inline Vector3 GetSize(){ return size; };
 
 	inline void SetGrids(const Vector3& _value) { grids = _value; };
 	inline Vector3 GetGrids(){ return grids; };
@@ -38,7 +38,7 @@ public:
 private:
 	//Vector3 position;
 	//Vector3 scale;
-	Vector3 size;
+	//Vector3 size;
 	Vector3 grids;
 	Vector3 maxBoundary;
 	Vector3 minBoundary;

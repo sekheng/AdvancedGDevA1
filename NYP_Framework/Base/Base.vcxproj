@@ -22,6 +22,7 @@
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
+    <ClCompile Include="Source\SpatialPartition\QuadTree.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
   </ItemGroup>

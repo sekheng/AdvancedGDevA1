@@ -63,6 +63,9 @@
     <ClCompile Include="Source\GenericEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SpatialPartition\QuadTree.cpp">
+      <Filter>SpatialPartition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">

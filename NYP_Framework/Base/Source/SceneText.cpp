@@ -20,6 +20,7 @@
 #include "SpriteEntity.h"
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
+#include "SpatialPartition\QuadTree.h"
 
 #include <iostream>
 using namespace std;
@@ -151,6 +152,7 @@ void SceneText::Init()
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
 	textObj[0]->SetText("HELLO WORLD");
+    spatialPartition = new QuadTree();
 }
 
 void SceneText::Update(double dt)
@@ -279,8 +281,7 @@ void SceneText::Exit()
     }
     m_activeList.clear();
 
-
-
+    delete spatialPartition;
 
 	// Delete the lights
 	delete lights[0];

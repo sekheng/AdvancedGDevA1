@@ -29,8 +29,8 @@ public:
 
 	// size is included for completeness. we assume that the mesh has a size of 1.0X1.0 square units
 	// use scale to change the ground texture sizes
-	inline void SetSize(const Vector3& _value) { size = _value; };
-	inline Vector3 GetSize(){ return size; };
+	//inline void SetSize(const Vector3& _value) { size = _value; };
+	//inline Vector3 GetSize(){ return size; };
 
 	Vector3 GetBoundary(void);
 
@@ -38,7 +38,7 @@ public:
 
 
 private:
-	Vector3 size, boundary;
+	Vector3 /*size, */boundary;
 	bool m_bBoundaryDefined;
 	Mesh* modelMesh[6];
 };
