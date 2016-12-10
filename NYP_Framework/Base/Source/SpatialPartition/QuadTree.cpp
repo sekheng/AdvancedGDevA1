@@ -2,6 +2,9 @@
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#ifdef _DEBUG
+#include <assert.h>
+#endif
 
 #define MAX_NUM_OBJ 4U
 
@@ -54,9 +57,12 @@ void QuadTree::Update(double dt)
                         quadIt->m_objectList.push_back(*it);
                         break;
                     }
+                    //assert(quadIt != quadEND - 1);
                 }
             }
             m_objectList.clear();
+            for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+                quadIt->previousQuad = this;
         }
         else
         {
