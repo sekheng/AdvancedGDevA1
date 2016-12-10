@@ -30,7 +30,11 @@ QuadTree::~QuadTree()
 
 void QuadTree::Update(double dt)
 {
-   
+    while (!waitingList.empty())
+    {
+        m_objectList.push_back(waitingList.back());
+        waitingList.pop_back();
+    }
     switch (otherTrees.empty())
     {
     case true:
@@ -66,9 +70,19 @@ void QuadTree::Update(double dt)
         }
         else
         {
+            std::vector<size_t> removeStuffInObjectList;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
             {
                 (*it)->Update(dt);
+                if (CheckAABBCollision(this, *it) == false)
+                {
+                    previousQuad->waitingList.push_back(*it);
+                    removeStuffInObjectList.push_back(it - m_objectList.begin());
+                }
+            }
+            for (std::vector<size_t>::iterator it = removeStuffInObjectList.begin(), end = removeStuffInObjectList.end(); it != end; ++it)
+            {
+                m_objectList.erase(m_objectList.begin() + (*it));
             }
         }
         break;
@@ -77,6 +91,33 @@ void QuadTree::Update(double dt)
         {
             it->Update(dt);
         }
+
+        if (!m_objectList.empty())
+        {
+            std::vector<size_t> removeStuffInObjectList;
+            for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+            {
+                for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+                {
+                    if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                    {
+                        removeStuffInObjectList.push_back(it - m_objectList.begin());
+                        quadIt->m_objectList.push_back((*it));
+                        break;
+                    }
+                }
+            }
+            for (std::vector<size_t>::iterator it = removeStuffInObjectList.begin(), end = removeStuffInObjectList.end(); it != end; ++it)           
+                m_objectList.erase(m_objectList.begin() + (*it));            
+            if (!m_objectList.empty())
+            {
+                for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+                {
+                    previousQuad->m_objectList.push_back(*it);
+                }
+            }
+        }
+
     }
 }
 
@@ -94,4 +135,23 @@ void QuadTree::Render()
     {
         it->Render();
     }
+}
+
+bool QuadTree::onNotify(EntityBase &zeEvent)
+{
+    if (otherTrees.empty())
+    {
+        for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+        {
+            if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
+            {
+                return quadIt->onNotify(zeEvent);
+            }
+        }
+    }
+    else
+    {
+        waitingList.push_back(&zeEvent);
+    }
+    return true;
 }
