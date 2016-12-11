@@ -216,7 +216,7 @@ bool SceneNode::DeleteAllChildren()
 {
 	bool bResult = false;
 	vector <SceneNode*>::iterator it = theChildren.begin();
-	while (it != theChildren.end())
+	while (it != theChildren.end()-1)
 	{
 		if ((*it)->DeleteAllChildren())
 		{
@@ -359,10 +359,10 @@ int SceneNode::GetNumOfChild()
 // Update the Scene Graph
 void SceneNode::Update(void)
 {
-	/*if (theUpdateTransformation)
+	if (theUpdateTransformation)
 	{
 		ApplyTransform(GetUpdateTransform());
-	}*/
+	}
 	// Update the children
 	std::vector<SceneNode*>::iterator it;
 	for (it = theChildren.begin(); it != theChildren.end(); ++it)

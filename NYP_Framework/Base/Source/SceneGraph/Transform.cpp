@@ -3,7 +3,7 @@
 using namespace std;
 // Default Constructor
 Transform::Transform(void)
-	//: theUpdateTransformation(NULL)
+	: theUpdateTransformation(NULL)
 {
 	Mtx.SetToIdentity();
 	DefaultMtx.SetToIdentity();
@@ -16,11 +16,11 @@ Transform::Transform(const float dx, const float dy, const float dz)
 // Destructor
 Transform::~Transform(void)
 {
-	/*if (theUpdateTransformation)
+	if (theUpdateTransformation)
 	{
 		delete theUpdateTransformation;
 		theUpdateTransformation = NULL;
-	}*/
+	}
 }
 // Apply a translation to the Transformation Matrix
 void Transform::ApplyTranslate(const float dx, const float dy, const float dz)
@@ -124,17 +124,17 @@ void Transform::PrintSelf(void) const
 		<< endl;
 }
 
-//void Transform::SetUpdateTransformation(UpdateTransformation *theUpdateTransformation)
-//{
-//	this->theUpdateTransformation = theUpdateTransformation;
-//}
-//Mtx44 Transform::GetUpdateTransform()
-//{
-//	if (theUpdateTransformation == NULL)
-//	{
-//		return DefaultMtx;
-//	}
-//	theUpdateTransformation->Update();
-//
-//	return theUpdateTransformation->GetUpdateTransformation();
-//}
+void Transform::SetUpdateTransformation(UpdateTransformation *theUpdateTransformation)
+{
+	this->theUpdateTransformation = theUpdateTransformation;
+}
+Mtx44 Transform::GetUpdateTransform()
+{
+	if (theUpdateTransformation == NULL)
+	{
+		return DefaultMtx;
+	}
+	theUpdateTransformation->Update();
+
+	return theUpdateTransformation->GetUpdateTransformation();
+}

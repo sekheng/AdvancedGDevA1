@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "SpatialPartition\QuadTree.h"
+#include "SceneGraph\UpdateTransformation.h"
 #include "SceneGraph/SceneGraph.h"
 
 #include <iostream>
@@ -147,6 +148,11 @@ void SceneText::Init()
 	//debuging for scene graph, START
 	GenericEntity* baseCube = Create::Entity("cube", Vector3(0.0f, 0.0f, 0.0f));
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
+
+	UpdateTransformation* baseMtx = new UpdateTransformation();
+	baseMtx->ApplyUpdate(1.f, 0.0f, 0.0f, 1.f);
+	baseMtx->SetSteps(-60, 60);
+	baseNode->SetUpdateTransformation(baseMtx);
 
 	GenericEntity* childCube = Create::Entity("cube", Vector3(0.0f, 10.0f, 0.0f));
 	SceneNode* childNode = baseNode->AddChild(childCube);

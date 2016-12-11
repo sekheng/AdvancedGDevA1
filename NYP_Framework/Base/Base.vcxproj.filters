@@ -29,7 +29,7 @@
       <UniqueIdentifier>{0941bc1d-0f18-479e-83dc-b7d41c6ebe00}</UniqueIdentifier>
     </Filter>
     <Filter Include="Projectile">
-      <UniqueIdentifier>{245abff7-686c-467e-81dd-19cdfbc0dd7c}</UniqueIdentifier>
+      <UniqueIdentifier>{968c4bcb-bf61-4f19-a90e-a859ef80de30}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,8 +87,11 @@
     <ClCompile Include="Source\SceneGraph\Transform.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneGraph\UpdateTransformation.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Projectile\Projectile.cpp">
-      <Filter>Projectile</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,8 +146,11 @@
     <ClInclude Include="Source\SceneGraph\Transform.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneGraph\UpdateTransformation.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Projectile\Projectile.h">
-      <Filter>Projectile</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
