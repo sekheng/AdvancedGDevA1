@@ -1,11 +1,11 @@
 #pragma once
 #include "Mtx44.h"
-//#include "UpdateTransformation.h"
+#include "UpdateTransformation.h"
 class Transform
 {
 protected:
 	Mtx44 Mtx, DefaultMtx;
-	//UpdateTransformation* theUpdateTransformation;
+	UpdateTransformation* theUpdateTransformation;
 public:
 	// Default Constructor
 	Transform(void);
@@ -39,8 +39,8 @@ public:
 	void Reset(void); //reset to identity
 	// Get the transformation matrix
 	Mtx44 GetTransform(void);
-	//void SetUpdateTransformation(UpdateTransformation *theUpdateTransformation = NULL);
-	//Mtx44 GetUpdateTransform();
+	void SetUpdateTransformation(UpdateTransformation *theUpdateTransformation = NULL);
+	Mtx44 GetUpdateTransform();
 	// Print Self
 	void PrintSelf(void) const;
 
