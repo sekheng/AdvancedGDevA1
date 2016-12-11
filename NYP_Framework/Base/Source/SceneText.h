@@ -39,7 +39,7 @@ private:
 
 	GenericEntity* theCube;
 
-    std::vector<GenericEntity*> m_activeList;
+    std::vector<GenericEntity*> m_activeList, m_inactiveList;
     EntityBase *spatialPartition;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered

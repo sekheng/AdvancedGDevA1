@@ -87,6 +87,9 @@
     <ClCompile Include="Source\SceneGraph\UpdateTransformation.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WeaponInfo\Projectile.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\UpdateTransformation.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WeaponInfo\Projectile.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -334,7 +334,9 @@ void SceneText::Exit()
         delete (*it);
     }
     m_activeList.clear();
-
+    for (std::vector<GenericEntity*>::iterator it = m_inactiveList.begin(), end = m_inactiveList.end(); it != end; ++it)
+        delete (*it);
+    m_inactiveList.clear();
     delete spatialPartition;
 
 	// Delete the lights
