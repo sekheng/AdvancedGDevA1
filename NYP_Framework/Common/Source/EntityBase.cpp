@@ -113,12 +113,12 @@ bool EntityBase::onNotify(EntityBase &zeEvent)
     return false;
 }
 
-bool EntityBase::onNotify(float &zeEvent)
+bool EntityBase::onNotify(const float &zeEvent)
 {
     return false;
 }
 
-bool EntityBase::onNotify(float &zeEvent1, float &zeEvent2)
+bool EntityBase::onNotify(const float &zeEvent1, const float &zeEvent2)
 {
     return false;
 }
@@ -128,7 +128,12 @@ bool EntityBase::onNotify(const std::string &zeEvent)
     return false;
 }
 
-bool EntityBase::onNotify(int &zeEvent)
+bool EntityBase::onNotify(const int &zeEvent)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(const int &zeEvent1, const int &zeEvent2)
 {
     return false;
 }

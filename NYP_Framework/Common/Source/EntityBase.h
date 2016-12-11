@@ -27,10 +27,11 @@ public:
 	// Check if this entity has a collider class parent
 
     virtual bool onNotify(EntityBase &zeEvent);
-    virtual bool onNotify(float &zeEvent);
-    virtual bool onNotify(float &zeEvent1, float &zeEvent2);
+    virtual bool onNotify(const float &zeEvent);
+    virtual bool onNotify(const float &zeEvent1, const float &zeEvent2);
     virtual bool onNotify(const std::string &zeEvent);
-    virtual bool onNotify(int &zeEvent);
+    virtual bool onNotify(const int &zeEvent);
+    virtual bool onNotify(const int &zeEvent1, const int &zeEvent2);
     virtual bool onNotify(const Vector3 &zeEvent);
     virtual bool onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2);
 
