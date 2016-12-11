@@ -20,7 +20,6 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\OBJMesh.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
-    <ClCompile Include="Source\Projectile\Projectile.cpp" />
     <ClCompile Include="Source\SceneGraph\SceneGraph.cpp" />
     <ClCompile Include="Source\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="Source\SceneGraph\Transform.cpp" />
@@ -30,6 +29,7 @@
     <ClCompile Include="Source\SpatialPartition\QuadTree.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
+    <ClCompile Include="Source\WeaponInfo\Projectile.cpp" />
     <ClCompile Include="Source\WeaponInfo\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,7 +41,6 @@
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\OBJMesh.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
-    <ClInclude Include="Source\Projectile\Projectile.h" />
     <ClInclude Include="Source\SceneGraph\SceneGraph.h" />
     <ClInclude Include="Source\SceneGraph\SceneNode.h" />
     <ClInclude Include="Source\SceneGraph\Transform.h" />
@@ -51,6 +50,7 @@
     <ClInclude Include="Source\SpatialPartition\QuadTree.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
+    <ClInclude Include="Source\WeaponInfo\Projectile.h" />
     <ClInclude Include="Source\WeaponInfo\Weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
