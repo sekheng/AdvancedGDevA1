@@ -11,6 +11,8 @@ public:
 
     virtual void Update(double dt);
 
-protected:
+    virtual bool onNotify(const std::string &zeEvent);
 
+protected:
+    unsigned char maxBullets, currBullets, maxClips, currClips;
 };

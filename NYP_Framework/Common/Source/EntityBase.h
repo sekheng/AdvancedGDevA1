@@ -43,6 +43,7 @@ public:
     const std::string &getName();
 
     bool operator==(const EntityBase &rhs);
+    bool operator!=(const EntityBase &rhs);
 
 protected:
 	Vector3 position;

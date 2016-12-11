@@ -149,3 +149,9 @@ bool EntityBase::operator==(const EntityBase &rhs)
         return true;
     return false;
 }
+
+bool EntityBase::operator!=(const EntityBase &rhs)
+{
+
+    return !(*this == rhs);
+}
