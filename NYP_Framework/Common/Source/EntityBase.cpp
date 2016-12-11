@@ -133,6 +133,16 @@ bool EntityBase::onNotify(int &zeEvent)
     return false;
 }
 
+bool EntityBase::onNotify(const Vector3 &zeEvent)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
+{
+    return false;
+}
+
 const std::string &EntityBase::getName()
 {
     return name_;
@@ -152,6 +162,5 @@ bool EntityBase::operator==(const EntityBase &rhs)
 
 bool EntityBase::operator!=(const EntityBase &rhs)
 {
-
     return !(*this == rhs);
 }

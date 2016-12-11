@@ -27,6 +27,10 @@ void Projectile::Update(double dt)
 
 bool Projectile::onNotify(const std::string &zeEvent)
 {
+    if (zeEvent.find("RESET") != std::string::npos)
+    {
+        return true;
+    }
     return false;
 }
 
