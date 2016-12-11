@@ -4,6 +4,7 @@
 #include "EntityBase.h"
 #include <string>
 #include "Collider/Collider.h"
+#include "SpatialPartition\QuadTree.h"
 
 class Mesh;
 
@@ -19,8 +20,11 @@ public:
 	// Set the maxAABB and minAABB
 	void SetAABB(Vector3 maxAABB, Vector3 minAABB);
 
+    virtual bool onNotify(EntityBase &zeEvent);
+
 protected:
 	Mesh* modelMesh;
+    QuadTree *whichQuadIsIn;
 };
 
 namespace Create

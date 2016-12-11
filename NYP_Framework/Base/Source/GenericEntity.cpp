@@ -3,10 +3,14 @@
 #include "EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#ifdef _DEBUG
+#include <assert.h>
+#endif
 
 GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
 {
+    whichQuadIsIn = nullptr;
 }
 
 GenericEntity::~GenericEntity()
@@ -50,6 +54,16 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 	result->SetPosition(_position);
 	result->SetScale(_scale);
 	result->SetCollider(false);
-	//EntityManager::GetInstance()->AddEntity(result);
+	EntityManager::GetInstance()->AddEntity(result);
 	return result;
+}
+
+bool GenericEntity::onNotify(EntityBase &zeEvent)
+{
+    if (zeEvent.getName().find("QuadTree") != std::string::npos)
+    {
+        whichQuadIsIn = dynamic_cast<QuadTree*>(&zeEvent);
+        return true;
+    }
+    return false;
 }

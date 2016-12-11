@@ -169,23 +169,24 @@ void SceneText::Init()
     spatialPartition = new QuadTree();
     spatialPartition->SetScale(Vector3(1000,1000,1000));
     spatialPartition->SetPosition(Vector3(0, 1, 0));
-    QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
+    //QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
-        zeQuadTree->m_objectList.push_back(*it);
+        //zeQuadTree->m_objectList.push_back(*it);
+        spatialPartition->onNotify(**it);
     }
-    zeQuadTree->Update(0);
+    //zeQuadTree->Update(0);
 }
 
 void SceneText::Update(double dt)
 {
 	// Update our entities
-	//EntityManager::GetInstance()->Update(dt);
+	EntityManager::GetInstance()->Update(dt);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         (*it)->Update(dt);
     }
-    spatialPartition->Update(dt);
+    //spatialPartition->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))

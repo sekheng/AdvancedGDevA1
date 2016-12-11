@@ -123,7 +123,12 @@ bool EntityBase::onNotify(float &zeEvent1, float &zeEvent2)
     return false;
 }
 
-bool EntityBase::onNotify(std::string &zeEvent)
+bool EntityBase::onNotify(const std::string &zeEvent)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(int &zeEvent)
 {
     return false;
 }
