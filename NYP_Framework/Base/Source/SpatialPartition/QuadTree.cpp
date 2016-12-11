@@ -7,7 +7,7 @@
 #endif
 
 #define MAX_NUM_OBJ 4U
-#define MAX_NUM_QUADTREE_DEPTH '9'
+#define MAX_NUM_QUADTREE_DEPTH '3'
 
 Mesh* QuadTree::debuggingModel = nullptr;
 
@@ -101,7 +101,7 @@ void QuadTree::Update(double dt)
         bool checkWholeTreeIsEmpty = true;
         for (std::vector<QuadTree>::iterator it = otherTrees.begin(), end = otherTrees.end(); it != end; ++it)
         {
-            if (it->m_objectList.empty() && it->waitingList.empty())
+            if (it->m_objectList.empty() && it->waitingList.empty() && it->otherTrees.empty())
                 continue;
             it->Update(dt);
             if (!it->onNotify("IS_EMPTY"))
