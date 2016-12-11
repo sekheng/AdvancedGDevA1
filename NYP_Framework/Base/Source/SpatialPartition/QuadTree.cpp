@@ -53,18 +53,24 @@ void QuadTree::Update(double dt)
             zeTree.SetPosition(position + Vector3(scale.x * 0.25f, 10, scale.z * 0.25f));
             otherTrees.push_back(zeTree);
 
+            std::vector<size_t> whatObjectToRemove;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
             {
                 for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
                 {
                     if (quadIt->CheckAABBCollision(&(*quadIt), *it))
                     {
-                        quadIt->m_objectList.push_back(*it);
+                        //quadIt->m_objectList.push_back(*it);
+                        quadIt->onNotify(**it);
+                        whatObjectToRemove.push_back(it - m_objectList.begin());
                         break;
                     }
                 }
             }
-            m_objectList.clear();
+            //m_objectList.clear();
+            for (std::vector<size_t>::reverse_iterator rit = whatObjectToRemove.rbegin(), rend = whatObjectToRemove.rend(); rit != rend; ++rit)
+                m_objectList.erase(m_objectList.begin() + (*rit));
+
             for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
                 quadIt->previousQuad = this;
         }
@@ -116,9 +122,9 @@ void QuadTree::Update(double dt)
                     }
                 }
             }
-            for (std::vector<size_t>::iterator it = removeStuffInObjectList.begin(), end = removeStuffInObjectList.end(); it != end; ++it)
-                m_objectList.erase(m_objectList.begin() + (*it));
-            
+            for (std::vector<size_t>::reverse_iterator rit = removeStuffInObjectList.rbegin(), rend = removeStuffInObjectList.rend(); rit != rend; ++rit)
+                m_objectList.erase(m_objectList.begin() + (*rit));
+
             // This part comes into effect when the entities doesn't fit into either of it's quads
             if (!m_objectList.empty())
             {
