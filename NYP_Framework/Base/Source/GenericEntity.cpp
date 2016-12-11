@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "SceneGraph\SceneGraph.h"
 #ifdef _DEBUG
 #include <assert.h>
 #endif
@@ -20,6 +21,7 @@ GenericEntity::~GenericEntity()
 void GenericEntity::Update(double _dt)
 {
 	// Does nothing here, can inherit & override or create your own version of this class :D
+	//SceneGraph::GetInstance()->Update();
     if (!CheckAABBCollision(this, whichQuadIsIn))
     {
         for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
@@ -34,6 +36,7 @@ void GenericEntity::Update(double _dt)
         whichQuadIsIn = whichQuadIsIn->previousQuad;
         return;
     }
+
 }
 
 void GenericEntity::Render()

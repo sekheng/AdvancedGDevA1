@@ -211,6 +211,7 @@ void SceneText::Update(double dt)
     {
         (*it)->Update(dt);
     }
+	SceneGraph::GetInstance()->Update();
     spatialPartition->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
@@ -304,10 +305,12 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
+	SceneGraph::GetInstance()->Render();
     spatialPartition->Render();
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
-        (*it)->Render();
+		if (SceneGraph::GetInstance()->GetNode(*it) == NULL)
+			(*it)->Render();
     }
 
 
