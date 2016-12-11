@@ -20,6 +20,20 @@ GenericEntity::~GenericEntity()
 void GenericEntity::Update(double _dt)
 {
 	// Does nothing here, can inherit & override or create your own version of this class :D
+    if (!CheckAABBCollision(this, whichQuadIsIn))
+    {
+        for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+        {
+            if ((**it) == *this)
+            {
+                whichQuadIsIn->m_objectList.erase(it);
+                break;
+            }
+        }
+        whichQuadIsIn->previousQuad->onNotify(*this);
+        whichQuadIsIn = whichQuadIsIn->previousQuad;
+        return;
+    }
 }
 
 void GenericEntity::Render()

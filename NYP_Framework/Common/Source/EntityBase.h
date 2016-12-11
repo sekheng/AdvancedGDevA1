@@ -42,6 +42,8 @@ public:
     void setName(const std::string &zeStr);
     const std::string &getName();
 
+    bool operator==(const EntityBase &rhs);
+
 protected:
 	Vector3 position;
 	Vector3 scale;

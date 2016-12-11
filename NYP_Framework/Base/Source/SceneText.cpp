@@ -176,6 +176,7 @@ void SceneText::Init()
         spatialPartition->onNotify(**it);
     }
     //zeQuadTree->Update(0);
+    spatialPartition->Update(0);
 }
 
 void SceneText::Update(double dt)
@@ -186,7 +187,7 @@ void SceneText::Update(double dt)
     {
         (*it)->Update(dt);
     }
-    //spatialPartition->Update(dt);
+    spatialPartition->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))

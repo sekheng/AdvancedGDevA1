@@ -142,3 +142,10 @@ void EntityBase::setName(const std::string &zeStr)
 {
     name_ = zeStr;
 }
+
+bool EntityBase::operator==(const EntityBase &rhs)
+{
+    if (name_ == rhs.name_ && position == rhs.position && scale == rhs.scale)
+        return true;
+    return false;
+}
