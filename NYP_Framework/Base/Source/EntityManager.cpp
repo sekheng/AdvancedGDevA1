@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "EntityBase.h"
 #include "Collider/Collider.h"
+#include "SceneGraph/SceneGraph.h"
 
 #include <iostream>
 using namespace std;
@@ -15,7 +16,7 @@ void EntityManager::Update(double _dt)
 	{
 		(*it)->Update(_dt);
 	}
-
+	//SceneGraph::GetInstance()->Update();//dont need update anything yet lol
 	//// Clean up entities that are done
 	//it = entityList.begin();
 	//while (it != end)
@@ -44,6 +45,7 @@ void EntityManager::Render()
 	{
 		(*it)->Render();
 	}
+	//SceneGraph::GetInstance()->Render();
 }
 
 // Render the UI entities

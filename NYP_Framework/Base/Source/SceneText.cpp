@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "SpatialPartition\QuadTree.h"
+#include "SceneGraph/SceneGraph.h"
 
 #include <iostream>
 using namespace std;
@@ -38,6 +39,7 @@ SceneText::SceneText(SceneManager* _sceneMgr)
 
 SceneText::~SceneText()
 {
+	SceneGraph::GetInstance()->Destroy();
 }
 
 void SceneText::Init()
@@ -142,6 +144,21 @@ void SceneText::Init()
     aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
 
+	//debuging for scene graph, START
+	GenericEntity* baseCube = Create::Entity("cube", Vector3(0.0f, 0.0f, 0.0f));
+	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
+
+	GenericEntity* childCube = Create::Entity("cube", Vector3(0.0f, 10.0f, 0.0f));
+	SceneNode* childNode = baseNode->AddChild(childCube);
+
+	GenericEntity* grandchildCube = Create::Entity("cube", Vector3(0.0f, -10.0f, 0.0f));
+	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
+
+	m_activeList.push_back(baseCube);
+	m_activeList.push_back(childCube);
+	m_activeList.push_back(grandchildCube);
+	//debuging for scene graph, END
+
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -150,6 +167,7 @@ void SceneText::Init()
 											 "SKYBOX_LEFT", "SKYBOX_RIGHT",
 											 "SKYBOX_TOP", "SKYBOX_BOTTOM");
 
+	
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
