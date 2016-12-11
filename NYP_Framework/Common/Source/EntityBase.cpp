@@ -123,7 +123,12 @@ bool EntityBase::onNotify(float &zeEvent1, float &zeEvent2)
     return false;
 }
 
-bool EntityBase::onNotify(std::string &zeEvent)
+bool EntityBase::onNotify(const std::string &zeEvent)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(int &zeEvent)
 {
     return false;
 }
@@ -136,4 +141,11 @@ const std::string &EntityBase::getName()
 void EntityBase::setName(const std::string &zeStr)
 {
     name_ = zeStr;
+}
+
+bool EntityBase::operator==(const EntityBase &rhs)
+{
+    if (name_ == rhs.name_ && position == rhs.position && scale == rhs.scale)
+        return true;
+    return false;
 }

@@ -29,7 +29,8 @@ public:
     virtual bool onNotify(EntityBase &zeEvent);
     virtual bool onNotify(float &zeEvent);
     virtual bool onNotify(float &zeEvent1, float &zeEvent2);
-    virtual bool onNotify(std::string &zeEvent);
+    virtual bool onNotify(const std::string &zeEvent);
+    virtual bool onNotify(int &zeEvent);
 
     bool CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
     bool CheckOverlap(const Vector3 &thisMinAABB, const Vector3 &thisMaxAABB, const Vector3 &thatMinAABB, const Vector3 &thatMaxAABB);
@@ -40,6 +41,8 @@ public:
 
     void setName(const std::string &zeStr);
     const std::string &getName();
+
+    bool operator==(const EntityBase &rhs);
 
 protected:
 	Vector3 position;
