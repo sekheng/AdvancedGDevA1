@@ -28,6 +28,9 @@
     <Filter Include="SceneGraph">
       <UniqueIdentifier>{0941bc1d-0f18-479e-83dc-b7d41c6ebe00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LevelOfDetail">
+      <UniqueIdentifier>{d3dcbd6d-2a50-4f3b-b152-9268497d3e77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -90,6 +93,9 @@
     <ClCompile Include="Source\WeaponInfo\Projectile.cpp">
       <Filter>WeaponInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LevelOfDetail\LevelOfDetails.cpp">
+      <Filter>LevelOfDetail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -148,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\Projectile.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LevelOfDetail\LevelOfDetails.h">
+      <Filter>LevelOfDetail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
