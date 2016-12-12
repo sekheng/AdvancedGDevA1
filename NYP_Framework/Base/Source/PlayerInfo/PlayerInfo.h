@@ -113,4 +113,5 @@ private:
 
 	FPSCamera* attachedCamera;
 
+    Weapon *mainWeapon;
 };

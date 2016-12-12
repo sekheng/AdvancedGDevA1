@@ -13,8 +13,12 @@ public:
 
     virtual bool onNotify(const std::string &zeEvent);
     virtual bool onNotify(const float &zeEvent);
+    virtual bool onNotify(const int &zeEvent1, const int &zeEvent2);
 
 protected:
     unsigned char maxBullets, currBullets, maxClips, currClips;
     double timeCounter, fireRate;
+
+private:
+    static size_t zeID;
 };

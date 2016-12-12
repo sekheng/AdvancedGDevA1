@@ -27,6 +27,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+    virtual bool onNotify(const std::string &zeEvent);
+
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 

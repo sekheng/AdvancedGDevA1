@@ -23,6 +23,7 @@
 #include "SpatialPartition\QuadTree.h"
 #include "SceneGraph\UpdateTransformation.h"
 #include "SceneGraph/SceneGraph.h"
+#include "WeaponInfo\Projectile.h"
 
 #include <iostream>
 using namespace std;
@@ -201,6 +202,11 @@ void SceneText::Init()
     }
     //zeQuadTree->Update(0);
     spatialPartition->Update(0);
+
+    for (size_t num = 0; num < 100; ++num)
+    {
+        m_inactiveList.push_back(new Projectile());
+    }
 }
 
 void SceneText::Update(double dt)
@@ -342,4 +348,16 @@ void SceneText::Exit()
 	// Delete the lights
 	delete lights[0];
 	delete lights[1];
+}
+
+bool SceneText::onNotify(const std::string &zeEvent)
+{
+    if (zeEvent.find("FIRE_BULLET") != std::string::npos)
+    {
+        for (std::vector<GenericEntity*>::iterator it = m_inactiveList.begin(), end = m_inactiveList.end(); it != end; ++it)
+        {
+            
+        }
+    }
+    return false;
 }

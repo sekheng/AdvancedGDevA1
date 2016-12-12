@@ -1,10 +1,15 @@
 #include "Weapon.h"
+#include "SceneManager.h"
+
+size_t Weapon::zeID = 0;
 
 Weapon::Weapon()
     : GenericEntity(nullptr)
 {
     maxBullets = maxClips = currBullets = currClips = 0;
     fireRate = timeCounter = 0;
+    name_ = "Weapon";
+    name_.append(std::to_string(zeID++));
 }
 
 Weapon::Weapon(Mesh *zeMesh)
@@ -12,6 +17,8 @@ Weapon::Weapon(Mesh *zeMesh)
 {
     maxBullets = maxClips = currBullets = currClips = 0;
     fireRate = timeCounter = 0;
+    name_ = "Weapon";
+    name_.append(std::to_string(zeID++));
 }
 
 Weapon::~Weapon()
@@ -26,8 +33,9 @@ void Weapon::Update(double dt)
 
 bool Weapon::onNotify(const std::string &zeEvent)
 {
-    if (zeEvent.find("FIRE") != std::string::npos && timeCounter >= fireRate)
+    if (zeEvent.find("FIRE") != std::string::npos && timeCounter >= fireRate && currBullets > 0)
     {
+        --currBullets;
         return true;
     }
     return false;
@@ -38,6 +46,17 @@ bool Weapon::onNotify(const float &zeEvent)
     if (zeEvent > Math::EPSILON)
     {
         timeCounter = fireRate = (double)zeEvent;
+        return true;
+    }
+    return false;
+}
+
+bool Weapon::onNotify(const int &zeEvent1, const int &zeEvent2)
+{
+    if (zeEvent1 > 0 && zeEvent2 > 0)
+    {
+        currBullets = maxBullets = zeEvent1;
+        currClips = maxClips = zeEvent2;
         return true;
     }
     return false;

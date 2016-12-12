@@ -21,11 +21,14 @@ CPlayerInfo::CPlayerInfo(void)
 	, attachedCamera(NULL)
 	, m_pTerrain(NULL)
 {
+    mainWeapon = new Weapon();
+    mainWeapon->onNotify(0.5f);
 }
 
 CPlayerInfo::~CPlayerInfo(void)
 {
 	m_pTerrain = NULL;
+    delete mainWeapon;
 }
 
 // Initialise this class instance
@@ -384,8 +387,10 @@ void CPlayerInfo::Update(double dt)
 	}
 
 	// if Mouse Buttons were activated, then act on them
+    mainWeapon->Update(dt);
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
+        mainWeapon->onNotify("FIRE");
 	}
 	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
 	{
