@@ -36,6 +36,7 @@ bool Weapon::onNotify(const std::string &zeEvent)
     if (zeEvent.find("FIRE") != std::string::npos && timeCounter >= fireRate && currBullets > 0)
     {
         --currBullets;
+        timeCounter = 0;
         return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
     }
     return false;

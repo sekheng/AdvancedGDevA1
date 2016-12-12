@@ -23,8 +23,8 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_pTerrain(NULL)
 {
     mainWeapon = new Weapon();
-    mainWeapon->onNotify(0.5f);
-    mainWeapon->onNotify(10, 1);
+    mainWeapon->onNotify(1.0f);
+    mainWeapon->onNotify(5, 1);
 }
 
 CPlayerInfo::~CPlayerInfo(void)
