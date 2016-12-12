@@ -12,6 +12,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
 {
     whichQuadIsIn = nullptr;
+    isDone = false;
 }
 
 GenericEntity::~GenericEntity()

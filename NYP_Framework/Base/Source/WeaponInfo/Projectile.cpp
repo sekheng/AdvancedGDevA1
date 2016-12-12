@@ -55,6 +55,7 @@ bool Projectile::onNotify(const std::string &zeEvent)
     {
         return true;
     }
+    /*else if (zeEvent.find("EXPIRED") )*/
     return false;
 }
 

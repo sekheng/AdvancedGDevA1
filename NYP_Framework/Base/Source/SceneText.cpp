@@ -217,6 +217,17 @@ void SceneText::Update(double dt)
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         (*it)->Update(dt);
+        if ((*it)->IsDone())
+            waitingListToBeRemoved.push_back(it - m_activeList.begin());
+    }
+    if (!waitingListToBeRemoved.empty())
+    {
+        for (std::vector<size_t>::reverse_iterator rit = waitingListToBeRemoved.rbegin(), rend = waitingListToBeRemoved.rend(); rit != rend; ++rit)
+        {
+            m_inactiveList.push_back(m_activeList[*rit]);
+            m_activeList.erase(m_activeList.begin() + (*rit));
+        }
+        waitingListToBeRemoved.clear();
     }
 	SceneGraph::GetInstance()->Update();
     spatialPartition->Update(dt);
