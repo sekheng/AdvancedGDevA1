@@ -278,7 +278,8 @@ Resulting vector
 /******************************************************************************/
 bool Vector3::operator>= (const Vector3& rhs) const
 {
-	return IsGreaterEqual(x, rhs.x) && IsGreaterEqual(y, rhs.y) && IsGreaterEqual(z, rhs.z);
+	//return IsGreaterEqual(x, rhs.x) && IsGreaterEqual(y, rhs.y) && IsGreaterEqual(z, rhs.z);
+    return (x >= rhs.x) && (y >= rhs.y) && (z >= rhs.z);
 }
 
 /******************************************************************************/
@@ -310,7 +311,8 @@ Resulting vector
 /******************************************************************************/
 bool Vector3::operator<= (const Vector3& rhs) const
 {
-	return IsLesser(x, rhs.x) && IsLesser(y, rhs.y) && IsLesser(z, rhs.z);
+	//return IsLesser(x, rhs.x) && IsLesser(y, rhs.y) && IsLesser(z, rhs.z);
+    return (x <= rhs.x) && (y <= rhs.y) && (z <= rhs.z);
 }
 
 /******************************************************************************/
