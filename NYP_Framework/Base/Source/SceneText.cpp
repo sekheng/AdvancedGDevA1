@@ -375,6 +375,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
                 zeBullet = *it;
                 m_activeList.push_back(*it);
                 m_inactiveList.erase(it);
+                spatialPartition->onNotify(*zeBullet);
                 break;
             }
         }

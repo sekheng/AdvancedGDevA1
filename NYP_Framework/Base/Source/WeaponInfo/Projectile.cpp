@@ -40,11 +40,35 @@ void Projectile::Update(double dt)
         if (timespan_ < Math::EPSILON)
         {
             isDone = true;
+            for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+            {
+                if ((**it) == *this)
+                {
+                    whichQuadIsIn->m_objectList.erase(it);
+                    break;
+                }
+            }
             return;
         }
         if (!vel_.IsZero())
         {
             position += vel_ * (float)(dt)* speed_;
+            if (whichQuadIsIn)
+            {
+                if (!CheckAABBCollision(this, whichQuadIsIn))
+                {
+                    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+                    {
+                        if ((**it) == *this)
+                        {
+                            whichQuadIsIn->m_objectList.erase(it);
+                            break;
+                        }
+                    }
+                    whichQuadIsIn->previousQuad->onNotify(*this);
+                    whichQuadIsIn = whichQuadIsIn->previousQuad;
+                }
+            }
         }
     }
 }
@@ -56,11 +80,6 @@ bool Projectile::onNotify(const std::string &zeEvent)
         return true;
     }
     /*else if (zeEvent.find("EXPIRED") )*/
-    return false;
-}
-
-bool Projectile::onNotify(EntityBase &zeEvent)
-{
     return false;
 }
 

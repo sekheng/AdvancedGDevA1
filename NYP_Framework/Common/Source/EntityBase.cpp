@@ -58,18 +58,70 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
     Vector3 thatMaxAABB = ThatEntity->GetPosition() + (ThatEntity->GetScale()*0.5f);
 
     // Check for overlap
-    if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
+    //if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
+    //    return true;
+    // Check if this object is overlapping that object
+    if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
+        ||
+        ((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
+    {
+        return true;
+    }
+
+    // Check if that object is overlapping this object
+    if (((thisMinAABB >= thatMinAABB) && (thisMinAABB <= thatMaxAABB))
+        ||
+        ((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
+    {
+        return true;
+    }
+
+    // Check if this object is within that object
+    if (((thisMinAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB))
+        &&
+        ((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
+        return true;
+
+    // Check if that object is within this object
+    if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
+        &&
+        ((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
         return true;
 
     // if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
     // Do more collision checks with other points on each bounding box
     Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
     Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
-    //	Vector3 altThatMinAABB = Vector3(thatMinAABB.x, thatMinAABB.y, thatMaxAABB.z);
-    //	Vector3 altThatMaxAABB = Vector3(thatMaxAABB.x, thatMaxAABB.y, thatMinAABB.z);
 
     // Check for overlap
-    if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
+    //if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
+    //    return true;
+    // Check if this object is overlapping that object
+    if (((thatMinAABB >= altThisMinAABB) && (thatMinAABB <= altThisMaxAABB))
+        ||
+        ((thatMaxAABB >= altThisMinAABB) && (thatMaxAABB <= altThisMaxAABB)))
+    {
+        return true;
+    }
+
+    // Check if that object is overlapping this object
+    if (((altThisMinAABB >= thatMinAABB) && (altThisMinAABB <= thatMaxAABB))
+        ||
+        ((altThisMaxAABB >= thatMinAABB) && (altThisMaxAABB <= thatMaxAABB)))
+    {
+        return true;
+    }
+
+    // Check if this object is within that object
+    if (((altThisMinAABB >= thatMinAABB) && (altThisMaxAABB <= thatMaxAABB))
+        &&
+        ((altThisMaxAABB >= thatMinAABB) && (altThisMaxAABB <= thatMaxAABB)))
+        return true;
+
+    // Check if that object is within this object
+    if (((thatMinAABB >= altThisMinAABB) && (thatMinAABB <= altThisMaxAABB))
+        &&
+        ((thatMaxAABB >= altThisMinAABB) && (thatMaxAABB <= altThisMaxAABB)))
         return true;
 
     return false;
