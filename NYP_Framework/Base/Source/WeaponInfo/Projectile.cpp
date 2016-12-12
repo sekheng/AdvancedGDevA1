@@ -1,7 +1,7 @@
 #include "Projectile.h"
 #include "MeshBuilder.h"
 
-#define MAX_LIFESPAN 5.f
+#define MAX_LIFESPAN 10.f
 
 size_t Projectile::zeID = 0;
 
@@ -9,7 +9,7 @@ Projectile::Projectile()
     : GenericEntity(MeshBuilder::GetInstance()->GetMesh("sphere"))
 {
     vel_.SetZero();
-    speed_ = 10;
+    speed_ = 50;
     timespan_ = MAX_LIFESPAN;
     isDone = true;
     name_ = "Projectile"; 
@@ -83,7 +83,9 @@ bool Projectile::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
     if (isDone)
     {
         isDone = false;
-
+        vel_ = (zeEvent2 - zeEvent1).Normalize();
+        position = zeEvent1;
+        timespan_ = MAX_LIFESPAN;
         return true;
     }
     return false;

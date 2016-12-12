@@ -28,7 +28,7 @@ Weapon::~Weapon()
 
 void Weapon::Update(double dt)
 {
-    timeCounter += dt;
+    timeCounter += (float)dt;
 }
 
 bool Weapon::onNotify(const std::string &zeEvent)
@@ -36,7 +36,7 @@ bool Weapon::onNotify(const std::string &zeEvent)
     if (zeEvent.find("FIRE") != std::string::npos && timeCounter >= fireRate && currBullets > 0)
     {
         --currBullets;
-        return true;
+        return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
     }
     return false;
 }
@@ -45,7 +45,7 @@ bool Weapon::onNotify(const float &zeEvent)
 {
     if (zeEvent > Math::EPSILON)
     {
-        timeCounter = fireRate = (double)zeEvent;
+        timeCounter = fireRate = zeEvent;
         return true;
     }
     return false;

@@ -7,26 +7,27 @@
 class CPlayerInfo
 {
 protected:
-	static CPlayerInfo *s_instance;
-	CPlayerInfo(void);
+	//static CPlayerInfo *s_instance;
+	//CPlayerInfo(void);
 
 public:
-	static CPlayerInfo *GetInstance()
-	{
-		if (!s_instance)
-			s_instance = new CPlayerInfo;
-		return s_instance;
-	}
-	static bool DropInstance()
-	{
-		if (s_instance)
-		{
-			delete s_instance;
-			s_instance = NULL;
-			return true;
-		}
-		return false;
-	}
+    CPlayerInfo(void);
+    //static CPlayerInfo *GetInstance()
+	//{
+	//	if (!s_instance)
+	//		s_instance = new CPlayerInfo;
+	//	return s_instance;
+	//}
+	//static bool DropInstance()
+	//{
+	//	if (s_instance)
+	//	{
+	//		delete s_instance;
+	//		s_instance = NULL;
+	//		return true;
+	//	}
+	//	return false;
+	//}
 	~CPlayerInfo(void);
 
 	// Initialise this class instance
@@ -93,6 +94,7 @@ public:
 	// Handling Camera
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera();
+    FPSCamera &GetCurrCamera();
 
 private:
 	//Vector3 defaultPosition, defaultTarget, defaultUp;

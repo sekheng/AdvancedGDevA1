@@ -123,7 +123,8 @@ void SceneText::Init()
 
 
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
-
+    playerInfo = new CPlayerInfo();
+    playerInfo->AttachCamera(&camera);
 
 	// Create entities into the scene
     m_activeList.push_back(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
@@ -282,7 +283,8 @@ void SceneText::Update(double dt)
 	// Update the player position and other details based on keyboard and mouse inputs
 
 
-	camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+    playerInfo->Update(dt);
 
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
@@ -354,10 +356,18 @@ bool SceneText::onNotify(const std::string &zeEvent)
 {
     if (zeEvent.find("FIRE_BULLET") != std::string::npos)
     {
+        EntityBase *zeBullet = nullptr;
         for (std::vector<GenericEntity*>::iterator it = m_inactiveList.begin(), end = m_inactiveList.end(); it != end; ++it)
         {
-            
+            if ((*it)->getName().find("Projectile") != std::string::npos)
+            {
+                zeBullet = *it;
+                m_activeList.push_back(*it);
+                m_inactiveList.erase(it);
+                break;
+            }
         }
+        return zeBullet->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
     }
     return false;
 }

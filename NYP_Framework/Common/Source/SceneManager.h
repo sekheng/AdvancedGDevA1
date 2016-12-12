@@ -4,6 +4,7 @@
 #include "SingletonTemplate.h"
 #include <map>
 #include <string>
+#include "Scene.h"
 
 class Scene;
 
@@ -21,6 +22,8 @@ public:
 	void RemoveScene(const std::string& _name);
 	void SetActiveScene(const std::string& _name);
 	bool CheckSceneExist(const std::string& _name);
+    //bool NotifyCurrScene(const std::string &zeEvent) { activeScene->}
+    Scene *GetCurrScene() { return activeScene; }
 
 private:
 	SceneManager();

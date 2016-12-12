@@ -17,7 +17,7 @@ public:
 
 protected:
     unsigned char maxBullets, currBullets, maxClips, currClips;
-    double timeCounter, fireRate;
+    float timeCounter, fireRate;
 
 private:
     static size_t zeID;

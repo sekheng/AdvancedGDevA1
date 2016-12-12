@@ -7,10 +7,11 @@
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
-CPlayerInfo *CPlayerInfo::s_instance = 0;
+//CPlayerInfo *CPlayerInfo::s_instance = 0;
+#define CAMERA_SPEED 200.f
 
 CPlayerInfo::CPlayerInfo(void)
-	: m_dSpeed(40.0)
+	: m_dSpeed(200.0)
 	, m_dAcceleration(10.0)
 	, m_bJumpUpwards(false)
 	, m_dJumpSpeed(10.0)
@@ -23,6 +24,7 @@ CPlayerInfo::CPlayerInfo(void)
 {
     mainWeapon = new Weapon();
     mainWeapon->onNotify(0.5f);
+    mainWeapon->onNotify(10, 1);
 }
 
 CPlayerInfo::~CPlayerInfo(void)
@@ -346,33 +348,33 @@ void CPlayerInfo::Update(double dt)
 	//}
 
 	////Update the camera direction based on mouse move
-	//{
-	//	Vector3 viewUV = (target - position).Normalized();
-	//	Vector3 rightUV;
+	{
+        Vector3 viewUV = (attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos()).Normalize();
+		Vector3 rightUV;
 
-	//	{
-	//		float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
-	//		Mtx44 rotation;
-	//		rotation.SetToRotation(yaw, 0, 1, 0);
-	//		viewUV = rotation * viewUV;
-	//		target = position + viewUV;
-	//		rightUV = viewUV.Cross(up);
-	//		rightUV.y = 0;
-	//		rightUV.Normalize();
-	//		up = rightUV.Cross(viewUV).Normalized();
-	//	}
-	//	{
-	//		float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
-	//		rightUV = viewUV.Cross(up);
-	//		rightUV.y = 0;
-	//		rightUV.Normalize();
-	//		up = rightUV.Cross(viewUV).Normalized();
-	//		Mtx44 rotation;
-	//		rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
-	//		viewUV = rotation * viewUV;
-	//		target = position + viewUV;
-	//	}
-	//}
+		{
+			float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
+			Mtx44 rotation;
+			rotation.SetToRotation(yaw, 0, 1, 0);
+			viewUV = rotation * viewUV;
+            attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewUV;
+			rightUV = viewUV.Cross(attachedCamera->GetCameraUp());
+			rightUV.y = 0;
+			rightUV.Normalize();
+            attachedCamera->GetCameraUp() = rightUV.Cross(viewUV).Normalized();
+		}
+		{
+			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
+            rightUV = viewUV.Cross(attachedCamera->GetCameraUp());
+			rightUV.y = 0;
+			rightUV.Normalize();
+            attachedCamera->GetCameraUp() = rightUV.Cross(viewUV).Normalized();
+			Mtx44 rotation;
+			rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
+			viewUV = rotation * viewUV;
+            attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewUV;
+		}
+	}
 
 	// If the user presses SPACEBAR, then make him jump
 	//if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&
@@ -445,4 +447,9 @@ void CPlayerInfo::AttachCamera(FPSCamera* _cameraPtr)
 void CPlayerInfo::DetachCamera()
 {
 	attachedCamera = nullptr;
+}
+
+FPSCamera &CPlayerInfo::GetCurrCamera()
+{
+    return *attachedCamera;
 }
