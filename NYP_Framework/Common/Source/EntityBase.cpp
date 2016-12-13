@@ -52,10 +52,10 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
 {
     // Get the colliders for the 2 entities
     // Get the minAABB and maxAABB for each entity
-    Vector3 thisMinAABB = ThisEntity->GetPosition() - (ThisEntity->GetScale() * 0.5f);
-    Vector3 thisMaxAABB = ThisEntity->GetPosition() + (ThisEntity->GetScale()*0.5f);
-    Vector3 thatMinAABB = ThatEntity->GetPosition() - (ThatEntity->GetScale()*0.5f);
-    Vector3 thatMaxAABB = ThatEntity->GetPosition() + (ThatEntity->GetScale()*0.5f);
+    Vector3 thisMinAABB = ThisEntity->position - (ThisEntity->scale * 0.5f);
+    Vector3 thisMaxAABB = ThisEntity->position + (ThisEntity->scale*0.5f);
+    Vector3 thatMinAABB = ThatEntity->position - (ThatEntity->scale*0.5f);
+    Vector3 thatMaxAABB = ThatEntity->position + (ThatEntity->scale*0.5f);
 
     // Check for overlap
     //if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))

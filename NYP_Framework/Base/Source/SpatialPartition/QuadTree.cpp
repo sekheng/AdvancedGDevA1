@@ -118,13 +118,16 @@ void QuadTree::Update(double dt)
             std::vector<size_t> removeStuffInObjectList;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
             {
-                for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+                if (CheckAABBCollision(this, *it))
                 {
-                    if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                    for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
                     {
-                        removeStuffInObjectList.push_back(it - m_objectList.begin());
-                        quadIt->m_objectList.push_back((*it));
-                        break;
+                        if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                        {
+                            removeStuffInObjectList.push_back(it - m_objectList.begin());
+                            quadIt->m_objectList.push_back((*it));
+                            break;
+                        }
                     }
                 }
             }
@@ -136,7 +139,8 @@ void QuadTree::Update(double dt)
             {
                 for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
                 {
-                    previousQuad->m_objectList.push_back(*it);
+                    /*previousQuad->m_objectList.push_back(*it);*/
+                    previousQuad->onNotify(**it);
                 }
             }
         }
@@ -164,14 +168,15 @@ bool QuadTree::onNotify(EntityBase &zeEvent)
 {
     if (!otherTrees.empty())
     {
-        for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
-        {
-            if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
+        if (CheckAABBCollision(this, &zeEvent))
+            for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
             {
-                return quadIt->onNotify(zeEvent);
+                if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
+                {
+                    return quadIt->onNotify(zeEvent);
+                }
             }
-        }
-        previousQuad->onNotify(zeEvent);
+        return previousQuad->onNotify(zeEvent);
     }
     else
     {
