@@ -42,15 +42,7 @@ void Projectile::Update(double dt)
         if (timespan_ < Math::EPSILON)
         {
             isDone = true;
-            for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
-            {
-                if ((**it) == *this)
-                {
-                    whichQuadIsIn->m_objectList.erase(it);
-                    break;
-                }
-            }
-            whichQuadIsIn = nullptr;
+            removeItselfFromQuad();
             return;
         }
         if (!vel_.IsZero())
@@ -59,15 +51,7 @@ void Projectile::Update(double dt)
             
             if (!CheckAABBCollision(this, boundary_))
             {
-                for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
-                {
-                    if ((**it) == *this)
-                    {
-                        whichQuadIsIn->m_objectList.erase(it);
-                        break;
-                    }
-                }
-                whichQuadIsIn = nullptr;
+                removeItselfFromQuad();
             }
             else if (whichQuadIsIn)
             {
@@ -87,9 +71,10 @@ void Projectile::Update(double dt)
                 }
                 else
                 {
+                    bool shouldRemoveItself = false;
                     for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
                     {
-                        if ((**it) != *this && (*it)->getName().find("Projectile") != std::string::npos)
+                        if ((**it) != *this && (*it)->getName().find("Projectile") == std::string::npos)
                         {
 #ifdef _DEBUG
                             std::cout << "Object is " << (*it)->getName() << std::endl;
@@ -103,11 +88,14 @@ void Projectile::Update(double dt)
                                 std::cout << "Hit  " << (*it)->getName() << std::endl;
 #endif
                                 isDone = true;
+                                shouldRemoveItself = true;
                                 (*it)->onNotify("DIED");
                                 break;
                             }
                         }
                     }
+                    if (shouldRemoveItself)
+                        removeItselfFromQuad();
                 }
 
             }

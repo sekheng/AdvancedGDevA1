@@ -97,7 +97,22 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
     if (zeEvent.find("DIED") != std::string::npos)
     {
         isDone = true;
+        removeItselfFromQuad();
         return true;
     }
     return false;
+}
+
+bool GenericEntity::removeItselfFromQuad()
+{
+    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+    {
+        if ((**it) == *this)
+        {
+            whichQuadIsIn->m_objectList.erase(it);
+            break;
+        }
+    }
+    whichQuadIsIn = nullptr;
+    return true;
 }

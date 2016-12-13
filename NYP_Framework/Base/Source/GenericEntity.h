@@ -27,6 +27,8 @@ protected:
 	Mesh* modelMesh;
     QuadTree *whichQuadIsIn;
     EntityBase *boundary_;
+
+    bool removeItselfFromQuad();
 };
 
 namespace Create
