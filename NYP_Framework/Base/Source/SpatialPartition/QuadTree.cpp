@@ -69,10 +69,13 @@ void QuadTree::Update(double dt)
                 }
             }
             //m_objectList.clear();
-            for (std::vector<size_t>::reverse_iterator rit = whatObjectToRemove.rbegin(), rend = whatObjectToRemove.rend(); rit != rend; ++rit)
-                m_objectList.erase(m_objectList.begin() + (*rit));
-            for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
-                previousQuad->onNotify(**it);
+            if (!whatObjectToRemove.empty())
+            {
+                for (std::vector<size_t>::reverse_iterator rit = whatObjectToRemove.rbegin(), rend = whatObjectToRemove.rend(); rit != rend; ++rit)
+                    m_objectList.erase(m_objectList.begin() + (*rit));
+                for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+                    previousQuad->onNotify(**it);
+            }
             m_objectList.clear();
 
             for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
