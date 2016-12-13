@@ -115,6 +115,7 @@ void QuadTree::Update(double dt)
         if (checkWholeTreeIsEmpty)
         {
             otherTrees.clear();
+            --QuadTreeDepth;
             return;
         }
 
