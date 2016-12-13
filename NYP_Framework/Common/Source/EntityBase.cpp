@@ -57,6 +57,11 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
     Vector3 thatMinAABB = ThatEntity->position - (ThatEntity->scale*0.5f);
     Vector3 thatMaxAABB = ThatEntity->position + (ThatEntity->scale*0.5f);
 
+    thisMinAABB.y = 0;
+    thisMaxAABB.y = 0;
+    thatMinAABB.y = 0;
+    thatMaxAABB.y = 0;
+
     // Check for overlap
     //if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
     //    return true;
@@ -90,8 +95,8 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
 
     // if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
     // Do more collision checks with other points on each bounding box
-    Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
-    Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
+    Vector3 altThisMinAABB = Vector3(thisMinAABB.x, /*thisMinAABB.y*/0, thisMaxAABB.z);
+    Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, /*thisMaxAABB.y*/0, thisMinAABB.z);
 
     // Check for overlap
     //if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))

@@ -8,6 +8,7 @@
 
 #define MAX_NUM_OBJ 4U
 #define MAX_NUM_QUADTREE_DEPTH '3'
+static size_t QuadTreeDepth = 0;
 
 Mesh* QuadTree::debuggingModel = nullptr;
 
@@ -17,9 +18,9 @@ QuadTree::QuadTree()
     if (!debuggingModel)
         debuggingModel = MeshBuilder::GetInstance()->GetMesh("GRIDMESH");
     m_bCollider = false;
-    static size_t zeQuadID = 0;
+    //static size_t zeQuadID = 0;
     name_ = "QuadTree";
-    name_.append(std::to_string(zeQuadID++));
+    name_.append(std::to_string(QuadTreeDepth));
 }
 
 QuadTree::~QuadTree()
@@ -42,6 +43,7 @@ void QuadTree::Update(double dt)
     case true:
         if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] <= MAX_NUM_QUADTREE_DEPTH)
         {
+            ++QuadTreeDepth;
             //Just the following sentences gives me a huge headache. So just hardcode 4 quad for each quad
             QuadTree zeTree;
             zeTree.SetScale(scale * 0.5f);
