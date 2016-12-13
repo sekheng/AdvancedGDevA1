@@ -1,6 +1,8 @@
 #include "Projectile.h"
 #include "MeshBuilder.h"
-
+#ifdef _DEBUG
+#include <iostream>
+#endif
 #define MAX_LIFESPAN 10.f
 
 size_t Projectile::zeID = 0;
@@ -87,13 +89,19 @@ void Projectile::Update(double dt)
                 {
                     for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
                     {
-                        if ((**it) != *this)
+                        if ((**it) != *this && (*it)->getName().find("Projectile") != std::string::npos)
                         {
+#ifdef _DEBUG
+                            std::cout << "Object is " << (*it)->getName() << std::endl;
+#endif
                             Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale();
                             Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale();
                             Vector3 HitPosition(0, 0, 0);
-                            if (CheckLineSegmentPlane(position, position + vel_ * 20.f, thatMinAABB, thatMaxAABB, HitPosition))
+                            if (CheckLineSegmentPlane(position, position - (vel_ * 20.f), thatMinAABB, thatMaxAABB, HitPosition))
                             {
+#ifdef _DEBUG
+                                std::cout << "Hit  " << (*it)->getName() << std::endl;
+#endif
                                 isDone = true;
                                 (*it)->onNotify("DIED");
                                 break;
