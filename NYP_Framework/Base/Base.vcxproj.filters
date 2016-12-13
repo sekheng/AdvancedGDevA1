@@ -96,6 +96,9 @@
     <ClCompile Include="Source\LevelOfDetail\LevelOfDetails.cpp">
       <Filter>LevelOfDetail</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneGraph\UpdateRotation.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Source\LevelOfDetail\LevelOfDetails.h">
       <Filter>LevelOfDetail</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\UpdateRotation.h">
+      <Filter>SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

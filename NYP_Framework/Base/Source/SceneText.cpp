@@ -22,6 +22,7 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "SpatialPartition\QuadTree.h"
 #include "SceneGraph\UpdateTransformation.h"
+#include "SceneGraph\UpdateRotation.h"
 #include "SceneGraph/SceneGraph.h"
 #include "WeaponInfo\Projectile.h"
 
@@ -157,20 +158,25 @@ void SceneText::Init()
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
-	GenericEntity* baseCube = Create::Entity("cube", Vector3(0.0f, 0.0f, 0.0f));
+	GenericEntity* baseCube = Create::Entity("ASTEROID", Vector3(0.0f, 0.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
 
 	UpdateTransformation* baseMtx = new UpdateTransformation();
-	baseMtx->ApplyUpdate(1.f, 0.0f, 0.0f, 1.f);
+	UpdateRotation* baseMtx2 = new UpdateRotation();
+	baseMtx->ApplyUpdate(1.f, 0.0f, 0.0f);
 	baseMtx->SetSteps(-60, 60);
+	baseMtx2->ApplyUpdate(1.f, 0.0f, 0.0f,1.f);
+	baseMtx2->SetSteps(-60, 60);
 	baseNode->SetUpdateTransformation(baseMtx);
+	
 
-	GenericEntity* childCube = Create::Entity("cube", Vector3(0.0f, 10.0f, 0.0f));
+	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     childCube->setName("cube5");
 	SceneNode* childNode = baseNode->AddChild(childCube);
+	childNode->SetUpdateRotation(baseMtx2);
 
-	GenericEntity* grandchildCube = Create::Entity("cube", Vector3(0.0f, -10.0f, 0.0f));
+	GenericEntity* grandchildCube = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     grandchildCube->setName("cube6");
 	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
 

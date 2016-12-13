@@ -4,6 +4,7 @@ using namespace std;
 // Default Constructor
 Transform::Transform(void)
 	: theUpdateTransformation(NULL)
+	, theUpdateRotation(NULL)
 {
 	Mtx.SetToIdentity();
 	DefaultMtx.SetToIdentity();
@@ -20,6 +21,11 @@ Transform::~Transform(void)
 	{
 		delete theUpdateTransformation;
 		theUpdateTransformation = NULL;
+	}
+	if (theUpdateRotation)
+	{
+		delete theUpdateRotation;
+		theUpdateRotation = NULL;
 	}
 }
 // Apply a translation to the Transformation Matrix
@@ -137,4 +143,19 @@ Mtx44 Transform::GetUpdateTransform()
 	theUpdateTransformation->Update();
 
 	return theUpdateTransformation->GetUpdateTransformation();
+}
+
+void Transform::SetUpdateRotation(UpdateRotation *theUpdateRotation)
+{
+	this->theUpdateRotation = theUpdateRotation;
+}
+Mtx44 Transform::GetUpdateRotation()
+{
+	if (theUpdateRotation == NULL)
+	{
+		return DefaultMtx;
+	}
+	theUpdateRotation->Update();
+
+	return theUpdateRotation->GetUpdateRotation();
 }

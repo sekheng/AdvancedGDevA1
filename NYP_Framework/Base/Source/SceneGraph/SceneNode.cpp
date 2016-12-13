@@ -359,10 +359,15 @@ int SceneNode::GetNumOfChild()
 // Update the Scene Graph
 void SceneNode::Update(void)
 {
+	if (theUpdateRotation)
+	{
+		ApplyTransform(GetUpdateRotation());
+	}
 	if (theUpdateTransformation)
 	{
 		ApplyTransform(GetUpdateTransform());
 	}
+	
 	// Update the children
 	std::vector<SceneNode*>::iterator it;
 	for (it = theChildren.begin(); it != theChildren.end(); ++it)
