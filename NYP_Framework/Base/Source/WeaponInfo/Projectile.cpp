@@ -48,11 +48,27 @@ void Projectile::Update(double dt)
                     break;
                 }
             }
+            whichQuadIsIn = nullptr;
             return;
         }
         if (!vel_.IsZero())
         {
             position += vel_ * (float)(dt)* speed_;
+            
+            if (!CheckAABBCollision(this, boundary_))
+            {
+                for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+                {
+                    if ((**it) == *this)
+                    {
+                        whichQuadIsIn->m_objectList.erase(it);
+                        break;
+                    }
+                }
+                whichQuadIsIn = nullptr;
+                return;
+            }
+
             if (whichQuadIsIn)
             {
                 if (!CheckAABBCollision(this, whichQuadIsIn))

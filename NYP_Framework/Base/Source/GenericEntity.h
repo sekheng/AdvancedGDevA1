@@ -25,6 +25,7 @@ public:
 protected:
 	Mesh* modelMesh;
     QuadTree *whichQuadIsIn;
+    EntityBase *boundary_;
 };
 
 namespace Create

@@ -126,29 +126,39 @@ void SceneText::Init()
     playerInfo = new CPlayerInfo();
     playerInfo->AttachCamera(&camera);
 
+    boundaryOfScene = new EntityBase();
+    boundaryOfScene->SetPosition(Vector3(0, 0, 0));
+    boundaryOfScene->SetScale(Vector3(1000, 1000, 1000));
+    boundaryOfScene->setName("Boundary");
+
 	// Create entities into the scene
     m_activeList.push_back(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
     m_activeList.push_back(Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z))); // Lightball
 	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+    aCube->setName("cube0");
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
 
     aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, -20.0f));
+    aCube->setName("cube1");
     aCube->SetCollider(true);
     aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
     aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, 20.0f));
+    aCube->setName("cube2");
     aCube->SetCollider(true);
     aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
     aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, 20.0f));
+    aCube->setName("cube3");
     aCube->SetCollider(true);
     aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
 	GenericEntity* baseCube = Create::Entity("cube", Vector3(0.0f, 0.0f, 0.0f));
+    baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
 
 	UpdateTransformation* baseMtx = new UpdateTransformation();
@@ -157,9 +167,11 @@ void SceneText::Init()
 	baseNode->SetUpdateTransformation(baseMtx);
 
 	GenericEntity* childCube = Create::Entity("cube", Vector3(0.0f, 10.0f, 0.0f));
+    childCube->setName("cube5");
 	SceneNode* childNode = baseNode->AddChild(childCube);
 
 	GenericEntity* grandchildCube = Create::Entity("cube", Vector3(0.0f, -10.0f, 0.0f));
+    grandchildCube->setName("cube6");
 	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
 
 	m_activeList.push_back(baseCube);
@@ -207,6 +219,7 @@ void SceneText::Init()
     for (size_t num = 0; num < 100; ++num)
     {
         m_inactiveList.push_back(new Projectile());
+        m_inactiveList.back()->onNotify(*boundaryOfScene);
     }
 }
 
@@ -357,6 +370,7 @@ void SceneText::Exit()
         delete (*it);
     m_inactiveList.clear();
     delete spatialPartition;
+    delete boundaryOfScene;
 
 	// Delete the lights
 	delete lights[0];

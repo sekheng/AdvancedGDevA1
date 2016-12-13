@@ -40,7 +40,7 @@ void QuadTree::Update(double dt)
     switch (otherTrees.empty())
     {
     case true:
-        if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] != MAX_NUM_QUADTREE_DEPTH)
+        if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] <= MAX_NUM_QUADTREE_DEPTH)
         {
             //Just the following sentences gives me a huge headache. So just hardcode 4 quad for each quad
             QuadTree zeTree;
@@ -113,6 +113,7 @@ void QuadTree::Update(double dt)
         if (checkWholeTreeIsEmpty)
         {
             otherTrees.clear();
+            return;
         }
 
         // This 1st part is to check whether the entity fit into it's quads
@@ -169,21 +170,29 @@ void QuadTree::Render()
 
 bool QuadTree::onNotify(EntityBase &zeEvent)
 {
-    if (!otherTrees.empty())
+    //if (!otherTrees.empty())
+    //{
+    //    if (CheckAABBCollision(this, &zeEvent))
+    //        for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+    //        {
+    //            if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
+    //            {
+    //                return quadIt->onNotify(zeEvent);
+    //            }
+    //        }
+    //    return previousQuad->onNotify(zeEvent);
+    //}
+    //else
+    //{
+    //    waitingList.push_back(&zeEvent);
+    //}
+    if (CheckAABBCollision(this, &zeEvent))
     {
-        if (CheckAABBCollision(this, &zeEvent))
-            for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
-            {
-                if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
-                {
-                    return quadIt->onNotify(zeEvent);
-                }
-            }
-        return previousQuad->onNotify(zeEvent);
+        waitingList.push_back(&zeEvent);
     }
     else
     {
-        waitingList.push_back(&zeEvent);
+        return previousQuad->onNotify(zeEvent);
     }
     return true;
 }

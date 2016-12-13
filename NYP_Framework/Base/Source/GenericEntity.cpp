@@ -13,6 +13,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
 {
     whichQuadIsIn = nullptr;
     isDone = false;
+    boundary_ = nullptr;
 }
 
 GenericEntity::~GenericEntity()
@@ -23,20 +24,20 @@ void GenericEntity::Update(double _dt)
 {
 	// Does nothing here, can inherit & override or create your own version of this class :D
 	//SceneGraph::GetInstance()->Update();
-    if (!CheckAABBCollision(this, whichQuadIsIn))
-    {
-        for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
-        {
-            if ((**it) == *this)
-            {
-                whichQuadIsIn->m_objectList.erase(it);
-                break;
-            }
-        }
-        whichQuadIsIn->previousQuad->onNotify(*this);
-        whichQuadIsIn = whichQuadIsIn->previousQuad;
-        return;
-    }
+    //if (!CheckAABBCollision(this, whichQuadIsIn))
+    //{
+    //    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+    //    {
+    //        if ((**it) == *this)
+    //        {
+    //            whichQuadIsIn->m_objectList.erase(it);
+    //            break;
+    //        }
+    //    }
+    //    whichQuadIsIn->previousQuad->onNotify(*this);
+    //    whichQuadIsIn = whichQuadIsIn->previousQuad;
+    //    return;
+    //}
 
 }
 
@@ -81,6 +82,11 @@ bool GenericEntity::onNotify(EntityBase &zeEvent)
     if (zeEvent.getName().find("QuadTree") != std::string::npos)
     {
         whichQuadIsIn = dynamic_cast<QuadTree*>(&zeEvent);
+        return true;
+    }
+    else if (zeEvent.getName().find("Boundary") != std::string::npos)
+    {
+        boundary_ = &zeEvent;
         return true;
     }
     return false;

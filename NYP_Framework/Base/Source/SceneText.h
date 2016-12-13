@@ -43,7 +43,7 @@ private:
 
     std::vector<GenericEntity*> m_activeList, m_inactiveList;
     std::vector<size_t> waitingListToBeRemoved;
-    EntityBase *spatialPartition;
+    EntityBase *spatialPartition, *boundaryOfScene;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };
