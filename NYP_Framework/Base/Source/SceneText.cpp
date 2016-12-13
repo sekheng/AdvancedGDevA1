@@ -134,26 +134,26 @@ void SceneText::Init()
 	// Create entities into the scene
     m_activeList.push_back(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
     m_activeList.push_back(Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z))); // Lightball
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f), Vector3(20.f,20.f,20.f));
     aCube->setName("cube0");
 	aCube->SetCollider(true);
-	aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+	//aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
 
     aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, -20.0f));
     aCube->setName("cube1");
     aCube->SetCollider(true);
-    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
     aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, 20.0f));
     aCube->setName("cube2");
     aCube->SetCollider(true);
-    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
     aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, 20.0f));
     aCube->setName("cube3");
     aCube->SetCollider(true);
-    aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START

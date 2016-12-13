@@ -66,11 +66,10 @@ void Projectile::Update(double dt)
                     }
                 }
                 whichQuadIsIn = nullptr;
-                return;
             }
-
-            if (whichQuadIsIn)
+            else if (whichQuadIsIn)
             {
+
                 if (!CheckAABBCollision(this, whichQuadIsIn))
                 {
                     for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
@@ -84,7 +83,27 @@ void Projectile::Update(double dt)
                     whichQuadIsIn->previousQuad->onNotify(*this);
                     whichQuadIsIn = whichQuadIsIn->previousQuad;
                 }
+                else
+                {
+                    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+                    {
+                        if ((**it) != *this)
+                        {
+                            Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale();
+                            Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale();
+                            Vector3 HitPosition(0, 0, 0);
+                            if (CheckLineSegmentPlane(position, position + vel_ * 20.f, thatMinAABB, thatMaxAABB, HitPosition))
+                            {
+                                isDone = true;
+                                (*it)->onNotify("DIED");
+                                break;
+                            }
+                        }
+                    }
+                }
+
             }
+
         }
     }
 }
@@ -124,5 +143,39 @@ bool Projectile::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
         timespan_ = MAX_LIFESPAN;
         return true;
     }
+    return false;
+}
+
+bool Projectile::GetIntersection(const float &fDst1, const float &fDst2, const Vector3 &P1, const Vector3 &P2, Vector3 &Hit)
+{
+    if ((fDst1 * fDst2) >= Math::EPSILON)
+        return false;
+    if (fDst1 == fDst2)
+        return false;
+    Hit = P1 + (P2 - P1) * (-fDst1 / (fDst2 - fDst1));
+    return true;
+}
+
+bool Projectile::InBox(const Vector3 &Hit, const Vector3 &B1, const Vector3 &B2, const int &Axis)
+{
+    if (Axis == 1 && Hit.x > B1.z && Hit.z < B2.z && Hit.y > B1.y && Hit.y < B2.y)
+        return true;
+    if (Axis == 2 && Hit.z > B1.z && Hit.z < B2.z && Hit.x > B1.x && Hit.x < B2.x)
+        return true;
+    if (Axis == 3 && Hit.x > B1.x && Hit.x < B2.x && Hit.y > B1.y && Hit.y < B2.y)
+        return true;
+    return false;
+}
+
+bool Projectile::CheckLineSegmentPlane(const Vector3 &line_start, const Vector3 &line_end, const Vector3 &minAABB, const Vector3 &maxAABB, Vector3 &Hit)
+{
+    if ((GetIntersection(line_start.x - minAABB.x, line_end.x - minAABB.x, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 1))
+        || (GetIntersection(line_start.y - minAABB.y, line_end.y - minAABB.y, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 2))
+        || (GetIntersection(line_start.z - minAABB.z, line_end.z - minAABB.z, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 3))
+        || (GetIntersection(line_start.x - maxAABB.x, line_end.x - maxAABB.x, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 1))
+        || (GetIntersection(line_start.y - maxAABB.y, line_end.y - maxAABB.y, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 2))
+        || (GetIntersection(line_start.z - maxAABB.z, line_end.z - maxAABB.z, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 3))
+        )
+        return true;
     return false;
 }
