@@ -4,6 +4,8 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
+#define offset 3.5f
+
 SkyBoxEntity::SkyBoxEntity(void)
 	: /*scale(1000.0f, 1000.0f, 1000.0f)
 	,*/ m_bBoundaryDefined(false)
@@ -27,7 +29,7 @@ void SkyBoxEntity::Render()
 
 		// Front
 		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
         modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[FRONT]);
 		modelStack.PopMatrix();
@@ -35,7 +37,7 @@ void SkyBoxEntity::Render()
 		// Back
 		modelStack.PushMatrix();
 		modelStack.Rotate(180, 0, 1, 0);
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
 		modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[BACK]);
 		modelStack.PopMatrix();
@@ -43,7 +45,7 @@ void SkyBoxEntity::Render()
 		// Left
 		modelStack.PushMatrix();
 		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
 		modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[LEFT]);
 		modelStack.PopMatrix();
@@ -51,7 +53,7 @@ void SkyBoxEntity::Render()
 		// Right
 		modelStack.PushMatrix();
 		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
 		modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[RIGHT]);
 		modelStack.PopMatrix();
@@ -59,7 +61,7 @@ void SkyBoxEntity::Render()
 		// Top
 		modelStack.PushMatrix();
 		modelStack.Rotate(90, 1, 0, 0);
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
 		modelStack.Rotate(-90, 0, 0, 1);
 		modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[TOP]);
@@ -68,7 +70,7 @@ void SkyBoxEntity::Render()
 		// Bottom
 		modelStack.PushMatrix();
 		modelStack.Rotate(-90, 1, 0, 0);
-		modelStack.Translate(0, 0, -scale.z / 2);
+		modelStack.Translate(0, 0, -scale.z / 2 + offset);
 		modelStack.Rotate(90, 0, 0, 1);
 		modelStack.Scale(scale.x, scale.y, scale.z);
 			RenderHelper::RenderMesh(modelMesh[BOTTOM]);
