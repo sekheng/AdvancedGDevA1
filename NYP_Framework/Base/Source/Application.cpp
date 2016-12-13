@@ -145,7 +145,7 @@ void Application::Init()
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//NebulaBack_Kai.tga");
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//NebulaLeft.tga");
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//NebulaRight.tga");
-    MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//NebulaTop_Kai.tga");
+    MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//NebulaTop_KaiNew.tga");
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//NebulaBottom_Kai.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
