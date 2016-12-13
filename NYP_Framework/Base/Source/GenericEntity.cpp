@@ -13,6 +13,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
 {
     whichQuadIsIn = nullptr;
     isDone = false;
+    boundary_ = nullptr;
 }
 
 GenericEntity::~GenericEntity()
@@ -23,20 +24,20 @@ void GenericEntity::Update(double _dt)
 {
 	// Does nothing here, can inherit & override or create your own version of this class :D
 	//SceneGraph::GetInstance()->Update();
-    if (!CheckAABBCollision(this, whichQuadIsIn))
-    {
-        for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
-        {
-            if ((**it) == *this)
-            {
-                whichQuadIsIn->m_objectList.erase(it);
-                break;
-            }
-        }
-        whichQuadIsIn->previousQuad->onNotify(*this);
-        whichQuadIsIn = whichQuadIsIn->previousQuad;
-        return;
-    }
+    //if (!CheckAABBCollision(this, whichQuadIsIn))
+    //{
+    //    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+    //    {
+    //        if ((**it) == *this)
+    //        {
+    //            whichQuadIsIn->m_objectList.erase(it);
+    //            break;
+    //        }
+    //    }
+    //    whichQuadIsIn->previousQuad->onNotify(*this);
+    //    whichQuadIsIn = whichQuadIsIn->previousQuad;
+    //    return;
+    //}
 
 }
 
@@ -54,11 +55,11 @@ void GenericEntity::Render()
 }
 
 // Set the maxAABB and minAABB
-void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
-{
-	this->maxAABB = maxAABB;
-	this->minAABB = minAABB;
-}
+//void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
+//{
+//	this->maxAABB = maxAABB;
+//	this->minAABB = minAABB;
+//}
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 
 								const Vector3& _position,
@@ -83,5 +84,35 @@ bool GenericEntity::onNotify(EntityBase &zeEvent)
         whichQuadIsIn = dynamic_cast<QuadTree*>(&zeEvent);
         return true;
     }
+    else if (zeEvent.getName().find("Boundary") != std::string::npos)
+    {
+        boundary_ = &zeEvent;
+        return true;
+    }
     return false;
+}
+
+bool GenericEntity::onNotify(const std::string &zeEvent)
+{
+    if (zeEvent.find("DIED") != std::string::npos)
+    {
+        isDone = true;
+        removeItselfFromQuad();
+        return true;
+    }
+    return false;
+}
+
+bool GenericEntity::removeItselfFromQuad()
+{
+    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+    {
+        if ((**it) == *this)
+        {
+            whichQuadIsIn->m_objectList.erase(it);
+            break;
+        }
+    }
+    whichQuadIsIn = nullptr;
+    return true;
 }

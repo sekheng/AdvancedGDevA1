@@ -8,6 +8,7 @@
 
 #define MAX_NUM_OBJ 4U
 #define MAX_NUM_QUADTREE_DEPTH '3'
+static size_t QuadTreeDepth = 0;
 
 Mesh* QuadTree::debuggingModel = nullptr;
 
@@ -17,9 +18,9 @@ QuadTree::QuadTree()
     if (!debuggingModel)
         debuggingModel = MeshBuilder::GetInstance()->GetMesh("GRIDMESH");
     m_bCollider = false;
-    static size_t zeQuadID = 0;
+    //static size_t zeQuadID = 0;
     name_ = "QuadTree";
-    name_.append(std::to_string(zeQuadID++));
+    name_.append(std::to_string(QuadTreeDepth));
 }
 
 QuadTree::~QuadTree()
@@ -40,8 +41,9 @@ void QuadTree::Update(double dt)
     switch (otherTrees.empty())
     {
     case true:
-        if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] != MAX_NUM_QUADTREE_DEPTH)
+        if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] <= MAX_NUM_QUADTREE_DEPTH)
         {
+            ++QuadTreeDepth;
             //Just the following sentences gives me a huge headache. So just hardcode 4 quad for each quad
             QuadTree zeTree;
             zeTree.SetScale(scale * 0.5f);
@@ -69,10 +71,13 @@ void QuadTree::Update(double dt)
                 }
             }
             //m_objectList.clear();
-            for (std::vector<size_t>::reverse_iterator rit = whatObjectToRemove.rbegin(), rend = whatObjectToRemove.rend(); rit != rend; ++rit)
-                m_objectList.erase(m_objectList.begin() + (*rit));
-            for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
-                previousQuad->onNotify(**it);
+            if (!whatObjectToRemove.empty())
+            {
+                for (std::vector<size_t>::reverse_iterator rit = whatObjectToRemove.rbegin(), rend = whatObjectToRemove.rend(); rit != rend; ++rit)
+                    m_objectList.erase(m_objectList.begin() + (*rit));
+                for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
+                    previousQuad->onNotify(**it);
+            }
             m_objectList.clear();
 
             for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
@@ -110,6 +115,8 @@ void QuadTree::Update(double dt)
         if (checkWholeTreeIsEmpty)
         {
             otherTrees.clear();
+            --QuadTreeDepth;
+            return;
         }
 
         // This 1st part is to check whether the entity fit into it's quads
@@ -118,13 +125,16 @@ void QuadTree::Update(double dt)
             std::vector<size_t> removeStuffInObjectList;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
             {
-                for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+                if (CheckAABBCollision(this, *it))
                 {
-                    if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                    for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
                     {
-                        removeStuffInObjectList.push_back(it - m_objectList.begin());
-                        quadIt->m_objectList.push_back((*it));
-                        break;
+                        if (quadIt->CheckAABBCollision(&(*quadIt), *it))
+                        {
+                            removeStuffInObjectList.push_back(it - m_objectList.begin());
+                            quadIt->m_objectList.push_back((*it));
+                            break;
+                        }
                     }
                 }
             }
@@ -136,7 +146,8 @@ void QuadTree::Update(double dt)
             {
                 for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
                 {
-                    previousQuad->m_objectList.push_back(*it);
+                    /*previousQuad->m_objectList.push_back(*it);*/
+                    previousQuad->onNotify(**it);
                 }
             }
         }
@@ -162,20 +173,29 @@ void QuadTree::Render()
 
 bool QuadTree::onNotify(EntityBase &zeEvent)
 {
-    if (!otherTrees.empty())
+    //if (!otherTrees.empty())
+    //{
+    //    if (CheckAABBCollision(this, &zeEvent))
+    //        for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
+    //        {
+    //            if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
+    //            {
+    //                return quadIt->onNotify(zeEvent);
+    //            }
+    //        }
+    //    return previousQuad->onNotify(zeEvent);
+    //}
+    //else
+    //{
+    //    waitingList.push_back(&zeEvent);
+    //}
+    if (CheckAABBCollision(this, &zeEvent))
     {
-        for (std::vector<QuadTree>::iterator quadIt = otherTrees.begin(), quadEND = otherTrees.end(); quadIt != quadEND; ++quadIt)
-        {
-            if (quadIt->CheckAABBCollision(&(*quadIt), &zeEvent))
-            {
-                return quadIt->onNotify(zeEvent);
-            }
-        }
-        previousQuad->onNotify(zeEvent);
+        waitingList.push_back(&zeEvent);
     }
     else
     {
-        waitingList.push_back(&zeEvent);
+        return previousQuad->onNotify(zeEvent);
     }
     return true;
 }

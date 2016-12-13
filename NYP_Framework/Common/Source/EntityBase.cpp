@@ -52,10 +52,15 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
 {
     // Get the colliders for the 2 entities
     // Get the minAABB and maxAABB for each entity
-    Vector3 thisMinAABB = ThisEntity->GetPosition() - (ThisEntity->GetScale() * 0.5f);
-    Vector3 thisMaxAABB = ThisEntity->GetPosition() + (ThisEntity->GetScale()*0.5f);
-    Vector3 thatMinAABB = ThatEntity->GetPosition() - (ThatEntity->GetScale()*0.5f);
-    Vector3 thatMaxAABB = ThatEntity->GetPosition() + (ThatEntity->GetScale()*0.5f);
+    Vector3 thisMinAABB = ThisEntity->position - (ThisEntity->scale * 0.5f);
+    Vector3 thisMaxAABB = ThisEntity->position + (ThisEntity->scale*0.5f);
+    Vector3 thatMinAABB = ThatEntity->position - (ThatEntity->scale*0.5f);
+    Vector3 thatMaxAABB = ThatEntity->position + (ThatEntity->scale*0.5f);
+
+    thisMinAABB.y = 0;
+    thisMaxAABB.y = 0;
+    thatMinAABB.y = 0;
+    thatMaxAABB.y = 0;
 
     // Check for overlap
     //if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
@@ -90,8 +95,8 @@ bool EntityBase::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEnti
 
     // if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
     // Do more collision checks with other points on each bounding box
-    Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
-    Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
+    Vector3 altThisMinAABB = Vector3(thisMinAABB.x, /*thisMinAABB.y*/0, thisMaxAABB.z);
+    Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, /*thisMaxAABB.y*/0, thisMinAABB.z);
 
     // Check for overlap
     //if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
@@ -196,6 +201,11 @@ bool EntityBase::onNotify(const Vector3 &zeEvent)
 }
 
 bool EntityBase::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
+{
+    return false;
+}
+
+bool EntityBase::onNotify(void *zeEvent)
 {
     return false;
 }

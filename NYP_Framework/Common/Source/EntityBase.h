@@ -34,6 +34,7 @@ public:
     virtual bool onNotify(const int &zeEvent1, const int &zeEvent2);
     virtual bool onNotify(const Vector3 &zeEvent);
     virtual bool onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2);
+    virtual bool onNotify(void *zeEvent);
 
     bool CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
     bool CheckOverlap(const Vector3 &thisMinAABB, const Vector3 &thisMaxAABB, const Vector3 &thatMinAABB, const Vector3 &thatMaxAABB);

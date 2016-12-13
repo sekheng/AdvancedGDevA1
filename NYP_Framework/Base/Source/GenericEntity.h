@@ -3,12 +3,12 @@
 
 #include "EntityBase.h"
 #include <string>
-#include "Collider/Collider.h"
+//#include "Collider/Collider.h"
 #include "SpatialPartition\QuadTree.h"
 
 class Mesh;
 
-class GenericEntity : public EntityBase, public CCollider
+class GenericEntity : public EntityBase/*, public CCollider*/
 {
 public:
 	GenericEntity(Mesh* _modelMesh);
@@ -18,13 +18,17 @@ public:
 	virtual void Render();
 
 	// Set the maxAABB and minAABB
-	void SetAABB(Vector3 maxAABB, Vector3 minAABB);
+	//void SetAABB(Vector3 maxAABB, Vector3 minAABB);
 
     virtual bool onNotify(EntityBase &zeEvent);
+    virtual bool onNotify(const std::string &zeEvent);
 
 protected:
 	Mesh* modelMesh;
     QuadTree *whichQuadIsIn;
+    EntityBase *boundary_;
+
+    bool removeItselfFromQuad();
 };
 
 namespace Create
