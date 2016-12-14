@@ -50,6 +50,6 @@ public:
 	// Print Self
 	void PrintSelf(void) const;
 
-
+	Vector3 getPosition();
 
 };

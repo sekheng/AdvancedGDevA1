@@ -161,20 +161,17 @@ void SceneText::Init()
 	GenericEntity* baseCube = Create::Entity("ASTEROID", Vector3(0.0f, 0.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
-
 	UpdateTransformation* baseMtx = new UpdateTransformation();
-	UpdateRotation* baseMtx2 = new UpdateRotation();
-	baseMtx->ApplyUpdate(1.f, 0.0f, 0.0f);
+	baseNode->ApplyTranslate(10, 0, 0);
+	baseMtx->ApplyUpdate(0.1f, 0.0f, 0.0f);
 	baseMtx->SetSteps(-60, 60);
-	baseMtx2->ApplyUpdate(1.f, 0.0f, 0.0f,1.f);
-	baseMtx2->SetSteps(-60, 60);
+
 	baseNode->SetUpdateTransformation(baseMtx);
 	
 
 	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     childCube->setName("cube5");
 	SceneNode* childNode = baseNode->AddChild(childCube);
-	childNode->SetUpdateRotation(baseMtx2);
 
 	GenericEntity* grandchildCube = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     grandchildCube->setName("cube6");
@@ -324,8 +321,9 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	textObj[1]->SetText(to_string(SceneGraph::GetInstance()->GetNode(1)->getPosition().x));
 
+	;
 	// Update the player position into textObj[2]
 	std::ostringstream ss1;
 	ss1.precision(4);
