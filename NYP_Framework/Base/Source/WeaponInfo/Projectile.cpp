@@ -79,8 +79,8 @@ void Projectile::Update(double dt)
 #ifdef _DEBUG
                             std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
-                            Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale();
-                            Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale();
+                            Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
+                            Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
                             Vector3 HitPosition(0, 0, 0);
                             if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                             {

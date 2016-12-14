@@ -7,6 +7,9 @@
 #ifdef _DEBUG
 #include <assert.h>
 #endif
+#include "SceneManager.h"
+
+static const int ScoreByGeneric = 50;
 
 GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
@@ -98,7 +101,9 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
     {
         isDone = true;
         removeItselfFromQuad();
-        return true;
+        std::string zeScore = "SCORE:";
+        zeScore.append(to_string(ScoreByGeneric));
+        return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
     }
     return false;
 }

@@ -46,6 +46,7 @@ private:
     EntityBase *spatialPartition, *boundaryOfScene;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
+    int score_;
 };
 
 #endif
