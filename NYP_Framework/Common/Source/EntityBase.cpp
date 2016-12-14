@@ -205,10 +205,6 @@ bool EntityBase::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
     return false;
 }
 
-bool EntityBase::onNotify(void *zeEvent)
-{
-    return false;
-}
 
 const std::string &EntityBase::getName()
 {
