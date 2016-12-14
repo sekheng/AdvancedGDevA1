@@ -17,6 +17,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
     whichQuadIsIn = nullptr;
     isDone = false;
     boundary_ = nullptr;
+    howManyLives = 2;
 }
 
 GenericEntity::~GenericEntity()
@@ -99,11 +100,22 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
 {
     if (zeEvent.find("DIED") != std::string::npos && !isDone)
     {
-        isDone = true;
+        --howManyLives;
+        if (howManyLives == 0)
+        {
+            isDone = true;
+            removeItselfFromQuad();
+            std::string zeScore = "SCORE:";
+            zeScore.append(to_string(ScoreByGeneric));
+            return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
+        }
+    }
+    else if (zeEvent.find("RESET") != std::string::npos)
+    {
+        howManyLives = 2;
         removeItselfFromQuad();
-        std::string zeScore = "SCORE:";
-        zeScore.append(to_string(ScoreByGeneric));
-        return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
+        isDone = false;
+        return true;
     }
     return false;
 }
