@@ -215,6 +215,8 @@ void SceneText::Init()
     textObj[3] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
     // For TimeLeft
     textObj[4] = Create::Text2DObject("text", Vector3(-200, halfWindowHeight - fontSize, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
+    // For GameOver Screen
+    /*textObj[5] = Create:;*/
 
     spatialPartition = new QuadTree();
     spatialPartition->SetScale(Vector3(1000,1000,1000));

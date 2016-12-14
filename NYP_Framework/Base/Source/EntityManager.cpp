@@ -98,6 +98,7 @@ EntityManager::~EntityManager()
     entityList.clear();
 }
 
+
 //// Check for overlap
 //bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 //{	
