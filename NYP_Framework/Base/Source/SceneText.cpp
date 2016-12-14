@@ -209,8 +209,12 @@ void SceneText::Init()
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
-    textObj[2] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 1.f, 0.f));
-	//textObj[0]->SetText("HELLO WORLD");
+    // For Score
+    textObj[2] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 1.f, 0.f));
+    // For Num of Bullets and Clips
+    textObj[3] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
+    // For TimeLeft
+    textObj[4] = Create::Text2DObject("text", Vector3(-200, halfWindowHeight - fontSize, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
 
     spatialPartition = new QuadTree();
     spatialPartition->SetScale(Vector3(1000,1000,1000));
@@ -230,11 +234,28 @@ void SceneText::Init()
         m_inactiveList.back()->onNotify(*boundaryOfScene);
     }
     score_ = 0;
+    timeLeft_Second = 60;
+    currGameState = PLAYING;
 }
 
 void SceneText::Update(double dt)
 {
 	// Update our entities
+    switch (currGameState)
+    {
+    case PLAYING:
+        timeLeft_Second -= (float)(dt);
+        if (timeLeft_Second <= Math::EPSILON)
+        {
+            timeLeft_Second = 0;
+            currGameState = GAME_OVER;
+        }
+        break;
+    case GAME_OVER:
+        break;
+    default:
+        break;
+    }
 	EntityManager::GetInstance()->Update(dt);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
@@ -338,6 +359,14 @@ void SceneText::Update(double dt)
     ss1.str("");
     ss1 << "Total Score:" << score_;
     textObj[2]->SetText(ss1.str());
+
+    ss1.str("");
+    ss1 << playerInfo->getCurrNumBullet() << "|" << playerInfo->getCurrNumClips();
+    textObj[3]->SetText(ss1.str());
+
+    ss1.str("");
+    ss1 << "TimeLeft:" << timeLeft_Second;
+    textObj[4]->SetText(ss1.str());
 }
 
 void SceneText::Render()

@@ -11,7 +11,7 @@ Projectile::Projectile()
     : GenericEntity(MeshBuilder::GetInstance()->GetMesh("sphere"))
 {
     vel_.SetZero();
-    speed_ = 100;
+    speed_ = 200;
     timespan_ = MAX_LIFESPAN;
     isDone = true;
     name_ = "Projectile"; 

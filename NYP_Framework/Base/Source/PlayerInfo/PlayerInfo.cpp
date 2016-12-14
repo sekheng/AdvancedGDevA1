@@ -453,3 +453,13 @@ FPSCamera &CPlayerInfo::GetCurrCamera()
 {
     return *attachedCamera;
 }
+
+size_t CPlayerInfo::getCurrNumBullet()
+{
+    return mainWeapon->getNumCurrBullets();
+}
+
+size_t CPlayerInfo::getCurrNumClips()
+{
+    return mainWeapon->getNumCurrMagazine();
+}

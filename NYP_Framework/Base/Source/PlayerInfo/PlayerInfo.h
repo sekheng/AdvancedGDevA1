@@ -95,6 +95,8 @@ public:
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera();
     FPSCamera &GetCurrCamera();
+    size_t getCurrNumBullet();
+    size_t getCurrNumClips();
 
 private:
 	//Vector3 defaultPosition, defaultTarget, defaultUp;

@@ -15,6 +15,9 @@ public:
     virtual bool onNotify(const float &zeEvent);
     virtual bool onNotify(const int &zeEvent1, const int &zeEvent2);
 
+    size_t getNumCurrBullets();
+    size_t getNumCurrMagazine();
+
 protected:
     unsigned char maxBullets, currBullets, maxClips, currClips;
     float timeCounter, fireRate;
