@@ -399,3 +399,4 @@ void SceneNode::Render(void)
 
 	modelStack.PopMatrix();
 }
+

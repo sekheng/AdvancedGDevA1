@@ -49,6 +49,8 @@ public:
 	// Render the Scene Graph
 	void Render(void);
 
+	
+
 protected:
 	int ID;
 	EntityBase* theEntity;

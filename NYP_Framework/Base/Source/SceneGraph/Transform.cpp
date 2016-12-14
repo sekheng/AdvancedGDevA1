@@ -159,3 +159,14 @@ Mtx44 Transform::GetUpdateRotation()
 
 	return theUpdateRotation->GetUpdateRotation();
 }
+
+Vector3 Transform::getPosition()
+{
+	Vector3 position;
+	position.x = Mtx.a[12];
+	position.y = Mtx.a[13];
+	position.z = Mtx.a[14];
+
+	//position += 
+	return position;
+}
