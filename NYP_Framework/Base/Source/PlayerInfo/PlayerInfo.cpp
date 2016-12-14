@@ -399,16 +399,14 @@ void CPlayerInfo::Update(double dt)
 	{
 
 	}
-
-	// If the user presses R key, then reset the view to default values
+    if (KeyboardController::GetInstance()->IsKeyDown('E'))
+    {
+        mainWeapon->onNotify("RELOAD");
+    }
+    // If the user presses R key, then reset the view to default values
 	if (KeyboardController::GetInstance()->IsKeyDown('P'))
 	{
 		Reset();
-	}
-	else
-	{
-
-
 	}
 
 	// If a camera is attached to this playerInfo class, then update it

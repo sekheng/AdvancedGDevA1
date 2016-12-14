@@ -39,6 +39,12 @@ bool Weapon::onNotify(const std::string &zeEvent)
         timeCounter = 0;
         return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
     }
+    else if (zeEvent.find("RELOAD") != std::string::npos && currBullets < maxBullets && currClips > 0)
+    {
+        currBullets = maxBullets;
+        --currClips;
+        return true;
+    }
     return false;
 }
 

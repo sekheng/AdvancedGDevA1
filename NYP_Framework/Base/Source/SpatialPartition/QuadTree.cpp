@@ -147,8 +147,17 @@ void QuadTree::Update(double dt)
                 for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
                 {
                     /*previousQuad->m_objectList.push_back(*it);*/
-                    previousQuad->onNotify(**it);
+                    if (previousQuad)
+                    {
+                        previousQuad->onNotify(**it);
+                    }
+                    else
+                    {
+                        (*it)->onNotify("DIED");
+                        (*it)->onNotify("DIED");
+                    }
                 }
+                m_objectList.clear();
             }
         }
     }
