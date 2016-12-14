@@ -368,6 +368,19 @@ void SceneNode::Update(void)
 		ApplyTransform(GetUpdateTransform());
 	}
 	
+	if (theEntity != NULL)
+	{
+
+		if (theEntity->IsDone() == true)
+		{
+			std::vector<SceneNode*>::iterator it;
+			for (it = theChildren.begin(); it != theChildren.end(); ++it)
+			{
+				(*it)->theEntity->onNotify("DIED");
+				(*it)->theEntity->onNotify("DIED");
+			}
+		}
+	}
 	// Update the children
 	std::vector<SceneNode*>::iterator it;
 	for (it = theChildren.begin(); it != theChildren.end(); ++it)

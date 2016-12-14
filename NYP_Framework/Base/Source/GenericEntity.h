@@ -23,6 +23,9 @@ public:
 
     virtual bool onNotify(EntityBase &zeEvent);
     virtual bool onNotify(const std::string &zeEvent);
+	virtual bool onNotify(const Vector3 &zeEvent);
+
+	//bool isVisable()
 
 protected:
 	Mesh* modelMesh;
@@ -30,6 +33,7 @@ protected:
     EntityBase *boundary_;
 
     bool removeItselfFromQuad(); 
+	Vector3* posOfPlayer;
 };
 
 namespace Create
