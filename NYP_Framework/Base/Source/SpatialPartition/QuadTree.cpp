@@ -7,7 +7,7 @@
 #endif
 
 #define MAX_NUM_OBJ 4U
-#define MAX_NUM_QUADTREE_DEPTH '3'
+#define MAX_NUM_QUADTREE_DEPTH '2'
 static size_t QuadTreeDepth = 0;
 
 Mesh* QuadTree::debuggingModel = nullptr;
@@ -41,9 +41,8 @@ void QuadTree::Update(double dt)
     switch (otherTrees.empty())
     {
     case true:
-        if (m_objectList.size() > MAX_NUM_OBJ && name_[name_.size() - 1] <= MAX_NUM_QUADTREE_DEPTH)
+        if (m_objectList.size() > MAX_NUM_OBJ && QuadTreeDepth + '0' <= MAX_NUM_QUADTREE_DEPTH)
         {
-            ++QuadTreeDepth;
             //Just the following sentences gives me a huge headache. So just hardcode 4 quad for each quad
             QuadTree zeTree;
             zeTree.SetScale(scale * 0.5f);
@@ -55,6 +54,7 @@ void QuadTree::Update(double dt)
             otherTrees.push_back(zeTree);
             zeTree.SetPosition(position + Vector3(scale.x * 0.25f, 10, scale.z * 0.25f));
             otherTrees.push_back(zeTree);
+            ++QuadTreeDepth;
 
             std::vector<size_t> whatObjectToRemove;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
