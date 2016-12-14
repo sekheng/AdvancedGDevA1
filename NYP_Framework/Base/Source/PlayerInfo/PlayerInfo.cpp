@@ -25,6 +25,7 @@ CPlayerInfo::CPlayerInfo(void)
     mainWeapon = new Weapon();
     mainWeapon->onNotify(0.2f);
     mainWeapon->onNotify(15, 1);
+    boundaryPtr = nullptr;
 }
 
 CPlayerInfo::~CPlayerInfo(void)
@@ -258,6 +259,7 @@ void CPlayerInfo::Update(double dt)
 	{
         Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
         Vector3 normalizedView = viewVector.Normalized();
+        normalizedView.y = 0;
 		Vector3 rightUV(0,0,0);
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
@@ -462,4 +464,9 @@ size_t CPlayerInfo::getCurrNumBullet()
 size_t CPlayerInfo::getCurrNumClips()
 {
     return mainWeapon->getNumCurrMagazine();
+}
+
+void CPlayerInfo::setBoundary(Vector3 &zeBounds)
+{
+    boundaryPtr = &zeBounds;
 }
