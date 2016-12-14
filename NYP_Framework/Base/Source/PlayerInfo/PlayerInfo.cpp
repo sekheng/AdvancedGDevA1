@@ -258,6 +258,7 @@ void CPlayerInfo::Update(double dt)
 	{
         Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
         Vector3 normalizedView = viewVector.Normalized();
+        normalizedView.y = 0;
 		Vector3 rightUV(0,0,0);
 		if (KeyboardController::GetInstance()->IsKeyDown('W'))
 		{
@@ -398,16 +399,14 @@ void CPlayerInfo::Update(double dt)
 	{
 
 	}
-
-	// If the user presses R key, then reset the view to default values
+    if (KeyboardController::GetInstance()->IsKeyDown('E'))
+    {
+        mainWeapon->onNotify("RELOAD");
+    }
+    // If the user presses R key, then reset the view to default values
 	if (KeyboardController::GetInstance()->IsKeyDown('P'))
 	{
 		Reset();
-	}
-	else
-	{
-
-
 	}
 
 	// If a camera is attached to this playerInfo class, then update it
@@ -421,21 +420,30 @@ void CPlayerInfo::Update(double dt)
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (attachedCamera->GetCameraPos().x > boundary_.x)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().x = boundary_.x - Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    else if (attachedCamera->GetCameraPos().x < -boundary_.x)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().x = -boundary_.x + Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    if (attachedCamera->GetCameraPos().z > boundary_.z)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().z = boundary_.z - Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    else if (attachedCamera->GetCameraPos().z < -boundary_.z)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().z = -boundary_.z + Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
 
 }
 
@@ -462,4 +470,10 @@ size_t CPlayerInfo::getCurrNumBullet()
 size_t CPlayerInfo::getCurrNumClips()
 {
     return mainWeapon->getNumCurrMagazine();
+}
+
+void CPlayerInfo::setBoundary(Vector3 &zeBounds)
+{
+    boundary_ = zeBounds * 0.5f;
+    boundary_ -= boundary_ * 0.1f;
 }

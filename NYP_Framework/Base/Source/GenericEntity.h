@@ -31,6 +31,7 @@ protected:
 	Mesh* modelMesh;
     QuadTree *whichQuadIsIn;
     EntityBase *boundary_;
+    unsigned char howManyLives;
 
     bool removeItselfFromQuad(); 
 	Vector3* posOfPlayer;

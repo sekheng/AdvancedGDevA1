@@ -183,7 +183,9 @@ void Application::Run()
 		
 	}
 	SceneManager::GetInstance()->Exit();
+    SceneManager::GetInstance()->Destroy();
     EntityManager::GetInstance()->Destroy();
+    GraphicsManager::GetInstance()->Destroy();
 }
 
 void Application::Exit()

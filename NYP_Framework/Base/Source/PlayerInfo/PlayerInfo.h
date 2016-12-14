@@ -98,6 +98,8 @@ public:
     size_t getCurrNumBullet();
     size_t getCurrNumClips();
 
+    void setBoundary(Vector3 &zeBounds);
+
 private:
 	//Vector3 defaultPosition, defaultTarget, defaultUp;
 	//Vector3 position, target, up;
@@ -118,4 +120,5 @@ private:
 	FPSCamera* attachedCamera;
 
     Weapon *mainWeapon;
+    Vector3 boundary_;
 };
