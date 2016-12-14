@@ -11,7 +11,7 @@ Projectile::Projectile()
     : GenericEntity(MeshBuilder::GetInstance()->GetMesh("sphere"))
 {
     vel_.SetZero();
-    speed_ = 50;
+    speed_ = 100;
     timespan_ = MAX_LIFESPAN;
     isDone = true;
     name_ = "Projectile"; 
@@ -82,7 +82,7 @@ void Projectile::Update(double dt)
                             Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale();
                             Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale();
                             Vector3 HitPosition(0, 0, 0);
-                            if (CheckLineSegmentPlane(position, (position - vel_) * 200.f, thatMinAABB, thatMaxAABB, HitPosition))
+                            if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                             {
 #ifdef _DEBUG
                                 std::cout << "Hit  " << (*it)->getName() << std::endl;

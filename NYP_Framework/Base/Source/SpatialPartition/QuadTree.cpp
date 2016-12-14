@@ -195,7 +195,10 @@ bool QuadTree::onNotify(EntityBase &zeEvent)
     }
     else
     {
-        return previousQuad->onNotify(zeEvent);
+        if (previousQuad)
+            return previousQuad->onNotify(zeEvent);
+        else
+            return false;
     }
     return true;
 }

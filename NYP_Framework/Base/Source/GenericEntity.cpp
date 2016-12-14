@@ -105,14 +105,18 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
 
 bool GenericEntity::removeItselfFromQuad()
 {
-    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+    if (whichQuadIsIn)
     {
-        if ((**it) == *this)
+        for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
         {
-            whichQuadIsIn->m_objectList.erase(it);
-            break;
+            if ((**it) == *this)
+            {
+                whichQuadIsIn->m_objectList.erase(it);
+                break;
+            }
         }
+        whichQuadIsIn = nullptr;
+        return true;
     }
-    whichQuadIsIn = nullptr;
-    return true;
+    return false;
 }
