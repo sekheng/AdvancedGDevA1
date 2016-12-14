@@ -171,6 +171,7 @@ void SceneText::Init()
 
 	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
     childCube->setName("cube5");
+	childCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
 	SceneNode* childNode = baseNode->AddChild(childCube);
 
 	GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));

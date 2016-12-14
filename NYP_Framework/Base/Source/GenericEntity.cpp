@@ -17,6 +17,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
     whichQuadIsIn = nullptr;
     isDone = false;
     boundary_ = nullptr;
+	posOfPlayer = nullptr;
     howManyLives = 2;
 }
 
@@ -26,6 +27,9 @@ GenericEntity::~GenericEntity()
 
 void GenericEntity::Update(double _dt)
 {
+	if (SceneGraph::GetInstance()->GetNode(this) != NULL)
+		
+	//SceneGraph::GetInstance()->Update();
 	// Does nothing here, can inherit & override or create your own version of this class :D
 	//SceneGraph::GetInstance()->Update();
     //if (!CheckAABBCollision(this, whichQuadIsIn))
@@ -144,4 +148,11 @@ bool GenericEntity::removeItselfFromQuad()
         return true;
     }
     return false;
+}
+
+bool GenericEntity::onNotify(const Vector3 &zeEvent)
+{
+	*posOfPlayer = zeEvent;
+
+	return false;
 }
