@@ -236,7 +236,7 @@ void SceneText::Init()
         m_inactiveList.back()->onNotify(*boundaryOfScene);
     }
     score_ = 0;
-    timeLeft_Second = 5;
+    timeLeft_Second = 30;
     currGameState = PLAYING;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
 }
