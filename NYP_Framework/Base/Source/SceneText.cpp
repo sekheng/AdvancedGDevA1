@@ -158,29 +158,30 @@ void SceneText::Init()
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
-	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(0.0f, 0.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
+	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(0.0f, 0.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
     baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
 	UpdateTransformation* baseMtx = new UpdateTransformation();
 	baseNode->ApplyTranslate(10, 0, 0);
-	baseMtx->ApplyUpdate(0.1f, 0.0f, 0.0f);
+	baseMtx->ApplyUpdate(0.1f, 0.0f, 0.5f);
 	baseMtx->SetSteps(-60, 60);
 
 	baseNode->SetUpdateTransformation(baseMtx);
 	
 
-	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
+	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
     childCube->setName("cube5");
 	childCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
 	SceneNode* childNode = baseNode->AddChild(childCube);
 
-	GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f, 0.0f), Vector3(0.5f, 0.5f, 0.5f));
+	GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
     grandchildCube->setName("cube6");
 	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
 
 	m_activeList.push_back(baseCube);
 	m_activeList.push_back(childCube);
 	m_activeList.push_back(grandchildCube);
+
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
