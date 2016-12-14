@@ -94,7 +94,7 @@ bool GenericEntity::onNotify(EntityBase &zeEvent)
 
 bool GenericEntity::onNotify(const std::string &zeEvent)
 {
-    if (zeEvent.find("DIED") != std::string::npos)
+    if (zeEvent.find("DIED") != std::string::npos && !isDone)
     {
         isDone = true;
         removeItselfFromQuad();
