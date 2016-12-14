@@ -149,6 +149,8 @@ void Application::Init()
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//NebulaTop_KaiNew.tga");
     MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//NebulaBottom_Kai.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID", "OBJ//asteroid.obj")->textureID = LoadTGA("Image//asteroid.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID1", "OBJ//asteroid_mid.obj")->textureID = LoadTGA("Image//asteroid.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID2", "OBJ//asteroid_low.obj")->textureID = LoadTGA("Image//asteroid.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
 }

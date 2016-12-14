@@ -5,10 +5,11 @@
 #include <string>
 //#include "Collider/Collider.h"
 #include "SpatialPartition\QuadTree.h"
+#include "LevelOfDetail\LevelOfDetails.h"
 
 class Mesh;
 
-class GenericEntity : public EntityBase/*, public CCollider*/
+class GenericEntity : public EntityBase, public CLevelOfDetails/*, public CCollider*/
 {
 public:
 	GenericEntity(Mesh* _modelMesh);
