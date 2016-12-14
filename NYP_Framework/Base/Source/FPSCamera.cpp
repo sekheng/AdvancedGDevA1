@@ -28,6 +28,7 @@ void FPSCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+	rotation.SetZero();
 }
 
 void FPSCamera::Update(double dt)
@@ -179,10 +180,24 @@ void FPSCamera::SetCameraUp(Vector3 up)
 {
 	this->up = up;
 }
+Vector3 &FPSCamera::GetCameraRotation()
+{
+	return rotation;
+}
+void FPSCamera::SetCameraRotation(Vector3 Rotation)
+{
+	rotation = Rotation;
+}
+
+Vector3 &FPSCamera::GetCameraRight()
+{
+	return right;
+}
 
 void FPSCamera::Reset()
 {
 	position = defaultPosition;
 	target = defaultTarget;
 	up = defaultUp;
+	rotation.SetZero();
 }

@@ -23,8 +23,9 @@ public:
 
     virtual bool onNotify(EntityBase &zeEvent);
     virtual bool onNotify(const std::string &zeEvent);
+	virtual bool onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2);
 	virtual bool onNotify(const Vector3 &zeEvent);
-
+	virtual bool onNotify(const float &zeEvent1, const float &zeEvent2);
 	//bool isVisable()
 
 protected:
@@ -34,7 +35,10 @@ protected:
     unsigned char howManyLives;
 
     bool removeItselfFromQuad(); 
-	Vector3* posOfPlayer;
+	bool isVisible;
+
+	float levelOfDetail_Distances[2];
+	Vector3 posOfPlayer, targetOfPlayer;
 };
 
 namespace Create

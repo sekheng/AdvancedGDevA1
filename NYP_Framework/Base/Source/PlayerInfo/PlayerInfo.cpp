@@ -363,6 +363,7 @@ void CPlayerInfo::Update(double dt)
 			rightUV.y = 0;
 			rightUV.Normalize();
             attachedCamera->GetCameraUp() = rightUV.Cross(viewUV).Normalized();
+			attachedCamera->GetCameraRotation().y += yaw;
 		}
 		{
 			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
@@ -374,7 +375,10 @@ void CPlayerInfo::Update(double dt)
 			rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
 			viewUV = rotation * viewUV;
             attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewUV;
+			attachedCamera->GetCameraRotation().x += pitch;
 		}
+
+		attachedCamera->GetCameraRight() = rightUV;
 	}
 
 	// If the user presses SPACEBAR, then make him jump

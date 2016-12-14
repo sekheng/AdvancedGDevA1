@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "GenericEntity.h"
 #include "DetectMemoryLeak.h"
+#include "WeaponInfo\RenderGun.h"
 #include <vector>
 
 class ShaderProgram;
@@ -40,6 +41,7 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
+	RenderGun* theGun;
 
     std::vector<GenericEntity*> m_activeList, m_inactiveList;
     std::vector<size_t> waitingListToBeRemoved;

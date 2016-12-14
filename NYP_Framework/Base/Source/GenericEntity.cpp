@@ -17,8 +17,10 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
     whichQuadIsIn = nullptr;
     isDone = false;
     boundary_ = nullptr;
-	posOfPlayer = nullptr;
     howManyLives = 2;
+	isVisible = true;
+	levelOfDetail_Distances[0] = 0.f;
+	levelOfDetail_Distances[1] = 0.f;
 }
 
 GenericEntity::~GenericEntity()
@@ -41,6 +43,7 @@ void GenericEntity::Update(double _dt)
 		whichQuadIsIn = whichQuadIsIn->previousQuad;
 	}
 	//if (SceneGraph::GetInstance()->GetNode(this) != NULL)
+	
 		
 	//SceneGraph::GetInstance()->Update();
 	// Does nothing here, can inherit & override or create your own version of this class :D
@@ -64,7 +67,7 @@ void GenericEntity::Update(double _dt)
 
 void GenericEntity::Render()
 {
-    if (modelMesh)
+	if ((modelMesh && isVisible))
     {
         MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
         modelStack.PushMatrix();
@@ -163,9 +166,47 @@ bool GenericEntity::removeItselfFromQuad()
     return false;
 }
 
+bool GenericEntity::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
+{
+	posOfPlayer = zeEvent1;
+	targetOfPlayer = zeEvent2;
+	Vector3 camDir = targetOfPlayer - posOfPlayer;
+	Vector3 distToObj = position - posOfPlayer;
+
+	if (camDir.Dot(distToObj) > 0)
+	{
+		isVisible = true;
+		return true;
+	}
+	isVisible = false;
+	return false;
+}
+
 bool GenericEntity::onNotify(const Vector3 &zeEvent)
 {
-	*posOfPlayer = zeEvent;
+	if (isVisible)
+	{
+		Vector3 PlayerPos = zeEvent;
+		Vector3 dist = position - PlayerPos;
+		if (dist.LengthSquared() < levelOfDetail_Distances[0] * levelOfDetail_Distances[0])
+		{
+			SetDetailLevel(HIGH_DETAILS);
+		}
+		else if (dist.LengthSquared() < levelOfDetail_Distances[1] * levelOfDetail_Distances[1])
+		{
+			SetDetailLevel(MID_DETAILS);
+		}
+		else
+		{
+			SetDetailLevel(LOW_DETAILS);
+		}
+	}
+	return true;
+}
 
-	return false;
+bool GenericEntity::onNotify(const float &zeEvent1, const float &zeEvent2)
+{
+	levelOfDetail_Distances[0] = zeEvent1;
+	levelOfDetail_Distances[1] = zeEvent2;
+	return true;
 }

@@ -158,25 +158,31 @@ void SceneText::Init()
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
-	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(0.0f, 0.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
+	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(0.0f, 0.0f, 0.0f));
     baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
-	UpdateTransformation* baseMtx = new UpdateTransformation();
 	baseNode->ApplyTranslate(10, 0, 0);
-	baseMtx->ApplyUpdate(0.1f, 0.0f, 0.5f);
-	baseMtx->SetSteps(-60, 60);
+	baseCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
+	baseCube->onNotify(50.f, 200.f);
+	//UpdateTransformation* baseMtx = new UpdateTransformation();
+	
+	//baseMtx->ApplyUpdate(0.1f, 0.0f, 0.5f);
+	//baseMtx->SetSteps(-60, 60);
 
-	baseNode->SetUpdateTransformation(baseMtx);
+	//baseNode->SetUpdateTransformation(baseMtx);
 	
 
-	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
+	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f, 0.0f));
     childCube->setName("cube5");
 	childCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
+	childCube->onNotify(50.f, 200.f);
 	SceneNode* childNode = baseNode->AddChild(childCube);
 
-	GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f, 0.0f), Vector3(5.f, 5.f, 5.f));
+	GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f, 0.0f));
     grandchildCube->setName("cube6");
-	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
+	grandchildCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
+	grandchildCube->onNotify(50.f, 200.f);
+	SceneNode* grandchildNode = baseNode->AddChild(grandchildCube);
 
 	m_activeList.push_back(baseCube);
 	m_activeList.push_back(childCube);
@@ -239,15 +245,24 @@ void SceneText::Init()
     timeLeft_Second = 30;
     currGameState = PLAYING;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
+
+	theGun = Create::Gun("ASTEROID", Vector3(playerInfo->GetCurrCamera().GetCameraPos().x, playerInfo->GetCurrCamera().GetCameraPos().y, playerInfo->GetCurrCamera().GetCameraPos().z));
 }
 
 void SceneText::Update(double dt)
 {
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
+	
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         (*it)->Update(dt);
+		if ((*it)->getName().find("Projectile") == std::string::npos)
+			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
+		if ((*it)->GetLODStatus() == true)
+		{
+			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
+		}
         if ((*it)->IsDone())
             waitingListToBeRemoved.push_back(it - m_activeList.begin());
     }
@@ -327,7 +342,8 @@ void SceneText::Update(double dt)
 
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
     playerInfo->Update(dt);
-
+	theGun->onNotify(playerInfo->GetCurrCamera().GetCameraTarget(), playerInfo->GetCurrCamera().GetCameraRotation());
+	theGun->onNotify(playerInfo->GetCurrCamera().GetCameraRight());
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
@@ -396,6 +412,7 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
 	SceneGraph::GetInstance()->Render();
+	theGun->Render();
     spatialPartition->Render();
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
