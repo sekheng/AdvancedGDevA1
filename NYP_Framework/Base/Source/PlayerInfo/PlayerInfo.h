@@ -120,5 +120,5 @@ private:
 	FPSCamera* attachedCamera;
 
     Weapon *mainWeapon;
-    Vector3 *boundaryPtr;
+    Vector3 boundary_;
 };

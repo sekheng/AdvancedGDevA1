@@ -25,7 +25,6 @@ CPlayerInfo::CPlayerInfo(void)
     mainWeapon = new Weapon();
     mainWeapon->onNotify(0.2f);
     mainWeapon->onNotify(15, 1);
-    boundaryPtr = nullptr;
 }
 
 CPlayerInfo::~CPlayerInfo(void)
@@ -423,21 +422,30 @@ void CPlayerInfo::Update(double dt)
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (attachedCamera->GetCameraPos().x > boundary_.x)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().x = boundary_.x - Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    else if (attachedCamera->GetCameraPos().x < -boundary_.x)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().x = -boundary_.x + Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    if (attachedCamera->GetCameraPos().z > boundary_.z)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().z = boundary_.z - Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
+    else if (attachedCamera->GetCameraPos().z < -boundary_.z)
+    {
+        Vector3 viewVector = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+        attachedCamera->GetCameraPos().z = -boundary_.z + Math::EPSILON;
+        attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewVector;
+    }
 
 }
 
@@ -468,5 +476,6 @@ size_t CPlayerInfo::getCurrNumClips()
 
 void CPlayerInfo::setBoundary(Vector3 &zeBounds)
 {
-    boundaryPtr = &zeBounds;
+    boundary_ = zeBounds * 0.5f;
+    boundary_ -= boundary_ * 0.1f;
 }

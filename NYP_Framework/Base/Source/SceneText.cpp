@@ -236,6 +236,7 @@ void SceneText::Init()
     score_ = 0;
     timeLeft_Second = 5;
     currGameState = PLAYING;
+    playerInfo->setBoundary(boundaryOfScene->GetScale());
 }
 
 void SceneText::Update(double dt)
