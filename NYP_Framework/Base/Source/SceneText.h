@@ -36,7 +36,7 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
-	TextEntity* textObj[3];
+	TextEntity* textObj[10];
 	Light* lights[2];
 
 	GenericEntity* theCube;
@@ -46,6 +46,17 @@ private:
     EntityBase *spatialPartition, *boundaryOfScene;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
+    int score_;
+    float timeLeft_Second;
+
+
+    enum GAME_STATES
+    {
+        PLAYING,
+        GAME_OVER,
+        TOTAL_STATES,
+    };
+    GAME_STATES currGameState;
 };
 
 #endif

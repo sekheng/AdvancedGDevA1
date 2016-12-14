@@ -28,7 +28,7 @@ protected:
     QuadTree *whichQuadIsIn;
     EntityBase *boundary_;
 
-    bool removeItselfFromQuad();
+    bool removeItselfFromQuad(); 
 };
 
 namespace Create

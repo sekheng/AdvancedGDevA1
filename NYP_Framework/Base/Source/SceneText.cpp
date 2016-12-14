@@ -200,17 +200,23 @@ void SceneText::Init()
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
-	float fontSize = 25.0f;
+	float fontSize = 50.f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
-	textObj[0]->SetText("HELLO WORLD");
+    // For Score
+    textObj[2] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 1.f, 0.f));
+    // For Num of Bullets and Clips
+    textObj[3] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
+    // For TimeLeft
+    textObj[4] = Create::Text2DObject("text", Vector3(-200, halfWindowHeight - fontSize, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
+
     spatialPartition = new QuadTree();
     spatialPartition->SetScale(Vector3(1000,1000,1000));
     spatialPartition->SetPosition(Vector3(0, 1, 0));
-    //QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
+    QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         //zeQuadTree->m_objectList.push_back(*it);
@@ -224,11 +230,29 @@ void SceneText::Init()
         m_inactiveList.push_back(new Projectile());
         m_inactiveList.back()->onNotify(*boundaryOfScene);
     }
+    score_ = 0;
+    timeLeft_Second = 60;
+    currGameState = PLAYING;
 }
 
 void SceneText::Update(double dt)
 {
 	// Update our entities
+    switch (currGameState)
+    {
+    case PLAYING:
+        timeLeft_Second -= (float)(dt);
+        if (timeLeft_Second <= Math::EPSILON)
+        {
+            timeLeft_Second = 0;
+            currGameState = GAME_OVER;
+        }
+        break;
+    case GAME_OVER:
+        break;
+    default:
+        break;
+    }
 	EntityManager::GetInstance()->Update(dt);
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
@@ -321,14 +345,27 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(to_string(SceneGraph::GetInstance()->GetNode(1)->getPosition().x));
+	textObj[0]->SetText(ss.str());
+
 
 	;
 	// Update the player position into textObj[2]
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Player:";
-	textObj[2]->SetText(ss1.str());
+	ss1 << "Player:" << playerInfo->GetCurrCamera().GetCameraPos();
+	textObj[1]->SetText(ss1.str());
+
+    ss1.str("");
+    ss1 << "Total Score:" << score_;
+    textObj[2]->SetText(ss1.str());
+
+    ss1.str("");
+    ss1 << playerInfo->getCurrNumBullet() << "|" << playerInfo->getCurrNumClips();
+    textObj[3]->SetText(ss1.str());
+
+    ss1.str("");
+    ss1 << "TimeLeft:" << timeLeft_Second;
+    textObj[4]->SetText(ss1.str());
 }
 
 void SceneText::Render()
@@ -398,6 +435,12 @@ bool SceneText::onNotify(const std::string &zeEvent)
             }
         }
         return zeBullet->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
+    }
+    else if (zeEvent.find("SCORE") != std::string::npos)
+    {
+        size_t posOfColon = zeEvent.find(":");
+        score_ += stoi(zeEvent.substr(posOfColon + 1));
+        return true;
     }
     return false;
 }

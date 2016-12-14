@@ -62,3 +62,13 @@ bool Weapon::onNotify(const int &zeEvent1, const int &zeEvent2)
     }
     return false;
 }
+
+size_t Weapon::getNumCurrBullets()
+{
+    return (size_t)currBullets;
+}
+
+size_t Weapon::getNumCurrMagazine()
+{
+    return (size_t)(currClips);
+}
