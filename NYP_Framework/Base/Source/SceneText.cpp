@@ -140,27 +140,27 @@ void SceneText::Init()
 	// Create entities into the scene
     EntityManager::GetInstance()->AddEntity(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
     EntityManager::GetInstance()->AddEntity(Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z))); // Lightball
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f), Vector3(20.f,20.f,20.f));
-    aCube->setName("cube0");
-	aCube->SetCollider(true);
-	//aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    m_activeList.push_back(aCube);
+	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f), Vector3(20.f,20.f,20.f));
+ //   aCube->setName("cube0");
+	//aCube->SetCollider(true);
+	////aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+ //   m_activeList.push_back(aCube);
 
-    aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, -20.0f));
-    aCube->setName("cube1");
-    aCube->SetCollider(true);
-    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    m_activeList.push_back(aCube);
-    aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, 20.0f));
-    aCube->setName("cube2");
-    aCube->SetCollider(true);
-    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    m_activeList.push_back(aCube);
-    aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, 20.0f));
-    aCube->setName("cube3");
-    aCube->SetCollider(true);
-    //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-    m_activeList.push_back(aCube);
+ //   aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, -20.0f));
+ //   aCube->setName("cube1");
+ //   aCube->SetCollider(true);
+ //   //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+ //   m_activeList.push_back(aCube);
+ //   aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, 20.0f));
+ //   aCube->setName("cube2");
+ //   aCube->SetCollider(true);
+ //   //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+ //   m_activeList.push_back(aCube);
+ //   aCube = Create::Entity("cube", Vector3(20.0f, 0.0f, 20.0f));
+ //   aCube->setName("cube3");
+ //   aCube->SetCollider(true);
+ //   //aCube->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+ //   m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
 	CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
@@ -351,7 +351,7 @@ void SceneText::Update(double dt)
     {
     case PLAYING:
         timeLeft_Second -= (float)(dt);
-        if (timeLeft_Second <= Math::EPSILON)
+        if (timeLeft_Second <= Math::EPSILON || num_ofAsteroidsLeft == 0)
         {
             timeLeft_Second = 0;
             currGameState = GAME_OVER;
@@ -465,6 +465,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
         size_t posOfColon = zeEvent.find(":");
         score_ += stoi(zeEvent.substr(posOfColon + 1));
         MusicSystem::accessing().playMusic("explode");
+        --num_ofAsteroidsLeft;
         return true;
     }
     return false;
@@ -479,6 +480,34 @@ void SceneText::resetGame()
     currGameState = PLAYING;
     textObj[5]->SetText("");
     textObj[6]->SetText("");
+    ROCK_ID = 0;
+    num_ofAsteroidsLeft = 0;
+    delete spatialPartition;
+    spatialPartition = new QuadTree();
+    for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
+    {
+        if ((*it)->getName().find("Projectile") != std::string::npos)
+            m_inactiveList.push_back(*it);
+        else
+            delete *it;
+    }
+    m_activeList.clear();
+    waitingListToBeRemoved.clear();
+    for (std::vector<GenericEntity*>::iterator it = m_inactiveList.begin(), end = m_inactiveList.end(); it != end; ++it)
+    {
+        if ((*it)->getName().find("Projectile") == std::string::npos)
+        {
+            waitingListToBeRemoved.push_back(it - m_inactiveList.begin());
+            delete *it;
+        }
+    }
+    for (std::vector<size_t>::reverse_iterator rit = waitingListToBeRemoved.rbegin(), rend = waitingListToBeRemoved.rend(); rit != rend; ++rit)
+    {
+        m_inactiveList.erase(m_inactiveList.begin() + *rit);
+    }
+    CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
+    CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
+    CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
 }
 
 void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
