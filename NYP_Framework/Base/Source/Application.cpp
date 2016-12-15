@@ -156,6 +156,7 @@ void Application::Init()
     MeshBuilder::GetInstance()->GenerateOBJ("BULLET2", "OBJ//Bullet2.obj")->textureID = LoadTGA("Image//bulletSkin.tga");
     MeshBuilder::GetInstance()->GenerateOBJ("BULLET3", "OBJ//Bullet3.obj")->textureID = LoadTGA("Image//bulletSkin.tga");
     MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f)->textureID = LoadTGA("Image//scope.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("Gun", "OBJ//lasergun.obj")->textureID = LoadTGA("Image//lasergun.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
 
