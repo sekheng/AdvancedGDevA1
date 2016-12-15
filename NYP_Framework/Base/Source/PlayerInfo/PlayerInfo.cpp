@@ -352,7 +352,8 @@ void CPlayerInfo::Update(double dt)
 	////Update the camera direction based on mouse move
 	{
         Vector3 viewUV = (attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos()).Normalize();
-		Vector3 rightUV;
+		Vector3 rightUV, theDirection, tempDistToTargetz;
+
 
 		{
 			float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
@@ -375,10 +376,27 @@ void CPlayerInfo::Update(double dt)
 			Mtx44 rotation;
 			rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
 			viewUV = rotation * viewUV;
-            attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewUV;
-			attachedCamera->GetCameraRotation().x += pitch;
+			if (attachedCamera->GetCameraPos().y + viewUV.y < 0.5f
+				&& attachedCamera->GetCameraPos().y + viewUV.y > -0.5f)
+			{
+				attachedCamera->GetCameraTarget() = attachedCamera->GetCameraPos() + viewUV;
+				attachedCamera->GetCameraRotation().x += pitch;
+			}
 		}
+		theDirection = attachedCamera->GetCameraTarget() - attachedCamera->GetCameraPos();
+		theDirection.Normalize();
 
+		
+		
+		/*attachedCamera->GetCameraRotation().x = Math::RadianToDegree(acos(theDirection.x / theDirection.Length()));
+		if ((theDirection.x < 0) && (theDirection.z > 0))
+			attachedCamera->GetCameraRotation().x *= -1.0f;
+		attachedCamera->GetCameraRotation().y = Math::RadianToDegree(acos(theDirection.y / theDirection.Length()));
+		attachedCamera->GetCameraRotation().z = Math::RadianToDegree(acos(theDirection.z / theDirection.Length()));
+		if ((theDirection.z < 0) && (theDirection.x < 0))
+			attachedCamera->GetCameraRotation().y *= -1.0f;
+		if ((theDirection.z > 0) && (theDirection.x < 0))
+			attachedCamera->GetCameraRotation().z *= -1.0f;*/
 		attachedCamera->GetCameraRight() = rightUV;
 	}
 
