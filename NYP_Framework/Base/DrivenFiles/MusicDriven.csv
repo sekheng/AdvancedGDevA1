@@ -1,2 +1,3 @@
 SoundFileName,SoundType,volume //Set it between 0.1 and 1,TimesToPlay,unlimitedtimes,loop //Only for background music,SoundID
 Sound//spaceBGM.mp3,2D,0.7,0,0,1,BGM
+Sound//Laser_Shoot.wav,2D,0.5,1,0,,Fire

@@ -1,5 +1,6 @@
 #include "Weapon.h"
 #include "SceneManager.h"
+#include "../MusicsStuff/MusicSystem.h"
 
 size_t Weapon::zeID = 0;
 
@@ -37,6 +38,7 @@ bool Weapon::onNotify(const std::string &zeEvent)
     {
         --currBullets;
         timeCounter = 0;
+        MusicSystem::accessing().playMusic("Fire");
         return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
     }
     else if (zeEvent.find("RELOAD") != std::string::npos && currBullets < maxBullets && currClips > 0)
