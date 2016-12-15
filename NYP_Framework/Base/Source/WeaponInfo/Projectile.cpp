@@ -16,6 +16,7 @@ Projectile::Projectile()
     isDone = true;
     name_ = "Projectile"; 
     name_.append(std::to_string(zeID++));
+    sceneObjectList = nullptr;
 }
 
 Projectile::Projectile(Mesh *zeMesh)
@@ -27,6 +28,7 @@ Projectile::Projectile(Mesh *zeMesh)
     isDone = true;
     name_ = "Projectile";
     name_.append(std::to_string(zeID++));
+    sceneObjectList = nullptr;
 }
 
 Projectile::~Projectile()
@@ -48,7 +50,7 @@ void Projectile::Update(double dt)
         if (!vel_.IsZero())
         {
             position += vel_ * (float)(dt)* speed_;
-            
+
             if (!CheckAABBCollision(this, boundary_))
             {
                 removeItselfFromQuad();
@@ -72,37 +74,65 @@ void Projectile::Update(double dt)
                 else
                 {
                     bool shouldRemoveItself = false;
-                    for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+                    if (!whichQuadIsIn->otherTrees.empty())
                     {
-                        if ((**it) != *this && (*it)->getName().find("Projectile") == std::string::npos)
+                        for (std::vector<GenericEntity*>::iterator it = sceneObjectList->begin(), end = sceneObjectList->end(); it != end; ++it)
                         {
-#ifdef _DEBUG
-                            std::cout << "Object is " << (*it)->getName() << std::endl;
-#endif
-                            Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
-                            Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
-                            Vector3 HitPosition(0, 0, 0);
-                            if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+                            if ((**it) != *this && (*it)->getName().find("Projectile") == std::string::npos)
                             {
 #ifdef _DEBUG
-                                std::cout << "Hit  " << (*it)->getName() << std::endl;
+                                std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
-                                isDone = true;
-                                shouldRemoveItself = true;
-                                (*it)->onNotify("DIED");
-                                break;
+                                Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
+                                Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
+                                Vector3 HitPosition(0, 0, 0);
+                                if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+                                {
+#ifdef _DEBUG
+                                    std::cout << "Hit  " << (*it)->getName() << std::endl;
+#endif
+                                    isDone = true;
+                                    shouldRemoveItself = true;
+                                    (*it)->onNotify("DIED");
+                                    break;
+                                }
                             }
                         }
                     }
-                    if (shouldRemoveItself)
-                        removeItselfFromQuad();
+                   else
+                            {
+                                for (std::vector<EntityBase*>::iterator it = whichQuadIsIn->m_objectList.begin(), end = whichQuadIsIn->m_objectList.end(); it != end; ++it)
+                                {
+                                    if ((**it) != *this && (*it)->getName().find("Projectile") == std::string::npos)
+                                    {
+#ifdef _DEBUG
+                                        std::cout << "Object is " << (*it)->getName() << std::endl;
+#endif
+                                        Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
+                                        Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
+                                        Vector3 HitPosition(0, 0, 0);
+                                        if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+                                        {
+#ifdef _DEBUG
+                                            std::cout << "Hit  " << (*it)->getName() << std::endl;
+#endif
+                                            isDone = true;
+                                            shouldRemoveItself = true;
+                                            (*it)->onNotify("DIED");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (shouldRemoveItself)
+                                removeItselfFromQuad();
+                        }
+
                 }
-
             }
-
         }
     }
-}
+
 
 bool Projectile::onNotify(const std::string &zeEvent)
 {
@@ -174,4 +204,10 @@ bool Projectile::CheckLineSegmentPlane(const Vector3 &line_start, const Vector3 
         )
         return true;
     return false;
+}
+
+bool Projectile::onNotify(std::vector<GenericEntity*> &zeList)
+{
+    sceneObjectList = &zeList;
+    return true;
 }

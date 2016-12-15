@@ -44,6 +44,7 @@ void QuadTree::Update(double dt)
         if (m_objectList.size() > MAX_NUM_OBJ && QuadTreeDepth + '0' <= MAX_NUM_QUADTREE_DEPTH)
         {
             //Just the following sentences gives me a huge headache. So just hardcode 4 quad for each quad
+            ++QuadTreeDepth;
             QuadTree zeTree;
             zeTree.SetScale(scale * 0.5f);
             zeTree.SetPosition(position + Vector3(-scale.x * 0.25f, 10, scale.z * 0.25f));
@@ -54,7 +55,6 @@ void QuadTree::Update(double dt)
             otherTrees.push_back(zeTree);
             zeTree.SetPosition(position + Vector3(scale.x * 0.25f, 10, scale.z * 0.25f));
             otherTrees.push_back(zeTree);
-            ++QuadTreeDepth;
 
             std::vector<size_t> whatObjectToRemove;
             for (std::vector<EntityBase*>::iterator it = m_objectList.begin(), end = m_objectList.end(); it != end; ++it)
