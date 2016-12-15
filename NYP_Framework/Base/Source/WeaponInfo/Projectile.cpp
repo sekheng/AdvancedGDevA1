@@ -21,7 +21,7 @@ Projectile::Projectile()
     name_.append(std::to_string(zeID++));
     sceneObjectList = nullptr;
     angleX = angleY = angleZ = 0;
-    scale.Set(0.5f, 0.5f, 0.5f);
+    scale.Set(0.2f, 0.5f, 0.2f);
 }
 
 Projectile::Projectile(Mesh *zeMesh)

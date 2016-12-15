@@ -9,6 +9,9 @@
 // The pointer is allocated but not the object's constructor.
 //CPlayerInfo *CPlayerInfo::s_instance = 0;
 #define CAMERA_SPEED 200.f
+#ifndef DEBUG_
+#define _IN_RELEASE_REDUCE_SPEED 0.05f
+#endif
 
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(200.0)
@@ -356,11 +359,13 @@ void CPlayerInfo::Update(double dt)
 
 
 		{
-			float yaw = (float)(/*-m_dSpeed **/ -camera_yaw * (float)dt);
+			float yaw = (float)(-m_dSpeed * -camera_yaw * (float)dt);
 #ifdef DEBUG_
-            yaw *= m_dSpeed;
+            //yaw *= m_dSpeed;
 #else
-            yaw *= (float)m_dSpeed * 0.5f;
+            //yaw *= (float)m_dSpeed * _IN_RELEASE_REDUCE_SPEED;
+            if (1 / dt >= 30)
+                yaw /= -1.5f;
 #endif
 			Mtx44 rotation;
 			rotation.SetToRotation(yaw, 0, 1, 0);
@@ -374,6 +379,13 @@ void CPlayerInfo::Update(double dt)
 		}
 		{
 			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
+#ifdef DEBUG_
+            //pitch *= (float)m_dSpeed;
+#else
+            //pitch *= (float)m_dSpeed * _IN_RELEASE_REDUCE_SPEED;
+            if (1 / dt >= 30)
+                pitch /= 1.2f;
+#endif
             rightUV = viewUV.Cross(attachedCamera->GetCameraUp());
 			rightUV.y = 0;
 			rightUV.Normalize();
