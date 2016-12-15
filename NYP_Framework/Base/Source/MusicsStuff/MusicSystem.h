@@ -47,8 +47,8 @@ private:
     Vector3 *playerPos;
     double TimeUpdate, m_accumulatedTime;
 
-    MusicSystem() {};
-    ~MusicSystem() {};
+    MusicSystem();
+    ~MusicSystem();
 };
 
 #endif

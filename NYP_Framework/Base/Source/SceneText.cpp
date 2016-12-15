@@ -26,6 +26,8 @@
 #include "SceneGraph/SceneGraph.h"
 #include "WeaponInfo\Projectile.h"
 #include "MyMath.h"
+#include "MusicsStuff\MusicSystem.h"
+
 
 #include <iostream>
 using namespace std;
@@ -230,7 +232,7 @@ void SceneText::Init()
     currGameState = PLAYING;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
 
-	theGun = Create::Gun("ASTEROID", Vector3(playerInfo->GetCurrCamera().GetCameraPos().x, playerInfo->GetCurrCamera().GetCameraPos().y, playerInfo->GetCurrCamera().GetCameraPos().z));
+	theGun = Create::Gun("Gun", Vector3(playerInfo->GetCurrCamera().GetCameraPos().x, playerInfo->GetCurrCamera().GetCameraPos().y, playerInfo->GetCurrCamera().GetCameraPos().z));
 }
 
 void SceneText::Update(double dt)
@@ -463,6 +465,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
     {
         size_t posOfColon = zeEvent.find(":");
         score_ += stoi(zeEvent.substr(posOfColon + 1));
+        MusicSystem::accessing().playMusic("explode");
         return true;
     }
     return false;
