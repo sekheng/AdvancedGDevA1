@@ -426,3 +426,21 @@ void SceneNode::Render(void)
 	modelStack.PopMatrix();
 }
 
+Vector3 SceneNode::getRealPosition()
+{
+	Vector3 temp;
+	temp.SetZero();
+	if (theParent == NULL)
+		return getPosition();
+	else
+	{
+		temp += getPosition();
+		for (SceneNode* tempNode = this; tempNode->theParent != NULL; tempNode = tempNode->theParent)
+		{
+			temp += tempNode->theParent->getPosition();
+		}
+		return temp;
+	}
+
+
+}
