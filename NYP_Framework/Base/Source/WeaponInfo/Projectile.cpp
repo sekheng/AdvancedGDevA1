@@ -93,8 +93,8 @@ void Projectile::Update(double dt)
                                 Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() /*+ scale*/;
                                 if (zeNodeObj)
                                 {
-                                    thatMinAABB += zeNodeObj->getPosition();
-                                    thatMaxAABB += zeNodeObj->getPosition();
+									thatMinAABB += zeNodeObj->getRealPosition();
+									thatMaxAABB += zeNodeObj->getRealPosition();
                                 }
                                 Vector3 HitPosition(0, 0, 0);
                                 if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
@@ -124,8 +124,8 @@ void Projectile::Update(double dt)
                                         Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
                                         if (zeNodeObj)
                                         {
-                                            thatMinAABB += zeNodeObj->getPosition();
-                                            thatMaxAABB += zeNodeObj->getPosition();
+											thatMinAABB += zeNodeObj->getRealPosition();
+											thatMaxAABB += zeNodeObj->getRealPosition();
                                         }
                                         Vector3 HitPosition(0, 0, 0);
                                         if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))

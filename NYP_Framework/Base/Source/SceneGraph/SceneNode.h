@@ -49,7 +49,7 @@ public:
 	// Render the Scene Graph
 	void Render(void);
 
-	
+	Vector3 getRealPosition();
 
 protected:
 	int ID;
