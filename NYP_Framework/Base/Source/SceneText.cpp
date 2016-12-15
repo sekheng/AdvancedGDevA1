@@ -349,7 +349,7 @@ void SceneText::Update(double dt)
 
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
     playerInfo->Update(dt);
-	theGun->onNotify(playerInfo->GetCurrCamera().GetCameraTarget(), playerInfo->GetCurrCamera().GetCameraRotation());
+	theGun->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraRotation());
 	theGun->onNotify(playerInfo->GetCurrCamera().GetCameraRight());
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
