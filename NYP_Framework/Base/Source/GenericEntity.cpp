@@ -67,7 +67,7 @@ void GenericEntity::Update(double _dt)
 
 void GenericEntity::Render()
 {
-	if (modelMesh && isVisible && !isDone)
+	if (modelMesh  && !isDone)
     {
         MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
         modelStack.PushMatrix();
@@ -170,16 +170,33 @@ bool GenericEntity::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
 {
 	posOfPlayer = zeEvent1;
 	targetOfPlayer = zeEvent2;
-	Vector3 camDir = targetOfPlayer - posOfPlayer;
-	Vector3 distToObj = position - posOfPlayer;
-
-	if (camDir.Dot(distToObj) > 0)
+	SceneNode* temp = SceneGraph::GetInstance()->GetNode(this);
+	if (temp == NULL)
 	{
-		isVisible = true;
-		return true;
+		Vector3 camDir = targetOfPlayer - posOfPlayer;
+		Vector3 distToObj = position - posOfPlayer;
+
+		if (camDir.Dot(distToObj) > 0)
+		{
+			isVisible = true;
+			return true;
+		}
+		isVisible = false;
+		return false;
 	}
-	isVisible = false;
-	return false;
+	else
+	{
+		Vector3 camDir = targetOfPlayer - posOfPlayer;
+		Vector3 distToObj = temp->getPosition() - posOfPlayer;
+
+		if (camDir.Dot(distToObj) > 0)
+		{
+			isVisible = true;
+			return true;
+		}
+		isVisible = false;
+		return false;
+	}
 }
 
 bool GenericEntity::onNotify(const Vector3 &zeEvent)

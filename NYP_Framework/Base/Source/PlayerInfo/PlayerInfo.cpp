@@ -14,7 +14,7 @@
 #endif
 
 CPlayerInfo::CPlayerInfo(void)
-	: m_dSpeed(200.0)
+	: m_dSpeed(100.0)
 	, m_dAcceleration(10.0)
 	, m_bJumpUpwards(false)
 	, m_dJumpSpeed(10.0)

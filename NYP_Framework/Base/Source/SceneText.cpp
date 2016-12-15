@@ -164,9 +164,8 @@ void SceneText::Init()
 
 	//debuging for scene graph, START
 	CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
-	CreateAsteroid(Vector3(Math::RandIntMinMax(-boundaryOfScene->GetScale().x/2, boundaryOfScene->GetScale().x/2), 0, Math::RandIntMinMax(-boundaryOfScene->GetScale().z/2, boundaryOfScene->GetScale().z/2)), Vector3(1, 1, 1));
-	CreateAsteroid(Vector3(Math::RandIntMinMax(-boundaryOfScene->GetScale().x/2, boundaryOfScene->GetScale().x/2), 0, Math::RandIntMinMax(-boundaryOfScene->GetScale().z/2, boundaryOfScene->GetScale().z/2)), Vector3(1, 1, 1));
-	CreateAsteroid(Vector3(Math::RandIntMinMax(-boundaryOfScene->GetScale().x/2, boundaryOfScene->GetScale().x/2), 0, Math::RandIntMinMax(-boundaryOfScene->GetScale().z/2, boundaryOfScene->GetScale().z/2)), Vector3(1, 1, 1));
+	CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
+	CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
 	//CreateAsteroid(Vector3(Math::RandIntMinMax(-50, 50), 0, Math::RandIntMinMax(-50, 50)), Vector3(1, 1, 1));
 	
 	//debuging for scene graph, END
@@ -494,15 +493,10 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 			  baseCube->onNotify(100.f, 200.f);
 			  UpdateTransformation* baseMtx = new UpdateTransformation();
 			  //UpdateRotation* baseMtx1 = new UpdateRotation();
-			  if (random == 1)
-			  {
-				  baseMtx->ApplyUpdate(0.0001f, 0.0f, 0.0f);
-			  }
-			  else
-			  {
-				  baseMtx->ApplyUpdate(0.0f, 0.0f, 0.0001f);
-			  }
-			  baseMtx->SetSteps(-60, 60);
+			baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));
+			  
+			  
+			baseMtx->SetSteps(Math::RandFloatMinMax(-2000, -1200), Math::RandFloatMinMax(1200, 2000));
 
 			  baseNode->SetUpdateTransformation(baseMtx);
 			  //baseNode->SetUpdateRotation(baseMtx1);
@@ -516,13 +510,13 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 			  //UpdateRotation* baseMtx1 = new UpdateRotation();
 			  if (random == 1)
 			  {
-				  childMtx->ApplyUpdate(0.0001f, 0.0f, 0.0f);
+				  childMtx->ApplyUpdate(0.05f, 0.0f, 0.0f);
 			  }
 			  else
 			  {
-				  childMtx->ApplyUpdate(0.0f, 0.0f, 0.0001f);
+				  childMtx->ApplyUpdate(0.0f, 0.0f, 0.05f);
 			  }
-			  childMtx->SetSteps(-60, 60);
+			  childMtx->SetSteps(Math::RandFloatMinMax(-100, -60), Math::RandFloatMinMax(60, 100));
 			  childNode->SetUpdateTransformation(childMtx);
 
 			  GenericEntity* grandchildCube = Create::Entity("ASTEROID2", Vector3(0.0f, -2.0f* zeScale.y, 0.0f), zeScale);
