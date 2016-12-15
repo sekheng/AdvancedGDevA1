@@ -208,12 +208,18 @@ void Application::Exit()
 void Application::UpdateInput()
 {
 	// Update Mouse Position
-	//double mouse_currX, mouse_currY;
-	//glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
+#ifdef _DEBUG
     POINT mousePosition;
     GetCursorPos(&mousePosition);
 
     MouseController::GetInstance()->UpdateMousePosition(-mousePosition.x, -mousePosition.y);
+#else
+    double mouse_currX, mouse_currY;
+    glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
+    MouseController::GetInstance()->UpdateMousePosition(-mouse_currX, -mouse_currY);
+#endif
+	//double mouse_currX, mouse_currY;
+	//glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
 
 	// Update Keyboard Input
 	for (int i = 0; i < KeyboardController::MAX_KEYS; ++i)
@@ -225,15 +231,18 @@ void Application::PostInputUpdate()
 	// If mouse is centered, need to update the center position for next frame
 	if (MouseController::GetInstance()->GetKeepMouseCentered())
 	{
-		//double mouse_currX, mouse_currY;
-		//mouse_currX = m_window_width >> 1;
-		//mouse_currY = m_window_height >> 1;
+#ifdef _DEBUG
         POINT mousePosition;
         GetCursorPos(&mousePosition);
 
         MouseController::GetInstance()->UpdateMousePosition(-mousePosition.x, -mousePosition.y);
-		//glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
         SetCursorPos(m_window_width / 2, m_window_height / 2);
+#else
+        double mouse_currX, mouse_currY;
+        mouse_currX = m_window_width >> 1;
+        mouse_currY = m_window_height >> 1;
+        glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
+#endif
 	}
 
 	// Call input systems to update at end of frame

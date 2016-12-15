@@ -9,7 +9,7 @@
 // The pointer is allocated but not the object's constructor.
 //CPlayerInfo *CPlayerInfo::s_instance = 0;
 #define CAMERA_SPEED 200.f
-#ifndef DEBUG_
+#ifndef _DEBUG
 #define _IN_RELEASE_REDUCE_SPEED 0.05f
 #endif
 
@@ -359,8 +359,8 @@ void CPlayerInfo::Update(double dt)
 
 
 		{
-			float yaw = (float)(-m_dSpeed * -camera_yaw * (float)dt);
-#ifdef DEBUG_
+			float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
+#ifdef _DEBUG
             //yaw *= m_dSpeed;
 #else
             //yaw *= (float)m_dSpeed * _IN_RELEASE_REDUCE_SPEED;
@@ -379,7 +379,7 @@ void CPlayerInfo::Update(double dt)
 		}
 		{
 			float pitch = (float)(-m_dSpeed * camera_pitch * (float)dt);
-#ifdef DEBUG_
+#ifdef _DEBUG
             //pitch *= (float)m_dSpeed;
 #else
             //pitch *= (float)m_dSpeed * _IN_RELEASE_REDUCE_SPEED;
