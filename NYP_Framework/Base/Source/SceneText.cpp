@@ -511,6 +511,7 @@ void SceneText::resetGame()
     CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
     CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
 
+    spatialPartition->onNotify("RESET");
     spatialPartition->SetScale(Vector3(1000, 1000, 1000));
     spatialPartition->SetPosition(Vector3(0, 1, 0));
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)

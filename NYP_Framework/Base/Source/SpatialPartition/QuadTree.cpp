@@ -216,5 +216,7 @@ bool QuadTree::onNotify(const std::string &zeEvent)
 {
     if (zeEvent == "IS_EMPTY" && otherTrees.empty() && m_objectList.empty())
         return true;
+    else if (zeEvent == "RESET")
+        QuadTreeDepth = 0;
     return false;
 }
