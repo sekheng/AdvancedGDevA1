@@ -222,6 +222,7 @@ void SceneText::Init()
     textObj[4] = Create::Text2DObject("text", Vector3(-400, halfWindowHeight - fontSize, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
     // For GameOver Screen
     textObj[5] = Create::Text2DObject("text", Vector3(-halfWindowWidth, 0, 0), "", Vector3(fontSize * 2, fontSize * 2, fontSize), Color(0, 1, 0));
+    textObj[6] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -fontSize * 2, 0), "", Vector3(fontSize * 2, fontSize * 2, fontSize), Color(0, 1, 0));
     // For GameOver Screen
 
     spatialPartition = new QuadTree();
@@ -380,6 +381,7 @@ void SceneText::Update(double dt)
             ss1.str("");
             ss1 << "Total Score:" << score_;
             textObj[5]->SetText(ss1.str());
+            textObj[6]->SetText("Press R to retry");
         }
         else
         {
@@ -397,6 +399,10 @@ void SceneText::Update(double dt)
         }
         break;
     case GAME_OVER:
+        if (KeyboardController::GetInstance()->IsKeyPressed('R'))
+        {
+            resetGame();
+        }
         break;
     default:
         break;
@@ -479,4 +485,15 @@ bool SceneText::onNotify(const std::string &zeEvent)
         return true;
     }
     return false;
+}
+
+void SceneText::resetGame()
+{
+    camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    playerInfo->Reset();
+    score_ = 0;
+    timeLeft_Second = 30;
+    currGameState = PLAYING;
+    textObj[5]->SetText("");
+    textObj[6]->SetText("");
 }

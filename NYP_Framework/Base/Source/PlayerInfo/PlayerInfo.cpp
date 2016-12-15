@@ -162,7 +162,8 @@ void CPlayerInfo::Reset(void)
 	//up = defaultUp;
 
 	// Stop vertical movement too
-	StopVerticalMovement();
+    mainWeapon->onNotify(15, 1);
+    StopVerticalMovement();
 }
 
 // Get position x of the player

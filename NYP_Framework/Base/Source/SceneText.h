@@ -59,6 +59,7 @@ private:
         TOTAL_STATES,
     };
     GAME_STATES currGameState;
+    void resetGame();
 };
 
 #endif
