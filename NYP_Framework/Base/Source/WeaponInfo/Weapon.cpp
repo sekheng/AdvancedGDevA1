@@ -34,12 +34,17 @@ void Weapon::Update(double dt)
 
 bool Weapon::onNotify(const std::string &zeEvent)
 {
-    if (zeEvent.find("FIRE") != std::string::npos && timeCounter >= fireRate && currBullets > 0)
+    if (zeEvent.find("FIRE") != std::string::npos)
     {
-        --currBullets;
-        timeCounter = 0;
-        MusicSystem::accessing().playMusic("Fire");
-        return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
+        if (timeCounter >= fireRate && currBullets > 0)
+        {
+            --currBullets;
+            timeCounter = 0;
+            MusicSystem::accessing().playMusic("Fire");
+            return SceneManager::GetInstance()->GetCurrScene()->onNotify("FIRE_BULLET");
+        }
+        else if (currBullets == 0)
+            MusicSystem::accessing().playMusic("NoAmmo");
     }
     else if (zeEvent.find("RELOAD") != std::string::npos && currBullets < maxBullets && currClips > 0)
     {
