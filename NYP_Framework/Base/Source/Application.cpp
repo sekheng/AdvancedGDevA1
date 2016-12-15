@@ -160,6 +160,7 @@ void Application::Init()
     zeMesh->mode = Mesh::DRAW_LINES;
 
     MusicSystem::accessing().Init();
+    MusicSystem::accessing().playBackgroundMusic("BGM");
 }
 
 void Application::Run()
