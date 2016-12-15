@@ -25,6 +25,7 @@
 #include "SceneGraph\UpdateRotation.h"
 #include "SceneGraph/SceneGraph.h"
 #include "WeaponInfo\Projectile.h"
+#include "MusicsStuff\MusicSystem.h"
 
 #include <iostream>
 using namespace std;
@@ -486,6 +487,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
     {
         size_t posOfColon = zeEvent.find(":");
         score_ += stoi(zeEvent.substr(posOfColon + 1));
+        MusicSystem::accessing().playMusic("explode");
         return true;
     }
     return false;

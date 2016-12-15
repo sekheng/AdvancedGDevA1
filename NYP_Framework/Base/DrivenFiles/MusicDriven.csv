@@ -2,3 +2,4 @@ SoundFileName,SoundType,volume //Set it between 0.1 and 1,TimesToPlay,unlimitedt
 Sound//spaceBGM.mp3,2D,0.7,0,0,1,BGM
 Sound//Laser_Shoot.wav,2D,0.5,1,0,,Fire
 Sound//noAmmo.ogg,2D,0.6,1,0,,NoAmmo
+Sound//asteroidExplode.wav,2D,0.5,1,0,,explode
