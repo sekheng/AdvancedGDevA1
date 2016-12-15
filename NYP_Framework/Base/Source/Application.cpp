@@ -19,6 +19,7 @@
 
 #include "SceneText.h"
 #include "EntityManager.h"
+#include "MusicsStuff\MusicSystem.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -157,6 +158,8 @@ void Application::Init()
     MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f)->textureID = LoadTGA("Image//scope.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
+
+    MusicSystem::accessing().Init();
 }
 
 void Application::Run()

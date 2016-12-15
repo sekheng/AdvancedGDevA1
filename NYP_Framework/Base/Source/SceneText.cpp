@@ -504,5 +504,5 @@ void SceneText::resetGame()
 
 void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 {
-
+    ++num_ofAsteroidsLeft;
 }
