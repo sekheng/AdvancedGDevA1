@@ -60,6 +60,8 @@ private:
     };
     GAME_STATES currGameState;
     void resetGame();
+    void CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale);
+    unsigned short num_ofAsteroidsLeft;
 };
 
 #endif

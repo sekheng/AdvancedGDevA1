@@ -127,6 +127,8 @@ void SceneText::Init()
     playerInfo = new CPlayerInfo();
     playerInfo->AttachCamera(&camera);
 
+    num_ofAsteroidsLeft = 0;
+
     boundaryOfScene = new EntityBase();
     boundaryOfScene->SetPosition(Vector3(0, 0, 0));
     boundaryOfScene->SetScale(Vector3(1000, 1000, 1000));
@@ -496,4 +498,9 @@ void SceneText::resetGame()
     currGameState = PLAYING;
     textObj[5]->SetText("");
     textObj[6]->SetText("");
+}
+
+void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
+{
+
 }

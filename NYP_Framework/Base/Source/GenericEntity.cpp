@@ -67,7 +67,7 @@ void GenericEntity::Update(double _dt)
 
 void GenericEntity::Render()
 {
-	if ((modelMesh && isVisible))
+	if (modelMesh && isVisible && !isDone)
     {
         MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
         modelStack.PushMatrix();

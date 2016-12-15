@@ -10,6 +10,7 @@ public:
     virtual ~Projectile();
 
     virtual void Update(double dt);
+    virtual void Render();
 
     virtual bool onNotify(const std::string &zeEvent);
     virtual bool onNotify(const float &zeEvent);
@@ -24,6 +25,7 @@ protected:
     bool CheckLineSegmentPlane(const Vector3 &linestart, const Vector3 &line_end, const Vector3 &minAABB, const Vector3 &maxAABB, Vector3 &Hit);
     bool InBox(const Vector3 &Hit, const Vector3 &B1, const Vector3 &B2, const int &Axis);
     std::vector<GenericEntity*> *sceneObjectList;
+    float angleX, angleY, angleZ;
 
 private:
     static size_t zeID;

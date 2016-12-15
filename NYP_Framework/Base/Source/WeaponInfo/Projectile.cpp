@@ -1,5 +1,8 @@
 #include "Projectile.h"
 #include "MeshBuilder.h"
+#include "../SceneGraph/SceneGraph.h"
+#include "GraphicsManager.h"
+#include "RenderHelper.h"
 #ifdef _DEBUG
 #include <iostream>
 #endif
@@ -8,15 +11,16 @@
 size_t Projectile::zeID = 0;
 
 Projectile::Projectile()
-    : GenericEntity(MeshBuilder::GetInstance()->GetMesh("sphere"))
+    : GenericEntity(MeshBuilder::GetInstance()->GetMesh("cube"))
 {
     vel_.SetZero();
-    speed_ = 200;
+    speed_ = 400;
     timespan_ = MAX_LIFESPAN;
     isDone = true;
     name_ = "Projectile"; 
     name_.append(std::to_string(zeID++));
     sceneObjectList = nullptr;
+    angleX = angleY = angleZ = 0;
 }
 
 Projectile::Projectile(Mesh *zeMesh)
@@ -83,8 +87,14 @@ void Projectile::Update(double dt)
 #ifdef _DEBUG
                                 std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
-                                Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
-                                Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
+                                SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
+                                Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() /*- scale*/;
+                                Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() /*+ scale*/;
+                                if (zeNodeObj)
+                                {
+                                    thatMinAABB += zeNodeObj->getPosition();
+                                    thatMaxAABB += zeNodeObj->getPosition();
+                                }
                                 Vector3 HitPosition(0, 0, 0);
                                 if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                                 {
@@ -108,8 +118,14 @@ void Projectile::Update(double dt)
 #ifdef _DEBUG
                                         std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
+                                        SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
                                         Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
                                         Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
+                                        if (zeNodeObj)
+                                        {
+                                            thatMinAABB += zeNodeObj->getPosition();
+                                            thatMaxAABB += zeNodeObj->getPosition();
+                                        }
                                         Vector3 HitPosition(0, 0, 0);
                                         if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                                         {
@@ -131,8 +147,36 @@ void Projectile::Update(double dt)
                 }
             }
         }
-    }
+}
 
+void Projectile::Render()
+{
+    if ((modelMesh && isVisible))
+    {
+        MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+        modelStack.PushMatrix();
+        modelStack.Translate(position.x, position.y, position.z);
+        modelStack.Scale(scale.x, scale.y, scale.z);
+
+            modelStack.PushMatrix();
+            modelStack.Rotate(angleZ, 0, 1, 0);
+                modelStack.PushMatrix();
+                modelStack.Rotate(angleY, 1, 0, 0);
+        if (GetLODStatus() == true)
+        {
+            if (theDetailLevel != NO_DETAILS)
+                RenderHelper::RenderMesh(GetLODMesh());
+        }
+        else
+        {
+            RenderHelper::RenderMesh(modelMesh);
+        }
+                modelStack.PopMatrix();
+            modelStack.PopMatrix();
+
+        modelStack.PopMatrix();
+    }
+}
 
 bool Projectile::onNotify(const std::string &zeEvent)
 {
@@ -165,6 +209,16 @@ bool Projectile::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
     {
         isDone = false;
         vel_ = (zeEvent2 - zeEvent1).Normalize();
+        float vel_Length = vel_.Length();
+        angleX = Math::RadianToDegree(acos(vel_.x / vel_Length));
+        angleY = Math::RadianToDegree(acos(vel_.y / vel_Length));
+        angleZ = Math::RadianToDegree(acos(vel_.z / vel_Length));
+        if (vel_.x < -Math::EPSILON && vel_.z > Math::EPSILON)
+            angleX *= -1;
+        if (vel_.z < -Math::EPSILON && vel_.x < -Math::EPSILON)
+            angleY *= -1;
+        if (vel_.z > Math::EPSILON && vel_.x < -Math::EPSILON)
+            angleZ *= -1;
         position = zeEvent1;
         timespan_ = MAX_LIFESPAN;
         return true;
