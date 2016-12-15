@@ -167,8 +167,8 @@ void SceneText::Init()
 	baseCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
 	baseCube->onNotify(50.f, 200.f);
 	//UpdateTransformation* baseMtx = new UpdateTransformation();
-	
-	//baseMtx->ApplyUpdate(0.1f, 0.0f, 0.5f);
+	//
+	//baseMtx->ApplyUpdate(0.001f, 0.0f, 0.5f);
 	//baseMtx->SetSteps(-60, 60);
 
 	//baseNode->SetUpdateTransformation(baseMtx);
@@ -194,7 +194,7 @@ void SceneText::Init()
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
-	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
+	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(100.0f, 100.0f, 100.0f));
 
 	SkyBoxEntity* theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 											 "SKYBOX_LEFT", "SKYBOX_RIGHT",
@@ -242,6 +242,8 @@ void SceneText::Init()
     for (size_t num = 0; num < 100; ++num)
     {
         Projectile *zeBullet = new Projectile();
+        zeBullet->onNotify(100.f, 300.f);
+        zeBullet->InitLOD("BULLET1", "BULLET2", "BULLET3");
         m_inactiveList.push_back(zeBullet);
         m_inactiveList.back()->onNotify(*boundaryOfScene);
         zeBullet->onNotify(m_activeList);

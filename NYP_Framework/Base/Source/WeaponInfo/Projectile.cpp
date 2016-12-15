@@ -11,7 +11,7 @@
 size_t Projectile::zeID = 0;
 
 Projectile::Projectile()
-    : GenericEntity(MeshBuilder::GetInstance()->GetMesh("cube"))
+    : GenericEntity(MeshBuilder::GetInstance()->GetMesh("BULLET3"))
 {
     vel_.SetZero();
     speed_ = 400;
@@ -21,6 +21,7 @@ Projectile::Projectile()
     name_.append(std::to_string(zeID++));
     sceneObjectList = nullptr;
     angleX = angleY = angleZ = 0;
+    scale.Set(0.5f, 0.5f, 0.5f);
 }
 
 Projectile::Projectile(Mesh *zeMesh)
@@ -211,14 +212,14 @@ bool Projectile::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
         vel_ = (zeEvent2 - zeEvent1).Normalize();
         float vel_Length = vel_.Length();
         angleX = Math::RadianToDegree(acos(vel_.x / vel_Length));
-        angleY = Math::RadianToDegree(acos(vel_.y / vel_Length));
+        angleY = Math::RadianToDegree(acos(vel_.y / vel_Length)) - 90.f;
         angleZ = Math::RadianToDegree(acos(vel_.z / vel_Length));
-        if (vel_.x < -Math::EPSILON && vel_.z > Math::EPSILON)
-            angleX *= -1;
-        if (vel_.z < -Math::EPSILON && vel_.x < -Math::EPSILON)
-            angleY *= -1;
-        if (vel_.z > Math::EPSILON && vel_.x < -Math::EPSILON)
-            angleZ *= -1;
+        //if (vel_.x < -Math::EPSILON && vel_.z > Math::EPSILON)
+        //    angleX *= -1;
+        //if (vel_.z < -Math::EPSILON && vel_.x < -Math::EPSILON)
+        //    angleY *= -1;
+        //if (vel_.z > Math::EPSILON && vel_.x < -Math::EPSILON)
+        //    angleZ *= -1;
         position = zeEvent1;
         timespan_ = MAX_LIFESPAN;
         return true;
@@ -264,4 +265,9 @@ bool Projectile::onNotify(std::vector<GenericEntity*> &zeList)
 {
     sceneObjectList = &zeList;
     return true;
+}
+
+bool Projectile::onNotify(const float &zeEvent1, const float &zeEvent2)
+{
+    return GenericEntity::onNotify(zeEvent1, zeEvent2);
 }

@@ -13,6 +13,7 @@ public:
     virtual void Render();
 
     virtual bool onNotify(const std::string &zeEvent);
+    virtual bool onNotify(const float &zeEvent1, const float &zeEvent2);
     virtual bool onNotify(const float &zeEvent);
     virtual bool onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2);
     virtual bool onNotify(std::vector<GenericEntity*> &zeList);

@@ -116,7 +116,7 @@ void Application::Init()
 	GraphicsManager::GetInstance()->Init();
     // Load all the meshes
     MeshBuilder::GetInstance()->GenerateAxes("reference");
-    MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
+    //MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
     MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
     MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
     MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
@@ -151,6 +151,10 @@ void Application::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID", "OBJ//asteroid.obj")->textureID = LoadTGA("Image//asteroid.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID1", "OBJ//asteroid_mid.obj")->textureID = LoadTGA("Image//asteroid.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("ASTEROID2", "OBJ//asteroid_low.obj")->textureID = LoadTGA("Image//asteroid.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("BULLET1", "OBJ//Bullet1.obj")->textureID = LoadTGA("Image//bulletSkin.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("BULLET2", "OBJ//Bullet2.obj")->textureID = LoadTGA("Image//bulletSkin.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("BULLET3", "OBJ//Bullet3.obj")->textureID = LoadTGA("Image//bulletSkin.tga");
+    MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f)->textureID = LoadTGA("Image//scope.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
 }
