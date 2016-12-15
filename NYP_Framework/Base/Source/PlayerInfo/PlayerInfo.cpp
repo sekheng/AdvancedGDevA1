@@ -356,7 +356,12 @@ void CPlayerInfo::Update(double dt)
 
 
 		{
-			float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
+			float yaw = (float)(/*-m_dSpeed **/ -camera_yaw * (float)dt);
+#ifdef DEBUG_
+            yaw *= m_dSpeed;
+#else
+            yaw *= (float)m_dSpeed * 0.5f;
+#endif
 			Mtx44 rotation;
 			rotation.SetToRotation(yaw, 0, 1, 0);
 			viewUV = rotation * viewUV;
