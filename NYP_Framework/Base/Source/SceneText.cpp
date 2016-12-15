@@ -160,10 +160,10 @@ void SceneText::Init()
     m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
-	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(10.0f, 0.0f, 0.0f));
+	GenericEntity* baseCube = Create::Entity("ASTEROID1", Vector3(0.0f, 0.0f, 0.0f));
     baseCube->setName("cube4");
 	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
-	//baseNode->ApplyTranslate(10, 0, 0);
+	baseNode->ApplyTranslate(10, 0, 0);
 	baseCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
 	baseCube->onNotify(50.f, 200.f);
 	//UpdateTransformation* baseMtx = new UpdateTransformation();
