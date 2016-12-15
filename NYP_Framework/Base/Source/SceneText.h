@@ -41,6 +41,7 @@ private:
 	Light* lights[2];
 
 	GenericEntity* theCube;
+	GenericEntity* theShip;
 	RenderGun* theGun;
 
     std::vector<GenericEntity*> m_activeList, m_inactiveList;

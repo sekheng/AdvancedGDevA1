@@ -42,6 +42,11 @@ void GenericEntity::Update(double _dt)
 		whichQuadIsIn->previousQuad->onNotify(*this);
 		whichQuadIsIn = whichQuadIsIn->previousQuad;
 	}
+	/*SceneNode* temp = SceneGraph::GetInstance()->GetNode(this);
+	if (temp != NULL)
+	{
+		position = temp->getRealPosition();
+	}*/
 	//if (SceneGraph::GetInstance()->GetNode(this) != NULL)
 	
 		
@@ -203,19 +208,40 @@ bool GenericEntity::onNotify(const Vector3 &zeEvent)
 {
 	if (isVisible)
 	{
-		Vector3 PlayerPos = zeEvent;
-		Vector3 dist = position - PlayerPos;
-		if (dist.LengthSquared() < levelOfDetail_Distances[0] * levelOfDetail_Distances[0])
+		SceneNode* temp = SceneGraph::GetInstance()->GetNode(this);
+		if (temp == NULL)
 		{
-			SetDetailLevel(HIGH_DETAILS);
-		}
-		else if (dist.LengthSquared() < levelOfDetail_Distances[1] * levelOfDetail_Distances[1])
-		{
-			SetDetailLevel(MID_DETAILS);
+			Vector3 PlayerPos = zeEvent;
+			Vector3 dist = position - PlayerPos;
+			if (dist.LengthSquared() < levelOfDetail_Distances[0] * levelOfDetail_Distances[0])
+			{
+				SetDetailLevel(HIGH_DETAILS);
+			}
+			else if (dist.LengthSquared() < levelOfDetail_Distances[1] * levelOfDetail_Distances[1])
+			{
+				SetDetailLevel(MID_DETAILS);
+			}
+			else
+			{
+				SetDetailLevel(LOW_DETAILS);
+			}
 		}
 		else
 		{
-			SetDetailLevel(LOW_DETAILS);
+			Vector3 PlayerPos = zeEvent;
+			Vector3 dist = temp->getRealPosition() - PlayerPos;
+			if (dist.LengthSquared() < levelOfDetail_Distances[0] * levelOfDetail_Distances[0])
+			{
+				SetDetailLevel(HIGH_DETAILS);
+			}
+			else if (dist.LengthSquared() < levelOfDetail_Distances[1] * levelOfDetail_Distances[1])
+			{
+				SetDetailLevel(MID_DETAILS);
+			}
+			else
+			{
+				SetDetailLevel(LOW_DETAILS);
+			}
 		}
 	}
 	return true;
