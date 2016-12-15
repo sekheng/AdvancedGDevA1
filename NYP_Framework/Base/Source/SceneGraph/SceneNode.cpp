@@ -42,7 +42,7 @@ bool SceneNode::SetEntity(EntityBase* theEntity)
 	if (theEntity)
 	{
 		this->theEntity = theEntity;
-		return this;
+		return true;
 	}
 	return false;
 }
@@ -215,8 +215,8 @@ bool SceneNode::DeleteChild(const int ID)
 bool SceneNode::DeleteAllChildren()
 {
 	bool bResult = false;
-	vector <SceneNode*>::iterator it = theChildren.begin();
-	while (it != theChildren.end()-1)
+	/*vector <SceneNode*>::iterator it = theChildren.begin();
+	while (it != theChildren.end())
 	{
 		if ((*it)->DeleteAllChildren())
 		{
@@ -226,9 +226,17 @@ bool SceneNode::DeleteAllChildren()
 		delete *it;
 		it = theChildren.erase(it);
 		bResult = true;
+	}*/
+	for (vector<SceneNode*>::iterator it = theChildren.begin(), end = theChildren.end(); it != end; ++it)
+	{
+		if ((*it)->DeleteAllChildren())
+		{
+			cout << "SceneNide::DeleteChild: Delete Child Node" << endl;
+		}
+		delete *it;
 	}
-	return bResult;
-
+	theChildren.clear();
+	return true;
 }
 
 SceneNode* SceneNode::DetachChild(EntityBase* theEntity)
@@ -303,20 +311,25 @@ SceneNode* SceneNode::DetachChild(SceneNode* theNode)
 SceneNode* SceneNode::GetEntity(EntityBase* theEntity)
 {
 	// if it is inside this node, then return this node
-	if (this->theEntity == theEntity)
-		return this;
+
+	if (this->theEntity != NULL)
+	{
+		if (*this->theEntity == *theEntity)
+			return this;
+	}
 	if (theChildren.size() != 0)
 	{
 		std::vector<SceneNode*>::iterator it;
 		for (it = theChildren.begin(); it != theChildren.end(); ++it)
 		{
 			SceneNode* theNode = (*it)->GetEntity(theEntity);
-			if (theNode)
+			if (theNode != NULL)
 			{
 				return theNode;
 			}
 		}
 	}
+	
 	return NULL;
 
 }

@@ -4,13 +4,13 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
-#define offset 3.5f
+#define offset 11.f
 
 SkyBoxEntity::SkyBoxEntity(void)
 	: /*scale(1000.0f, 1000.0f, 1000.0f)
 	,*/ m_bBoundaryDefined(false)
 {
-    scale.Set(1000, 1000, 1000);
+    scale.Set(2500, 2500, 2500);
 }
 
 SkyBoxEntity::~SkyBoxEntity()
