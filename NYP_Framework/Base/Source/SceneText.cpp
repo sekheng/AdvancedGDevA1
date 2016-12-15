@@ -505,6 +505,7 @@ void SceneText::resetGame()
     {
         m_inactiveList.erase(m_inactiveList.begin() + *rit);
     }
+    waitingListToBeRemoved.clear();
     CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
     CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
     CreateAsteroid(Vector3(0, 0, 0), Vector3(1, 1, 1));
