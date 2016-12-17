@@ -202,9 +202,9 @@ void SceneText::Init()
     // For Num of Bullets and Clips
     textObj[3] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
     // For TimeLeft
-    textObj[4] = Create::Text2DObject("text", Vector3(-400, halfWindowHeight - fontSize, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
+    textObj[4] = Create::Text2DObject("text", Vector3(-400, halfWindowHeight - fontSize - 50, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
     // For GameOver Screen
-    textObj[5] = Create::Text2DObject("text", Vector3(-halfWindowWidth, 0, 0), "", Vector3(fontSize * 2, fontSize * 2, fontSize), Color(0, 1, 0));
+    textObj[5] = Create::Text2DObject("text", Vector3(-halfWindowWidth, 0, 0), "", Vector3(fontSize , fontSize , fontSize), Color(0, 1, 0));
     textObj[6] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -fontSize * 2, 0), "", Vector3(fontSize * 2, fontSize * 2, fontSize), Color(0, 1, 0));
     // For GameOver Screen
 
@@ -229,7 +229,7 @@ void SceneText::Init()
         m_inactiveList.back()->onNotify(*boundaryOfScene);
         zeBullet->onNotify(m_activeList);
     }
-    score_ = 0;
+    health_ = 100;
     timeLeft_Second = 120;
     currGameState = PLAYING;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
@@ -251,8 +251,11 @@ void SceneText::Update(double dt)
 		{
 			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
 		}
-        if ((*it)->IsDone())
-            waitingListToBeRemoved.push_back(it - m_activeList.begin());
+		if ((*it)->IsDone())
+		{
+			waitingListToBeRemoved.push_back(it - m_activeList.begin());
+			health_ -= 2;
+		}
     }
     if (!waitingListToBeRemoved.empty())
     {
@@ -356,8 +359,11 @@ void SceneText::Update(double dt)
     {
     case PLAYING:
         timeLeft_Second -= (float)(dt);
-        if (timeLeft_Second <= Math::EPSILON)
+        if (timeLeft_Second <= Math::EPSILON || health_ <= Math::EPSILON)
         {
+			float timeSurvived = 120 - timeLeft_Second;
+			if (timeSurvived <= Math::EPSILON)
+				timeSurvived = 0;
             timeLeft_Second = 0;
             currGameState = GAME_OVER;
             textObj[2]->SetText("");
@@ -366,14 +372,14 @@ void SceneText::Update(double dt)
 
             textObj[4]->SetText("");
             ss1.str("");
-            ss1 << "Total Score:" << score_;
+			ss1 << "Total Time survived:" << timeSurvived;
             textObj[5]->SetText(ss1.str());
             textObj[6]->SetText("Press R to retry");
         }
         else
         {
             ss1.str("");
-            ss1 << "Score:" << score_;
+            ss1 << "Ship's health:" << health_;
             textObj[2]->SetText(ss1.str());
 
             ss1.str("");
@@ -400,6 +406,8 @@ void SceneText::Update(double dt)
 				if ((Vector3(0, 0, 0) - temp->getRealPosition()).LengthSquared() <= 5)//despawn when hit origin
 				{
 					temp->GetEntity()->SetIsDone(true);
+					/*int totalHealthToMinus = temp->GetNumOfChild() + 1;
+					health_ -= 2 * totalHealthToMinus;*/
 				}
 			}
         }
@@ -502,7 +510,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
     else if (zeEvent.find("SCORE") != std::string::npos)
     {
         size_t posOfColon = zeEvent.find(":");
-        score_ += stoi(zeEvent.substr(posOfColon + 1));
+        //health_ += stoi(zeEvent.substr(posOfColon + 1));
         MusicSystem::accessing().playMusic("explode");
         --num_ofAsteroidsLeft;
         return true;
@@ -514,7 +522,7 @@ void SceneText::resetGame()
 {
     camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
     playerInfo->Reset();
-    score_ = 0;
+    health_ = 100;
     timeLeft_Second = 120;
     currGameState = PLAYING;
     textObj[5]->SetText("");
