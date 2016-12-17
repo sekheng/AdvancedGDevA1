@@ -88,16 +88,17 @@ void Projectile::Update(double dt)
 #ifdef _DEBUG
                                 std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
-                                SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
-                                Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() /*- scale*/;
-                                Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() /*+ scale*/;
-                                if (zeNodeObj)
-                                {
-									thatMinAABB += zeNodeObj->getRealPosition();
-									thatMaxAABB += zeNodeObj->getRealPosition();
-                                }
-                                Vector3 HitPosition(0, 0, 0);
-                                if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+         //                       SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
+         //                       Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() /*- scale*/;
+         //                       Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() /*+ scale*/;
+         //                       if (zeNodeObj)
+         //                       {
+									//thatMinAABB += zeNodeObj->getRealPosition();
+									//thatMaxAABB += zeNodeObj->getRealPosition();
+         //                       }
+         //                       Vector3 HitPosition(0, 0, 0);
+         //                       if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+                                if (trueRayCasting((*it)))
                                 {
 #ifdef _DEBUG
                                     std::cout << "Hit  " << (*it)->getName() << std::endl;
@@ -119,16 +120,17 @@ void Projectile::Update(double dt)
 #ifdef _DEBUG
                                         std::cout << "Object is " << (*it)->getName() << std::endl;
 #endif
-                                        SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
-                                        Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
-                                        Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
-                                        if (zeNodeObj)
-                                        {
-											thatMinAABB += zeNodeObj->getRealPosition();
-											thatMaxAABB += zeNodeObj->getRealPosition();
-                                        }
-                                        Vector3 HitPosition(0, 0, 0);
-                                        if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+           //                             SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(*it);
+           //                             Vector3 thatMinAABB = (*it)->GetPosition() - (*it)->GetScale() - scale;
+           //                             Vector3 thatMaxAABB = (*it)->GetPosition() + (*it)->GetScale() + scale;
+           //                             if (zeNodeObj)
+           //                             {
+											//thatMinAABB += zeNodeObj->getRealPosition();
+											//thatMaxAABB += zeNodeObj->getRealPosition();
+           //                             }
+           //                             Vector3 HitPosition(0, 0, 0);
+           //                             if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
+                                        if (trueRayCasting((*it)))
                                         {
 #ifdef _DEBUG
                                             std::cout << "Hit  " << (*it)->getName() << std::endl;
@@ -270,4 +272,35 @@ bool Projectile::onNotify(std::vector<GenericEntity*> &zeList)
 bool Projectile::onNotify(const float &zeEvent1, const float &zeEvent2)
 {
     return GenericEntity::onNotify(zeEvent1, zeEvent2);
+}
+
+bool Projectile::trueRayCasting(EntityBase *rhs)
+{
+    SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(rhs);
+    Vector3 rhsPos = rhs->GetPosition();
+    if (zeNodeObj)
+        rhsPos += zeNodeObj->getRealPosition();
+    Vector3 DirectionBetweenThisAndRhs = position - rhsPos;
+    //float c = (DirectionBetweenThisAndRhs).LengthSquared() + rhs->GetScale().LengthSquared();
+    //float b = 2.f * (vel_ - rhsPos).Length();
+    //float a = vel_.LengthSquared();
+    float c = (DirectionBetweenThisAndRhs.Dot(DirectionBetweenThisAndRhs)) - (rhs->GetScale().LengthSquared());
+    float b = 2.f * (vel_.Dot(position));
+    float a = 1;
+
+    std::cout << a << " " << b << " " << c << std::endl;
+    float d = (b*b) - (4 * a * c);
+    if (d < Math::EPSILON)
+        return false;
+    if (a < Math::EPSILON)
+        return false;
+
+    float sqrtOFd = sqrt(d);
+    float t0 = (-b - sqrtOFd) / (2/* * a*/);
+    float t1 = (-b + sqrtOFd) / (2/* * a*/);
+
+    if (t1 < 0 || t0 > 10000.f)
+        return false;
+    
+    return true;
 }
