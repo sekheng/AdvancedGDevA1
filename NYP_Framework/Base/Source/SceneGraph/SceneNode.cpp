@@ -444,3 +444,8 @@ Vector3 SceneNode::getRealPosition()
 
 
 }
+
+vector<SceneNode*> SceneNode::getTheChildren()
+{
+	return this->theChildren;
+}

@@ -51,6 +51,8 @@ public:
 
 	Vector3 getRealPosition();
 
+
+	vector<SceneNode*> getTheChildren();
 protected:
 	int ID;
 	EntityBase* theEntity;

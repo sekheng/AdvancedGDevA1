@@ -41,6 +41,8 @@ public:
 	// The root of the scene graph.
 	// It usually does not have a mesh, and is the starting point for all scene graph operations
 	SceneNode* theRoot;
+
+	vector<SceneNode*> getChildVector();
 protected:
 	// The next ID to be assigned to a scene node.
 	int ID;

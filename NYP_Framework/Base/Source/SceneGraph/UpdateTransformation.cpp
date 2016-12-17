@@ -22,9 +22,12 @@ void UpdateTransformation::Reset(void)
 void UpdateTransformation::Update(void)
 {
 	curSteps += deltaSteps;
-	if ((curSteps >= maxSteps) || (curSteps <= minSteps))
+	if (minSteps != 0)
 	{
-		deltaSteps *= -1;
+		if ((curSteps >= maxSteps) || (curSteps <= minSteps))
+		{
+			deltaSteps *= -1;
+		}
 	}
 }
 // Apply a translation to the Update Transformation Matrix

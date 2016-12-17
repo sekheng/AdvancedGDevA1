@@ -171,7 +171,7 @@ void SceneText::Init()
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
-	theShip = Create::Entity("SHIP_1", Vector3(0, 10, 0));
+	theShip = Create::Entity("SHIP_1", Vector3(0, 0, 0));
 	theShip->InitLOD("SHIP_1", "SHIP_2", "SHIP_3");
 	theShip->onNotify(200.f, 400.f);
 //	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
@@ -230,7 +230,7 @@ void SceneText::Init()
         zeBullet->onNotify(m_activeList);
     }
     score_ = 0;
-    timeLeft_Second = 30;
+    timeLeft_Second = 120;
     currGameState = PLAYING;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
 
@@ -356,7 +356,7 @@ void SceneText::Update(double dt)
     {
     case PLAYING:
         timeLeft_Second -= (float)(dt);
-        if (timeLeft_Second <= Math::EPSILON || num_ofAsteroidsLeft == 0)
+        if (timeLeft_Second <= Math::EPSILON)
         {
             timeLeft_Second = 0;
             currGameState = GAME_OVER;
@@ -383,13 +383,46 @@ void SceneText::Update(double dt)
             ss1.str("");
             ss1 << "TimeLeft:" << timeLeft_Second;
             textObj[4]->SetText(ss1.str());
+			//int difficulty = 16 - (int)(timeLeft_Second / 10);
+			
+			if (num_ofAsteroidsLeft <= 7)
+			{
+				CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+			}
+			int numOfChild = SceneGraph::GetInstance()->GetRoot()->getTheChildren().size();
+			for (int i = 0; i < numOfChild; ++i)
+			{
+				SceneNode* temp = SceneGraph::GetInstance()->GetRoot()->getTheChildren()[i];
+				/*if (temp->getRealPosition().x > boundaryOfScene->GetScale().x /10
+					|| temp->getRealPosition().x < -boundaryOfScene->GetScale().x / 10
+					|| temp->getRealPosition().z > boundaryOfScene->GetScale().z / 10
+					|| temp->getRealPosition().z < -boundaryOfScene->GetScale().z / 10)*/
+				if ((Vector3(0, 0, 0) - temp->getRealPosition()).LengthSquared() <= 5)//despawn when hit origin
+				{
+					temp->GetEntity()->SetIsDone(true);
+				}
+			}
         }
         break;
-    case GAME_OVER:
-        if (KeyboardController::GetInstance()->IsKeyPressed('R'))
-        {
-            resetGame();
-        }
+	case GAME_OVER:
+	{
+					  if (KeyboardController::GetInstance()->IsKeyPressed('R'))
+					  {
+						  resetGame();
+					  }
+					  int numOfChild2 = SceneGraph::GetInstance()->GetRoot()->getTheChildren().size();
+					  for (int i = 0; i < numOfChild2; ++i)
+					  {
+						  SceneNode* temp = SceneGraph::GetInstance()->GetRoot()->getTheChildren()[i];
+						  if (temp->getRealPosition().x > boundaryOfScene->GetScale().x / 10//despawn
+							  || temp->getRealPosition().x < -boundaryOfScene->GetScale().x / 10
+							  || temp->getRealPosition().z > boundaryOfScene->GetScale().z / 10
+							  || temp->getRealPosition().z < -boundaryOfScene->GetScale().z / 10)
+						  {
+							  temp->GetEntity()->SetIsDone(true);
+						  }
+					  }
+	}
         break;
     default:
         break;
@@ -482,7 +515,7 @@ void SceneText::resetGame()
     camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
     playerInfo->Reset();
     score_ = 0;
-    timeLeft_Second = 30;
+    timeLeft_Second = 120;
     currGameState = PLAYING;
     textObj[5]->SetText("");
     textObj[6]->SetText("");
@@ -530,6 +563,7 @@ void SceneText::resetGame()
 void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 {
 	int random = Math::RandIntMinMax(1, 4);
+	Vector3 dist;
 	
 	GenericEntity* baseCube = Create::Entity("ASTEROID", Vector3(0.0f, 0.0f, 0.0f), zeScale);
 	baseCube->setName("rock" + to_string(ROCK_ID++));
@@ -538,12 +572,13 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	baseCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
 	baseCube->onNotify(200.f, 400.f);
 	UpdateTransformation* baseMtx = new UpdateTransformation();
-	//UpdateRotation* baseMtx1 = new UpdateRotation();
-	baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));
-			  
-			  
-	baseMtx->SetSteps(Math::RandFloatMinMax(-200, -120), Math::RandFloatMinMax(120, 200));
-
+	UpdateRotation* baseMtx1 = new UpdateRotation();
+	dist = Vector3(0, 0, 0) - baseNode->getRealPosition();
+	//baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));	  
+	baseMtx->ApplyUpdate(dist.Normalized().x / 5, dist.Normalized().y / 5, dist.Normalized().z / 5);
+	baseMtx->SetSteps(0, Math::RandFloatMinMax(120, 200));
+	baseMtx1->ApplyUpdate(1, 0, 1, 0);
+	baseMtx1->SetSteps(0, 60);
 	baseNode->SetUpdateTransformation(baseMtx);
 	//baseNode->SetUpdateRotation(baseMtx1);
 
@@ -581,7 +616,7 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	m_activeList.push_back(childCube);
 	m_activeList.push_back(grandchildCube);
 	m_activeList.push_back(anotherchildCube);
-	num_ofAsteroidsLeft += 3;
+	num_ofAsteroidsLeft += 4;
 		
 	
 }

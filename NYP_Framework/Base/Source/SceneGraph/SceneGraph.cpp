@@ -91,3 +91,8 @@ void SceneGraph::Render(void)
 {
 	theRoot->Render();
 }
+
+vector<SceneNode*>  SceneGraph::getChildVector()
+{
+	return theRoot->getTheChildren();
+}
