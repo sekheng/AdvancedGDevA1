@@ -169,8 +169,16 @@ void Application::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("SHIP_1", "OBJ//ship_HIGH.obj")->textureID = LoadTGA("Image//ship.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("SHIP_2", "OBJ//ship_MEDIUM.obj")->textureID = LoadTGA("Image//ship.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("SHIP_3", "OBJ//ship_LOW.obj")->textureID = LoadTGA("Image//ship.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("SHIP_3", "OBJ//ship_LOW.obj")->textureID = LoadTGA("Image//ship.tga");
+
     MeshBuilder::GetInstance()->GenerateQuad("crosshair", Color(1, 1, 1), 1.f)->textureID = LoadTGA("Image//scope.tga");
-    MeshBuilder::GetInstance()->GenerateOBJ("Gun", "OBJ//lasergun.obj")->textureID = LoadTGA("Image//asteroid.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Gun", "OBJ//lasergun.obj")->textureID = LoadTGA("Image//asteroid.tga");
+
+    MeshBuilder::GetInstance()->GenerateOBJ("BASE", "OBJ//satelite_base.obj")->textureID = LoadTGA("Image//asteroid.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("STAND1", "OBJ//satelite_stand1.obj")->textureID = LoadTGA("Image//rock2.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("STAND2", "OBJ//satelite_stand2.obj")->textureID = LoadTGA("Image//rock3.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("DISH", "OBJ//satelite_dish.obj")->textureID = LoadTGA("Image//rock.tga");
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
 

@@ -11,6 +11,7 @@
 #include "GenericEntity.h"
 #include "DetectMemoryLeak.h"
 #include "WeaponInfo\RenderGun.h"
+#include "SceneGraph\SceneGraph.h"
 #include <vector>
 
 class ShaderProgram;
@@ -44,13 +45,19 @@ private:
 	GenericEntity* theShip;
 	RenderGun* theGun;
 
+	SceneNode* baseNode_s;
+	SceneNode* secondNode_s;
+	SceneNode* thirdNode_s;
+	SceneNode* forthNode_s;
+
     std::vector<GenericEntity*> m_activeList, m_inactiveList;
     std::vector<size_t> waitingListToBeRemoved;
     EntityBase *spatialPartition, *boundaryOfScene;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
-    int score_;
+    int health_;
     float timeLeft_Second;
+	float timeTillSateliteRDY;
 
 
     enum GAME_STATES
@@ -62,6 +69,9 @@ private:
     GAME_STATES currGameState;
     void resetGame();
     void CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale);
+	void CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale);
+	bool startAnimation;
+	void sceneGraphAnimation();
     unsigned short num_ofAsteroidsLeft;
 };
 

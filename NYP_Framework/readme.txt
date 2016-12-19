@@ -3,6 +3,7 @@ Mouse - pitch, yaw camera
 left click - shoot
 E - reload
 R(when game finish) - restart
+Q near satelite - start satelite and refil ammo if satelite is ready
 
 1,2 - toggle front face culling
 3,4 - toggle wireframe mode

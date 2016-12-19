@@ -19,6 +19,7 @@ GenericEntity::GenericEntity(Mesh* _modelMesh)
     boundary_ = nullptr;
     howManyLives = 2;
 	isVisible = true;
+	isKilledByBullet = true;
 	levelOfDetail_Distances[0] = 0.f;
 	levelOfDetail_Distances[1] = 0.f;
 }

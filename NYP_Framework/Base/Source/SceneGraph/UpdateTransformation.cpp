@@ -4,6 +4,7 @@ UpdateTransformation::UpdateTransformation()
 	, deltaSteps(1)
 	, minSteps(0)
 	, maxSteps(0)
+	, toContinue(false)
 {
 	Update_Mtx.SetToIdentity();
 	Update_Mtx_REVERSED.SetToIdentity();
@@ -21,13 +22,25 @@ void UpdateTransformation::Reset(void)
 // Update the steps
 void UpdateTransformation::Update(void)
 {
-	curSteps += deltaSteps;
 	if (minSteps != 0)
 	{
+	curSteps += deltaSteps;
 		if ((curSteps >= maxSteps) || (curSteps <= minSteps))
 		{
 			deltaSteps *= -1;
 		}
+	}
+	else if (minSteps == 0 && toContinue == false)
+	{
+		curSteps += deltaSteps;
+		if ((curSteps >= maxSteps))
+		{
+			deltaSteps *= 0;
+		}
+	}
+	else if (minSteps == 0 && toContinue == true)
+	{
+		curSteps += deltaSteps;
 	}
 }
 // Apply a translation to the Update Transformation Matrix
@@ -67,5 +80,16 @@ Mtx44 UpdateTransformation::GetUpdateTransformation(void)
 {
 	if (deltaSteps == -1)
 		return Update_Mtx_REVERSED;
-	return Update_Mtx;
+	else if (deltaSteps == 0)
+	{
+		Update_Mtx.SetToIdentity();
+		return Update_Mtx;
+	}
+	else
+		return Update_Mtx;
+}
+
+void UpdateTransformation::setContinue(bool toggle)
+{
+	toContinue = toggle;
 }

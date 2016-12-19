@@ -4,6 +4,7 @@ UpdateRotation::UpdateRotation()
 	, deltaSteps(1)
 	, minSteps(0)
 	, maxSteps(0)
+	, toContinue(false)
 {
 	Update_Mtx.SetToIdentity();
 	Update_Mtx_REVERSED.SetToIdentity();
@@ -21,13 +22,25 @@ void UpdateRotation::Reset(void)
 // Update the steps
 void UpdateRotation::Update(void)
 {
-	curSteps += deltaSteps;
 	if (minSteps != 0)
 	{
+		curSteps += deltaSteps;
 		if ((curSteps >= maxSteps) || (curSteps <= minSteps))
 		{
 			deltaSteps *= -1;
 		}
+	}
+	else if (minSteps == 0 && toContinue == false)
+	{
+		curSteps += deltaSteps;
+		if ((curSteps >= maxSteps))
+		{
+			deltaSteps *= 0;
+		}
+	}
+	else if (minSteps == 0 && toContinue == true)
+	{
+		curSteps += deltaSteps;
 	}
 }
 // Apply a rotation to the Update Transformation Matrix
@@ -62,4 +75,9 @@ Mtx44 UpdateRotation::GetUpdateRotation(void)
 	if (deltaSteps == -1)
 		return Update_Mtx_REVERSED;
 	return Update_Mtx;
+}
+
+void UpdateRotation::setContinue(bool toggle)
+{
+	toContinue = toggle;
 }
