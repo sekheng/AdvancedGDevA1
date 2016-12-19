@@ -9,7 +9,7 @@
 #endif
 #include "SceneManager.h"
 
-static const int ScoreByGeneric = 50;
+static const int ScoreByGeneric = 2;
 
 GenericEntity::GenericEntity(Mesh* _modelMesh)
 	: modelMesh(_modelMesh)
@@ -139,9 +139,10 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
         {
             isDone = true;
             removeItselfFromQuad();
-            std::string zeScore = "SCORE:";
-            zeScore.append(to_string(ScoreByGeneric));
-            return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
+            //return true;
+            //std::string zeScore = "SCORE:";
+            //zeScore.append(to_string(ScoreByGeneric));
+            return SceneManager::GetInstance()->GetCurrScene()->onNotify("ASTEROID_DIED");
         }
     }
     else if (zeEvent.find("RESET") != std::string::npos)
@@ -150,6 +151,14 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
         removeItselfFromQuad();
         isDone = false;
         return true;
+    }
+    else if (zeEvent.find("DESTROY_SHIP") != std::string::npos)
+    {
+        std::string zeScore = "SCORE:";
+        isDone = true;
+        zeScore.append(to_string(ScoreByGeneric));
+        std::cout << name_ << zeEvent << std::endl;
+        return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
     }
     return false;
 }

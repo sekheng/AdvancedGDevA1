@@ -22,7 +22,7 @@ public:
 	inline Vector3 GetScale(){ return scale; };
 
 	bool IsDone();
-	void SetIsDone(const bool _value);
+	void SetIsDone(const bool &_value);
 
 	// Check if this entity has a collider class parent
 

@@ -30,7 +30,7 @@ bool EntityBase::IsDone()
 	return isDone;
 }
 
-void EntityBase::SetIsDone(bool _value)
+void EntityBase::SetIsDone(const bool &_value)
 {
 	isDone = _value;
 }

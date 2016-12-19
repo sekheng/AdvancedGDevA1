@@ -245,6 +245,7 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+    MusicSystem::accessing().Update(dt);
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
 	
@@ -261,7 +262,7 @@ void SceneText::Update(double dt)
 		{
 			waitingListToBeRemoved.push_back(it - m_activeList.begin());
 			
-			health_ -= 2;
+			//health_ -= 2;
 		}
     }
     if (!waitingListToBeRemoved.empty())
@@ -355,7 +356,6 @@ void SceneText::Update(double dt)
 	textObj[0]->SetText(ss.str());
 
 
-	;
 	// Update the player position into textObj[2]
 	std::ostringstream ss1;
 	ss1.precision(4);
@@ -416,8 +416,9 @@ void SceneText::Update(double dt)
 					|| temp->getRealPosition().z < -boundaryOfScene->GetScale().z / 10)*/
 				if ((Vector3(0, 0, 0) - temp->getRealPosition()).LengthSquared() <= 5)//despawn when hit origin
 				{
-					temp->GetEntity()->SetIsDone(true);
-					int dmg = temp->getTheChildren().size() + 1;
+					//temp->GetEntity()->SetIsDone(true);
+                    temp->GetEntity()->onNotify("DESTROY_SHIP");
+					//int dmg = temp->getTheChildren().size() + 1;
 					//health_ -= dmg;
 					/*int totalHealthToMinus = temp->GetNumOfChild() + 1;
 					health_ -= 2 * totalHealthToMinus;*/
@@ -551,7 +552,13 @@ bool SceneText::onNotify(const std::string &zeEvent)
     else if (zeEvent.find("SCORE") != std::string::npos)
     {
         size_t posOfColon = zeEvent.find(":");
-        //health_ += stoi(zeEvent.substr(posOfColon + 1));
+        health_ -= stoi(zeEvent.substr(posOfColon + 1));
+        MusicSystem::accessing().playMusic("explode");
+        --num_ofAsteroidsLeft;
+        return true;
+    }
+    else if (zeEvent.find("ASTEROID_DIED") != std::string::npos)
+    {
         MusicSystem::accessing().playMusic("explode");
         --num_ofAsteroidsLeft;
         return true;
