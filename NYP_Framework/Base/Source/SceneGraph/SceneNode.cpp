@@ -308,6 +308,35 @@ SceneNode* SceneNode::DetachChild(SceneNode* theNode)
 	return NULL;
 }
 
+SceneNode* SceneNode::setAllChildToShot(EntityBase* theEntity, bool toggle)
+{
+	if (this->theEntity != NULL)
+	{
+		if (*this->theEntity == *theEntity)
+		{
+			this->theEntity->SetIsShot(toggle);
+			if (theChildren.size() == 0)
+			{
+				return this;
+			}
+		}
+			
+	}
+	if (theChildren.size() != 0)
+	{
+		std::vector<SceneNode*>::iterator it;
+		for (it = theChildren.begin(); it != theChildren.end(); ++it)
+		{
+			SceneNode* theNode = (*it)->setAllChildToShot(theEntity, toggle);
+			if (theNode != NULL)
+			{
+				return theNode;
+			}
+		}
+	}
+	return NULL;
+}
+
 SceneNode* SceneNode::GetEntity(EntityBase* theEntity)
 {
 	// if it is inside this node, then return this node

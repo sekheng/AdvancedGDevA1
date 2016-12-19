@@ -261,8 +261,12 @@ void SceneText::Update(double dt)
 		if ((*it)->IsDone())
 		{
 			waitingListToBeRemoved.push_back(it - m_activeList.begin());
-			
-			//health_ -= 2;
+			if (!(*it)->IsShot())
+			{
+				health_ -= 10;
+			}
+			if ((*it)->getName().find("rock") != std::string::npos && num_ofAsteroidsLeft > 0)
+				--num_ofAsteroidsLeft;
 		}
     }
     if (!waitingListToBeRemoved.empty())
@@ -418,12 +422,22 @@ void SceneText::Update(double dt)
 				{
 					//temp->GetEntity()->SetIsDone(true);
                     temp->GetEntity()->onNotify("DESTROY_SHIP");
+					/*nodesToDelete.push_back(temp);
+					cout << temp->GetEntity()->getName() << endl;
+					cout << temp->GetEntity()->GetPosition() << endl;*/
 					//int dmg = temp->getTheChildren().size() + 1;
 					//health_ -= dmg;
 					/*int totalHealthToMinus = temp->GetNumOfChild() + 1;
 					health_ -= 2 * totalHealthToMinus;*/
 				}
+				
 			}
+			//for (vector<SceneNode*>::iterator it = nodesToDelete.begin(); it != nodesToDelete.end(); ++it)
+			//{
+			//	//SceneGraph::GetInstance()->GetRoot()->DeleteChild((*it)->GetEntity());
+			//	//SceneGraph::GetInstance()->GetNode((*it)->GetEntity())->DeleteAllChildren();
+			//	//SceneGraph::GetInstance()->DeleteNode((*it)->GetEntity());
+			//}
 			Vector3 distToSatellite = baseNode_s->getRealPosition() - playerInfo->GetCurrCamera().GetCameraPos();
 			if (distToSatellite.LengthSquared() < 700)
 			{
@@ -552,15 +566,15 @@ bool SceneText::onNotify(const std::string &zeEvent)
     else if (zeEvent.find("SCORE") != std::string::npos)
     {
         size_t posOfColon = zeEvent.find(":");
-        health_ -= stoi(zeEvent.substr(posOfColon + 1));
+        //health_ -= stoi(zeEvent.substr(posOfColon + 1));
         MusicSystem::accessing().playMusic("explode");
-        --num_ofAsteroidsLeft;
+        //--num_ofAsteroidsLeft;
         return true;
     }
     else if (zeEvent.find("ASTEROID_DIED") != std::string::npos)
     {
         MusicSystem::accessing().playMusic("explode");
-        --num_ofAsteroidsLeft;
+        //--num_ofAsteroidsLeft;
         return true;
     }
     return false;

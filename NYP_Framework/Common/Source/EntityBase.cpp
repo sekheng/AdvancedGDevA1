@@ -4,6 +4,7 @@ EntityBase::EntityBase()
 	: position(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
 	, isDone(false)
+	, isShot(true)
 	, m_bCollider(false)
 {
     name_ = "";
@@ -33,6 +34,16 @@ bool EntityBase::IsDone()
 void EntityBase::SetIsDone(const bool &_value)
 {
 	isDone = _value;
+}
+
+bool EntityBase::IsShot()
+{
+	return isShot;
+}
+
+void EntityBase::SetIsShot(const bool &_value)
+{
+	isShot = _value;
 }
 
 // Check if this entity has a collider class parent

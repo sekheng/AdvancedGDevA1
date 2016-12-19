@@ -24,6 +24,9 @@ public:
 	bool IsDone();
 	void SetIsDone(const bool &_value);
 
+	bool IsShot();
+	void SetIsShot(const bool &_value);
+
 	// Check if this entity has a collider class parent
 
     virtual bool onNotify(EntityBase &zeEvent);
@@ -48,11 +51,13 @@ public:
     bool operator==(const EntityBase &rhs);
     bool operator!=(const EntityBase &rhs);
 
+
+
 protected:
 	Vector3 position;
 	Vector3 scale;
 
-	bool isDone;
+	bool isDone,isShot;
 	bool m_bCollider;
     std::string name_;
     //union Vector3Union

@@ -73,6 +73,7 @@ private:
 	bool startAnimation;
 	void sceneGraphAnimation();
     unsigned short num_ofAsteroidsLeft;
+	vector<SceneNode*> nodesToDelete;
 };
 
 #endif

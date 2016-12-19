@@ -51,6 +51,7 @@ public:
 
 	Vector3 getRealPosition();
 
+	SceneNode* setAllChildToShot(EntityBase* theEntity, bool toggle);
 
 	vector<SceneNode*> getTheChildren();
 protected:

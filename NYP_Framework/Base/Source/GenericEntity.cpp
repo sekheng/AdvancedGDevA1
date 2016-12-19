@@ -138,6 +138,12 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
         if (howManyLives == 0)
         {
             isDone = true;
+			isShot = true;
+			SceneNode* temp = SceneGraph::GetInstance()->GetNode(this);
+			if (temp != NULL)
+			{
+				temp->setAllChildToShot(this, true);
+			}
             removeItselfFromQuad();
             //return true;
             //std::string zeScore = "SCORE:";
@@ -157,7 +163,15 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
         std::string zeScore = "SCORE:";
         isDone = true;
         zeScore.append(to_string(ScoreByGeneric));
-        std::cout << name_ << zeEvent << std::endl;
+		isShot = false;
+		SceneNode* temp = SceneGraph::GetInstance()->GetNode(this);
+		if (temp != NULL)
+		{
+			temp->setAllChildToShot(this, false);
+		}
+        //std::cout << name_ << zeEvent << std::endl;
+		//SceneGraph::GetInstance()->GetNode(this)->DeleteAllChildren();
+		//SceneGraph::GetInstance()->DeleteNode(this);
         return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
     }
     return false;
