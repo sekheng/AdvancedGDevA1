@@ -168,6 +168,10 @@ void CPlayerInfo::Reset(void)
     mainWeapon->onNotify(15, 1);
     StopVerticalMovement();
 }
+void CPlayerInfo::refillAmmo()
+{
+	mainWeapon->onNotify(15, 1);
+}
 
 // Get position x of the player
 //Vector3 CPlayerInfo::GetPos(void) const

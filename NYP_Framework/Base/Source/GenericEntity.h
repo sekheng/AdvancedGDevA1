@@ -36,6 +36,7 @@ protected:
 
     bool removeItselfFromQuad(); 
 	bool isVisible;
+	bool isKilledByBullet;
 
 	float levelOfDetail_Distances[2];
 	Vector3 posOfPlayer, targetOfPlayer;

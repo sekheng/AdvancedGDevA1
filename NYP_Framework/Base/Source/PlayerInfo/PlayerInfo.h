@@ -99,6 +99,7 @@ public:
     size_t getCurrNumClips();
 
     void setBoundary(Vector3 &zeBounds);
+	void refillAmmo();
 
 private:
 	//Vector3 defaultPosition, defaultTarget, defaultUp;

@@ -23,7 +23,7 @@
 #include "SpatialPartition\QuadTree.h"
 #include "SceneGraph\UpdateTransformation.h"
 #include "SceneGraph\UpdateRotation.h"
-#include "SceneGraph/SceneGraph.h"
+
 #include "WeaponInfo\Projectile.h"
 #include "MyMath.h"
 #include "MusicsStuff\MusicSystem.h"
@@ -168,6 +168,8 @@ void SceneText::Init()
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	//CreateAsteroid(Vector3(Math::RandIntMinMax(-50, 50), 0, Math::RandIntMinMax(-50, 50)), Vector3(1, 1, 1));
 	
+
+	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
@@ -201,6 +203,8 @@ void SceneText::Init()
     textObj[2] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.f, 1.f, 0.f));
     // For Num of Bullets and Clips
     textObj[3] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - fontSize - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
+	//satelite info
+	textObj[7] = Create::Text2DObject("text", Vector3(-halfWindowWidth, halfWindowHeight - (fontSize * 3) - halfFontSize, 0), "", Vector3(fontSize, fontSize, fontSize), Color(0, 1, 0));
     // For TimeLeft
     textObj[4] = Create::Text2DObject("text", Vector3(-400, halfWindowHeight - fontSize - 50, 0), "", Vector3(fontSize + halfFontSize, fontSize + halfFontSize, fontSize), Color(0, 1, 0));
     // For GameOver Screen
@@ -231,7 +235,9 @@ void SceneText::Init()
     }
     health_ = 100;
     timeLeft_Second = 120;
+	timeTillSateliteRDY = 5;
     currGameState = PLAYING;
+	startAnimation = false;
     playerInfo->setBoundary(boundaryOfScene->GetScale());
 
 	theGun = Create::Gun("Gun", Vector3(playerInfo->GetCurrCamera().GetCameraPos().x, playerInfo->GetCurrCamera().GetCameraPos().y, playerInfo->GetCurrCamera().GetCameraPos().z));
@@ -254,6 +260,7 @@ void SceneText::Update(double dt)
 		if ((*it)->IsDone())
 		{
 			waitingListToBeRemoved.push_back(it - m_activeList.begin());
+			
 			health_ -= 2;
 		}
     }
@@ -389,6 +396,10 @@ void SceneText::Update(double dt)
             ss1.str("");
             ss1 << "TimeLeft:" << timeLeft_Second;
             textObj[4]->SetText(ss1.str());
+
+			ss1.str("");
+			ss1 << "Time Till Satelite is ready:" << timeTillSateliteRDY;
+			textObj[7]->SetText(ss1.str());
 			//int difficulty = 16 - (int)(timeLeft_Second / 10);
 			
 			if (num_ofAsteroidsLeft <= 7)
@@ -406,9 +417,39 @@ void SceneText::Update(double dt)
 				if ((Vector3(0, 0, 0) - temp->getRealPosition()).LengthSquared() <= 5)//despawn when hit origin
 				{
 					temp->GetEntity()->SetIsDone(true);
+					int dmg = temp->getTheChildren().size() + 1;
+					//health_ -= dmg;
 					/*int totalHealthToMinus = temp->GetNumOfChild() + 1;
 					health_ -= 2 * totalHealthToMinus;*/
 				}
+			}
+			Vector3 distToSatellite = baseNode_s->getRealPosition() - playerInfo->GetCurrCamera().GetCameraPos();
+			if (distToSatellite.LengthSquared() < 700)
+			{
+				if (KeyboardController::GetInstance()->IsKeyPressed('Q'))
+				{
+					if (startAnimation == false)
+					{
+						sceneGraphAnimation();
+						startAnimation = true;
+					}
+					if (startAnimation == true && timeTillSateliteRDY <= 0)
+					{
+						//refill ammo
+						playerInfo->refillAmmo();
+						timeTillSateliteRDY = 5;
+					}
+
+				}
+				
+			}
+			if (startAnimation == true && timeTillSateliteRDY > 0)
+			{
+				timeTillSateliteRDY -= dt;
+			}
+			if (timeTillSateliteRDY < 0)
+			{
+				timeTillSateliteRDY = 0;
 			}
         }
         break;
@@ -522,6 +563,8 @@ void SceneText::resetGame()
 {
     camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
     playerInfo->Reset();
+	startAnimation = false;
+	timeTillSateliteRDY = 5;
     health_ = 100;
     timeLeft_Second = 120;
     currGameState = PLAYING;
@@ -557,6 +600,8 @@ void SceneText::resetGame()
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	
+	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	ROCK_ID = 0;
     spatialPartition->onNotify("RESET");
     spatialPartition->SetScale(Vector3(1000, 1000, 1000));
@@ -568,6 +613,52 @@ void SceneText::resetGame()
     spatialPartition->Update(0);
 }
 
+void SceneText::CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale)
+{
+	GenericEntity* base = Create::Entity("BASE", Vector3(0.0f, 0.0f, 0.0f), zeScale * 10);
+	base->setName("base");
+	baseNode_s = SceneGraph::GetInstance()->AddNode(base);
+	baseNode_s->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
+
+	GenericEntity* stand1 = Create::Entity("STAND1", Vector3(0.0f, 0.0f, 0.0f), zeScale*8);
+	stand1->setName("stand1");
+	secondNode_s = baseNode_s->AddChild(stand1);
+	
+	GenericEntity* stand2 = Create::Entity("STAND2", Vector3(0.0f, 0.0f, 0.0f), zeScale*8);
+	stand2->setName("stand2");
+	thirdNode_s = secondNode_s->AddChild(stand2);
+	thirdNode_s->ApplyTranslate(0, 5, 0);
+
+	GenericEntity* dish = Create::Entity("DISH", Vector3(0.0f, 0.0f, 0.0f), zeScale * 5);
+	dish->setName("dish");
+	forthNode_s = thirdNode_s->AddChild(dish);
+	//forthNode->ApplyRotate(45, 0, 0, 1);
+	forthNode_s->ApplyTranslate(0, 15, 0);
+}
+void SceneText::sceneGraphAnimation()
+{
+	UpdateTransformation* stand1T = new UpdateTransformation();
+	UpdateRotation* stand1R = new UpdateRotation();
+	stand1T->ApplyUpdate(0, 0.05f, 0);
+	stand1T->SetSteps(0, 300);
+	secondNode_s->SetUpdateTransformation(stand1T);
+	stand1R->ApplyUpdate(0.5f, 0, 1, 0);
+	stand1R->SetSteps(0, 200);
+	stand1R->setContinue(true);
+	secondNode_s->SetUpdateRotation(stand1R);
+
+	UpdateRotation* stand2R = new UpdateRotation();
+	stand2R->ApplyUpdate(1.f, 0, 0, 1);
+	stand2R->SetSteps(-100, 100);
+	stand2R->setContinue(true);
+	thirdNode_s->SetUpdateRotation(stand2R);
+
+	UpdateRotation* dishR = new UpdateRotation();
+	dishR->ApplyUpdate(1.f, 0, 1, 0);
+	dishR->SetSteps(0, 10);
+	stand2R->setContinue(false);
+	forthNode_s->SetUpdateRotation(dishR);
+}
 void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 {
 	int random = Math::RandIntMinMax(1, 4);
@@ -585,8 +676,10 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	//baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));	  
 	baseMtx->ApplyUpdate(dist.Normalized().x / 5, dist.Normalized().y / 5, dist.Normalized().z / 5);
 	baseMtx->SetSteps(0, Math::RandFloatMinMax(120, 200));
+	baseMtx->setContinue(true);
 	baseMtx1->ApplyUpdate(1, 0, 1, 0);
 	baseMtx1->SetSteps(0, 60);
+	baseMtx1->setContinue(true);
 	baseNode->SetUpdateTransformation(baseMtx);
 	//baseNode->SetUpdateRotation(baseMtx1);
 
@@ -606,6 +699,7 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	 childMtx->ApplyUpdate(0.0f, 0.0f, 0.05f);
 	}
 	childMtx->SetSteps(Math::RandFloatMinMax(-100, -60), Math::RandFloatMinMax(60, 100));
+	childMtx->setContinue(true);
 	childNode->SetUpdateTransformation(childMtx);
 
 	GenericEntity* grandchildCube = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f* zeScale.y, 0.0f), zeScale);

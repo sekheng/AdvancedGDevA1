@@ -4,6 +4,7 @@ class UpdateRotation
 {
 protected:
 	int curSteps, deltaSteps, minSteps, maxSteps;
+	bool toContinue, isReached;
 	Mtx44 Update_Mtx, Update_Mtx_REVERSED;
 public:
 	UpdateRotation();
@@ -20,6 +21,8 @@ public:
 	void GetSteps(int& minSteps, int& maxSteps);
 	// Get the direction of update
 	bool GetDirection(void) const;
+
+	void setContinue(bool toggle);
 	// Get the Update_Mtx
 	Mtx44 GetUpdateRotation(void);
 };
