@@ -644,12 +644,12 @@ void SceneText::resetGame()
 void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 {
     GenericEntity* base = Create::Entity("PLANET", Vector3(0.0f, 0.0f, 0.0f), zeScale);
-    base->setName("base");
+    base->setName("planetBase");
     baseNode_s = SceneGraph::GetInstance()->AddNode(base);
     baseNode_s->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
 
     GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
-    stand1->setName("stand1");
+    stand1->setName("PlanetRing1");
     secondNode_s = baseNode_s->AddChild(stand1);
 }
 
