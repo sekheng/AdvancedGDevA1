@@ -70,10 +70,13 @@ private:
     void resetGame();
     void CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale);
 	void CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale);
+    void CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale);
 	bool startAnimation;
 	void sceneGraphAnimation();
     unsigned short num_ofAsteroidsLeft;
 	vector<SceneNode*> nodesToDelete;
+
+    bool DisplaySpatialPartition;
 };
 
 #endif

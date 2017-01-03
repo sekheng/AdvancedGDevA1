@@ -179,6 +179,10 @@ void Application::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("STAND1", "OBJ//satelite_stand1.obj")->textureID = LoadTGA("Image//rock2.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("STAND2", "OBJ//satelite_stand2.obj")->textureID = LoadTGA("Image//rock3.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("DISH", "OBJ//satelite_dish.obj")->textureID = LoadTGA("Image//rock.tga");
+
+    MeshBuilder::GetInstance()->GenerateOBJ("PLANET_RING", "OBJ//PlanetRing.obj")->textureID = LoadTGA("Image//PlanetRing.tga");
+    MeshBuilder::GetInstance()->GenerateOBJ("PLANET", "OBJ//Planet.obj")->textureID = LoadTGA("Image//Planet.tga");
+
     Mesh *zeMesh = MeshBuilder::GetInstance()->GenerateQuadXZ("GRIDMESH", Color(1, 1, 1), 1.f);
     zeMesh->mode = Mesh::DRAW_LINES;
 

@@ -138,8 +138,8 @@ void SceneText::Init()
     boundaryOfScene->setName("Boundary");
 
 	// Create entities into the scene
-    EntityManager::GetInstance()->AddEntity(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
-    EntityManager::GetInstance()->AddEntity(Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z))); // Lightball
+    //EntityManager::GetInstance()->AddEntity(Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f))); // Reference
+    //EntityManager::GetInstance()->AddEntity(Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z))); // Lightball
 	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f), Vector3(20.f,20.f,20.f));
  //   aCube->setName("cube0");
 	//aCube->SetCollider(true);
@@ -170,6 +170,9 @@ void SceneText::Init()
 	
 
 	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+
+    // I am testing out scene graph animation
+    CreatePlanet(Vector3(0, 0, 0), Vector3(1, 1, 1));
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
@@ -241,6 +244,7 @@ void SceneText::Init()
     playerInfo->setBoundary(boundaryOfScene->GetScale());
 
 	theGun = Create::Gun("Gun", Vector3(playerInfo->GetCurrCamera().GetCameraPos().x, playerInfo->GetCurrCamera().GetCameraPos().y, playerInfo->GetCurrCamera().GetCameraPos().z));
+    DisplaySpatialPartition = false;
 }
 
 void SceneText::Update(double dt)
@@ -318,6 +322,8 @@ void SceneText::Update(double dt)
 		lights[0]->position.y -= (float)(10.f * dt);
 	if(KeyboardController::GetInstance()->IsKeyDown('P'))
 		lights[0]->position.y += (float)(10.f * dt);
+    if (KeyboardController::GetInstance()->IsKeyDown('Y'))
+        DisplaySpatialPartition = !DisplaySpatialPartition;
 
 	// if the left mouse button was released
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
@@ -506,7 +512,8 @@ void SceneText::Render()
 	SceneGraph::GetInstance()->Render();
 	theGun->Render();
 	theShip->Render();
-    spatialPartition->Render();
+    if (DisplaySpatialPartition)
+        spatialPartition->Render();
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
 		if (SceneGraph::GetInstance()->GetNode(*it) == NULL)
@@ -632,6 +639,11 @@ void SceneText::resetGame()
         spatialPartition->onNotify(**it);
     }
     spatialPartition->Update(0);
+}
+
+void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
+{
+
 }
 
 void SceneText::CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale)
