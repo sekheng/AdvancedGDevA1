@@ -172,7 +172,7 @@ void SceneText::Init()
 	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 
     // I am testing out scene graph animation
-    CreatePlanet(Vector3(0, 0, 0), Vector3(1, 1, 1));
+    CreatePlanet(Vector3(0, 2, 0), Vector3(1, 1, 1));
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
@@ -643,7 +643,14 @@ void SceneText::resetGame()
 
 void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 {
+    GenericEntity* base = Create::Entity("PLANET", Vector3(0.0f, 0.0f, 0.0f), zeScale);
+    base->setName("base");
+    baseNode_s = SceneGraph::GetInstance()->AddNode(base);
+    baseNode_s->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
 
+    GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
+    stand1->setName("stand1");
+    secondNode_s = baseNode_s->AddChild(stand1);
 }
 
 void SceneText::CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale)
