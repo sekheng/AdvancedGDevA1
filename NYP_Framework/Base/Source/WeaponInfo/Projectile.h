@@ -17,9 +17,10 @@ public:
     virtual bool onNotify(const float &zeEvent);
     virtual bool onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2);
     virtual bool onNotify(std::vector<GenericEntity*> &zeList);
+    virtual bool onNotify(const Vector3 &zeEvent);
 
 protected:
-    Vector3 vel_;
+    Vector3 vel_, right_, rotationVector_;
     float speed_, timespan_;
 
     bool GetIntersection(const float &fDst1, const float &fDst2, const Vector3 &P1, const Vector3 &P2, Vector3 &Hit);

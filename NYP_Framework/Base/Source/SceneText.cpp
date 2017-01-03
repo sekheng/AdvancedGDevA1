@@ -583,6 +583,7 @@ bool SceneText::onNotify(const std::string &zeEvent)
                 break;
             }
         }
+        zeBullet->onNotify(playerInfo->GetCurrCamera().GetCameraRotation());
         return zeBullet->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
     }
     else if (zeEvent.find("SCORE") != std::string::npos)
