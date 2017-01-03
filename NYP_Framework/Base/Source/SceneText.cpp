@@ -163,16 +163,22 @@ void SceneText::Init()
  //   m_activeList.push_back(aCube);
 
 	//debuging for scene graph, START
+
+	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+
+	// I am testing out scene graph animation
+	CreatePlanet(Vector3(100, 0, 0), Vector3(25, 25, 25));
+
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	//CreateAsteroid(Vector3(Math::RandIntMinMax(-50, 50), 0, Math::RandIntMinMax(-50, 50)), Vector3(1, 1, 1));
 	
-
-	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
-
-    // I am testing out scene graph animation
-    CreatePlanet(Vector3(0, 2, 0), Vector3(1, 1, 1));
+	for (int i = 0; i < 2; ++i)
+	{
+		CreateSatelite2(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	}
+	
 	//debuging for scene graph, END
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
@@ -282,6 +288,15 @@ void SceneText::Update(double dt)
         }
         waitingListToBeRemoved.clear();
     }
+
+	for (std::vector<GenericEntity*>::iterator it = listOfOBJForLOD.begin(), end = listOfOBJForLOD.end(); it != end; ++it)
+	{
+		if ((*it)->GetLODStatus() == true)
+		{
+			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
+		}
+		(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
+	}
 	theShip->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
 	theShip->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
 	SceneGraph::GetInstance()->Update();
@@ -630,6 +645,11 @@ void SceneText::resetGame()
 	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 	
 	CreateSatelite(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	CreatePlanet(Vector3(100, 0, 0), Vector3(25, 25, 25));
+	for (int i = 0; i < 2; ++i)
+	{
+		CreateSatelite2(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	}
 	ROCK_ID = 0;
     spatialPartition->onNotify("RESET");
     spatialPartition->SetScale(Vector3(1000, 1000, 1000));
@@ -643,20 +663,64 @@ void SceneText::resetGame()
 
 void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 {
+	GenericEntity* dummy = Create::Entity("quad", Vector3(0.0f, 0.0f, 0.0f), Vector3(0.1f, 0.1f, 0.1f));
+	dummy->setName("dummy");
+	SceneNode* dummyNode = SceneGraph::GetInstance()->AddNode(dummy);
+	dummyNode->ApplyTranslate(5, 0, 0);
+
     GenericEntity* base = Create::Entity("PLANET", Vector3(0.0f, 0.0f, 0.0f), zeScale);
     base->setName("planetBase");
-    baseNode_s = SceneGraph::GetInstance()->AddNode(base);
-    baseNode_s->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
+	base->InitLOD("PLANET", "PLANET1", "PLANET2");
+	base->onNotify(200.f, 400.f);
+	SceneNode* baseNode = dummyNode->AddChild(base);
+	baseNode->ApplyTranslate(zePos.x, zePos.y + ((zeScale.y * 10)), zePos.z);
 
     GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
     stand1->setName("PlanetRing1");
-    secondNode_s = baseNode_s->AddChild(stand1);
+	stand1->InitLOD("PLANET_RING", "PLANET_RING1", "PLANET_RING2");
+	stand1->onNotify(200.f, 400.f);
+	SceneNode* SecondbaseNode = baseNode->AddChild(stand1);
+
+	GenericEntity* stand2 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
+	stand2->setName("PlanetRing1");
+	stand2->InitLOD("PLANET_RING", "PLANET_RING1", "PLANET_RING2");
+	stand2->onNotify(200.f, 400.f);
+	SceneNode* ThirdbaseNode = baseNode->AddChild(stand2);
+
+	listOfOBJForLOD.push_back(base);
+	listOfOBJForLOD.push_back(stand1);
+	listOfOBJForLOD.push_back(stand2);
+
+	UpdateRotation* rotateWholeSystem = new UpdateRotation();
+	UpdateRotation* rotateRing = new UpdateRotation();
+	UpdateRotation* rotateSickly = new UpdateRotation();
+	UpdateRotation* rotateSickly2 = new UpdateRotation();
+	rotateWholeSystem->ApplyUpdate(1, 0, 1, 0);
+	rotateWholeSystem->SetSteps(0, 60);
+	rotateWholeSystem->setContinue(true);
+	dummyNode->SetUpdateRotation(rotateWholeSystem);
+
+	rotateRing->ApplyUpdate(1, 0, 1, 0);
+	rotateRing->SetSteps(0, 60);
+	rotateRing->setContinue(true);
+	baseNode->SetUpdateRotation(rotateRing);
+
+	rotateSickly->ApplyUpdate(-1,0, 0,1);
+	rotateSickly->SetSteps(0, 60);
+	rotateSickly->setContinue(true);
+	SecondbaseNode->SetUpdateRotation(rotateSickly);
+	rotateSickly2->ApplyUpdate(-1, 1, 0, 0);
+	rotateSickly2->SetSteps(0, 60);
+	rotateSickly2->setContinue(true);
+	ThirdbaseNode->SetUpdateRotation(rotateSickly2);
 }
 
 void SceneText::CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale)
 {
 	GenericEntity* base = Create::Entity("BASE", Vector3(0.0f, 0.0f, 0.0f), zeScale * 10);
 	base->setName("base");
+	base->InitLOD("BASE", "BASE1", "BASE2");
+	base->onNotify(200.f, 400.f);
 	baseNode_s = SceneGraph::GetInstance()->AddNode(base);
 	baseNode_s->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
 
@@ -671,16 +735,21 @@ void SceneText::CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale)
 
 	GenericEntity* dish = Create::Entity("DISH", Vector3(0.0f, 0.0f, 0.0f), zeScale * 5);
 	dish->setName("dish");
+	dish->InitLOD("DISH", "DISH1", "DISH2");
+	dish->onNotify(200.f, 400.f);
 	forthNode_s = thirdNode_s->AddChild(dish);
 	//forthNode->ApplyRotate(45, 0, 0, 1);
 	forthNode_s->ApplyTranslate(0, 15, 0);
+
+	listOfOBJForLOD.push_back(base);
+	listOfOBJForLOD.push_back(dish);
 }
 void SceneText::sceneGraphAnimation()
 {
 	UpdateTransformation* stand1T = new UpdateTransformation();
 	UpdateRotation* stand1R = new UpdateRotation();
-	stand1T->ApplyUpdate(0, 0.05f, 0);
-	stand1T->SetSteps(0, 300);
+	stand1T->ApplyUpdate(0, 0.1f, 0);
+	stand1T->SetSteps(0, 150);
 	secondNode_s->SetUpdateTransformation(stand1T);
 	stand1R->ApplyUpdate(0.5f, 0, 1, 0);
 	stand1R->SetSteps(0, 200);
@@ -698,6 +767,44 @@ void SceneText::sceneGraphAnimation()
 	dishR->SetSteps(0, 10);
 	stand2R->setContinue(false);
 	forthNode_s->SetUpdateRotation(dishR);
+}
+
+void SceneText::CreateSatelite2(const Vector3 &zePos, const Vector3 &zeScale)
+{
+	GenericEntity* base = Create::Entity("BASE", Vector3(0.0f, 0.0f, 0.0f), zeScale * 10);
+	base->setName("base" + to_string(ROCK_ID++));
+	base->InitLOD("BASE", "BASE1", "BASE2");
+	base->onNotify(200.f, 400.f);
+	SceneNode* baseNode_s2 = SceneGraph::GetInstance()->AddNode(base);
+	baseNode_s2->ApplyTranslate(zePos.x, zePos.y - ((zeScale.y * 10)), zePos.z);
+
+	GenericEntity* stand1 = Create::Entity("STAND1", Vector3(0.0f, 0.0f, 0.0f), zeScale * 8);
+	stand1->setName("stand1" + to_string(ROCK_ID));
+	SceneNode* secondNode_s2 = baseNode_s2->AddChild(stand1);
+
+	GenericEntity* stand2 = Create::Entity("STAND2", Vector3(0.0f, 0.0f, 0.0f), zeScale * 8);
+	stand2->setName("stand2" + to_string(ROCK_ID));
+	SceneNode* thirdNode_s2 = secondNode_s2->AddChild(stand2);
+	thirdNode_s2->ApplyTranslate(0, 5, 0);
+
+	listOfOBJForLOD.push_back(base);
+
+	UpdateTransformation* stand1T = new UpdateTransformation();
+	UpdateRotation* stand1R = new UpdateRotation();
+	stand1T->ApplyUpdate(0, 0.1f, 0);
+	stand1T->SetSteps(0, 150);
+	secondNode_s2->SetUpdateTransformation(stand1T);
+	stand1R->ApplyUpdate(0.5f, 0, 1, 0);
+	stand1R->SetSteps(0, 200);
+	stand1R->setContinue(true);
+	secondNode_s2->SetUpdateRotation(stand1R);
+
+	UpdateRotation* stand2R = new UpdateRotation();
+	stand2R->ApplyUpdate(1.f, 0, 0, 1);
+	stand2R->SetSteps(-100, 100);
+	stand2R->setContinue(true);
+	thirdNode_s2->SetUpdateRotation(stand2R);
+
 }
 void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 {
@@ -717,7 +824,7 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	baseMtx->ApplyUpdate(dist.Normalized().x / 5, dist.Normalized().y / 5, dist.Normalized().z / 5);
 	baseMtx->SetSteps(0, Math::RandFloatMinMax(120, 200));
 	baseMtx->setContinue(true);
-	baseMtx1->ApplyUpdate(1, 0, 1, 0);
+	baseMtx1->ApplyUpdate(1, 0, 0, 1);
 	baseMtx1->SetSteps(0, 60);
 	baseMtx1->setContinue(true);
 	baseNode->SetUpdateTransformation(baseMtx);
@@ -728,36 +835,56 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	childCube->InitLOD("ROCK1_1", "ROCK1_2", "ROCK1_3");
 	childCube->onNotify(200.f, 400.f);
 	SceneNode* childNode = baseNode->AddChild(childCube);
-	UpdateTransformation* childMtx = new UpdateTransformation();
+	UpdateRotation* childMtx = new UpdateRotation();
 	//UpdateRotation* baseMtx1 = new UpdateRotation();
 	if (random == 1)
 	{
-	 childMtx->ApplyUpdate(0.05f, 0.0f, 0.0f);
+	 childMtx->ApplyUpdate(1, 0, 0, 1);
 	}
 	else
 	{
-	 childMtx->ApplyUpdate(0.0f, 0.0f, 0.05f);
+	 childMtx->ApplyUpdate(1, 1, 0, 0);
 	}
-	childMtx->SetSteps(Math::RandFloatMinMax(-100, -60), Math::RandFloatMinMax(60, 100));
+	childMtx->SetSteps(0, 1);
 	childMtx->setContinue(true);
-	childNode->SetUpdateTransformation(childMtx);
+	childNode->SetUpdateRotation(childMtx);
 
 	GenericEntity* grandchildCube = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f* zeScale.y, 0.0f), zeScale);
 	grandchildCube->setName("rock" + to_string(ROCK_ID++));
 	grandchildCube->InitLOD("ROCK2_1", "ROCK2_2", "ROCK2_3");
 	grandchildCube->onNotify(200.f, 400.f);
-	SceneNode* grandchildNode = baseNode->AddChild(grandchildCube);
+	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
 
 	GenericEntity* anotherchildCube = Create::Entity("ASTEROID", Vector3(0.0f, 4.f* zeScale.y, 0.0f* zeScale.z), zeScale);
 	anotherchildCube->setName("rock" + to_string(ROCK_ID++));
 	anotherchildCube->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
-	anotherchildCube->onNotify(200.f, 400.f);
+	anotherchildCube->onNotify(100.f, 200.f);
 	SceneNode* anotherchildnode = childNode->AddChild(anotherchildCube);
+
+	GenericEntity* anotherchildCube2 = Create::Entity("ASTEROID", Vector3(0.0f, 6.f* zeScale.y, 0.0f* zeScale.z), zeScale);
+	anotherchildCube2->setName("rock" + to_string(ROCK_ID++));
+	anotherchildCube2->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
+	anotherchildCube2->onNotify(200.f, 400.f);
+	SceneNode* anotherchildnode2 = anotherchildnode->AddChild(anotherchildCube2);
+	UpdateRotation* childMtx1 = new UpdateRotation();
+	//UpdateRotation* baseMtx1 = new UpdateRotation();
+	if (random == 1)
+	{
+		childMtx1->ApplyUpdate(1, 1, 0, 0);
+	}
+	else
+	{
+		childMtx1->ApplyUpdate(1, 0, 0, 1);
+	}
+	childMtx1->SetSteps(0, 1);
+	childMtx1->setContinue(true);
+	anotherchildnode->SetUpdateRotation(childMtx1);
 
 	m_activeList.push_back(baseCube);
 	m_activeList.push_back(childCube);
 	m_activeList.push_back(grandchildCube);
 	m_activeList.push_back(anotherchildCube);
+	m_activeList.push_back(anotherchildCube2);
 	num_ofAsteroidsLeft += 4;
 		
 	

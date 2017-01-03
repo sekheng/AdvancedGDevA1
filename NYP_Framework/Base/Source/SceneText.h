@@ -43,6 +43,7 @@ private:
 
 	GenericEntity* theCube;
 	GenericEntity* theShip;
+	vector<GenericEntity*> listOfOBJForLOD;
 	RenderGun* theGun;
 
 	SceneNode* baseNode_s;
@@ -70,6 +71,7 @@ private:
     void resetGame();
     void CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale);
 	void CreateSatelite(const Vector3 &zePos, const Vector3 &zeScale);
+	void CreateSatelite2(const Vector3 &zePos, const Vector3 &zeScale);
     void CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale);
 	bool startAnimation;
 	void sceneGraphAnimation();

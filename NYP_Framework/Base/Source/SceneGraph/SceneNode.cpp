@@ -401,14 +401,15 @@ int SceneNode::GetNumOfChild()
 // Update the Scene Graph
 void SceneNode::Update(void)
 {
-	if (theUpdateRotation)
-	{
-		ApplyTransform(GetUpdateRotation());
-	}
 	if (theUpdateTransformation)
 	{
 		ApplyTransform(GetUpdateTransform());
 	}
+	if (theUpdateRotation)
+	{
+		ApplyTransform(GetUpdateRotation());
+	}
+	
 	
 	if (theEntity != NULL)
 	{
