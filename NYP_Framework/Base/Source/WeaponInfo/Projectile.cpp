@@ -157,14 +157,27 @@ void Projectile::Render()
     if ((modelMesh && isVisible))
     {
         MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+        //modelStack.PushMatrix();
+        //modelStack.Rotate(rotationVector_.x, right_.x, 0, right_.z);
+        //modelStack.PushMatrix();
+        //modelStack.Rotate(rotationVector_.y - 90.f, 0, 1, 0);
+
         modelStack.PushMatrix();
         modelStack.Translate(position.x, position.y, position.z);
         modelStack.Scale(scale.x, scale.y, scale.z);
 
-            modelStack.PushMatrix();
-            modelStack.Rotate(angleZ, 0, 1, 0);
-                modelStack.PushMatrix();
-                modelStack.Rotate(angleY, 1, 0, 0);
+        modelStack.PushMatrix();
+        modelStack.Rotate(rotationVector_.x, right_.x, 0, right_.z);
+        modelStack.PushMatrix();
+        modelStack.Rotate(rotationVector_.y - 180.f, 0, 1, 0);
+//        modelStack.PushMatrix();
+//            //modelStack.Rotate(angleZ, 0, 1, 0);
+//
+//                modelStack.PushMatrix();
+//                //modelStack.Rotate(angleY, 1, 0, 0);
+////                modelStack.Rotate(angleY, vel_.x, 0, vel_.z);
+//                    modelStack.PushMatrix();
+//                    //modelStack.Rotate(angleX, 0, 0, 1);
         if (GetLODStatus() == true)
         {
             if (theDetailLevel != NO_DETAILS)
@@ -174,10 +187,14 @@ void Projectile::Render()
         {
             RenderHelper::RenderMesh(modelMesh);
         }
-                modelStack.PopMatrix();
+            //        modelStack.PopMatrix();
+            //    modelStack.PopMatrix();
+            //modelStack.PopMatrix();
+            modelStack.PopMatrix();
             modelStack.PopMatrix();
 
         modelStack.PopMatrix();
+
     }
 }
 
@@ -212,16 +229,18 @@ bool Projectile::onNotify(const Vector3 &zeEvent1, const Vector3 &zeEvent2)
     {
         isDone = false;
         vel_ = (zeEvent2 - zeEvent1).Normalize();
-        float vel_Length = vel_.Length();
-        angleX = Math::RadianToDegree(acos(vel_.x / vel_Length));
-        angleY = Math::RadianToDegree(acos(vel_.y / vel_Length)) - 90.f;
-        angleZ = Math::RadianToDegree(acos(vel_.z / vel_Length));
-        //if (vel_.x < -Math::EPSILON && vel_.z > Math::EPSILON)
-        //    angleX *= -1;
-        //if (vel_.z < -Math::EPSILON && vel_.x < -Math::EPSILON)
-        //    angleY *= -1;
-        //if (vel_.z > Math::EPSILON && vel_.x < -Math::EPSILON)
-        //    angleZ *= -1;
+        right_ = vel_.Cross(Vector3(0, 1, 0));
+        right_.y = 0;
+        right_.Normalize();
+        angleX = Math::RadianToDegree(acos(vel_.x));
+        angleY = Math::RadianToDegree(acos(vel_.y)) - 90.f;
+        angleZ = Math::RadianToDegree(acos(vel_.z));
+        if (vel_.x < -Math::EPSILON && vel_.z > Math::EPSILON)
+            angleX *= -1;
+        if (vel_.z < -Math::EPSILON && vel_.x < -Math::EPSILON)
+            angleY *= -1;
+        if (vel_.z > Math::EPSILON && vel_.x < -Math::EPSILON)
+            angleZ *= -1;
         position = zeEvent1;
         timespan_ = MAX_LIFESPAN;
         return true;
@@ -302,5 +321,11 @@ bool Projectile::trueRayCasting(EntityBase *rhs)
     if (t1 < 0 || t0 > 10000.f)
         return false;
     
+    return true;
+}
+
+bool Projectile::onNotify(const Vector3 &zeEvent)
+{
+    rotationVector_ = zeEvent;
     return true;
 }
