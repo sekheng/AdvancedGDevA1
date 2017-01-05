@@ -22,6 +22,7 @@ Projectile::Projectile()
     sceneObjectList = nullptr;
     angleX = angleY = angleZ = 0;
     scale.Set(0.2f, 0.5f, 0.2f);
+    whichQuadIsIn = nullptr;
 }
 
 Projectile::Projectile(Mesh *zeMesh)
@@ -34,6 +35,7 @@ Projectile::Projectile(Mesh *zeMesh)
     name_ = "Projectile";
     name_.append(std::to_string(zeID++));
     sceneObjectList = nullptr;
+    whichQuadIsIn = nullptr;
 }
 
 Projectile::~Projectile()
@@ -99,6 +101,7 @@ void Projectile::Update(double dt)
                                 Vector3 HitPosition(0, 0, 0);
                                 if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                                 //if (trueRayCasting((*it)))
+                                //if (CheckSphereToSphereCollision(*it))
                                 {
 #ifdef _DEBUG
                                     std::cout << "Hit  " << (*it)->getName() << std::endl;
@@ -131,6 +134,7 @@ void Projectile::Update(double dt)
                                         Vector3 HitPosition(0, 0, 0);
                                         if (CheckLineSegmentPlane(position, position - (position + vel_ * 200.f), thatMinAABB, thatMaxAABB, HitPosition))
                                         //if (trueRayCasting((*it)))
+                                        //if (CheckSphereToSphereCollision(*it))
                                         {
 #ifdef _DEBUG
                                             std::cout << "Hit  " << (*it)->getName() << std::endl;
@@ -328,4 +332,18 @@ bool Projectile::onNotify(const Vector3 &zeEvent)
 {
     rotationVector_ = zeEvent;
     return true;
+}
+
+bool Projectile::CheckSphereToSphereCollision(EntityBase *rhs)
+{
+    SceneNode *zeNodeObj = SceneGraph::GetInstance()->GetNode(rhs);
+    Vector3 rhsPos = rhs->GetPosition();
+    if (zeNodeObj)
+        rhsPos += zeNodeObj->getRealPosition();
+
+    float Distsq = (position - rhsPos).LengthSquared();
+    if (Distsq <= ((scale.x * scale.x) + (rhs->GetScale().x * rhs->GetScale().x)))
+        return true;
+
+    return false;
 }
