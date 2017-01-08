@@ -258,7 +258,7 @@ void SceneText::Update(double dt)
     MusicSystem::accessing().Update(dt);
 	// Update our entities
 	EntityManager::GetInstance()->Update(dt);
-	
+	//vector<EntityBase*> listToDelete;
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
         (*it)->Update(dt);
@@ -278,8 +278,21 @@ void SceneText::Update(double dt)
 			}
 			if ((*it)->getName().find("rock") != std::string::npos && num_ofAsteroidsLeft > 0)
 				--num_ofAsteroidsLeft;
+
+			
+			
+			/*for (std::vector<SceneNode*>::iterator it2 = SceneGraph::GetInstance()->GetRoot()->getTheChildren().begin(), end = SceneGraph::GetInstance()->GetRoot()->getTheChildren().end(); it2 != end; ++it2)
+			{
+				if ((*it) == (*it2)->GetEntity())
+				{
+					listToDelete.push_back((*it2)->GetEntity());
+					
+				}
+			}*/
+			
 		}
     }
+	
     if (!waitingListToBeRemoved.empty())
     {
         for (std::vector<size_t>::reverse_iterator rit = waitingListToBeRemoved.rbegin(), rend = waitingListToBeRemoved.rend(); rit != rend; ++rit)
@@ -298,6 +311,10 @@ void SceneText::Update(double dt)
 		}
 		(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
 	}
+	/*for (std::vector<EntityBase*>::iterator it3 = listToDelete.begin(), end = listToDelete.end(); it3 != end; ++it3)
+	{
+		SceneGraph::GetInstance()->GetNode((*it3))->DeleteAllChildren();
+	}*/
 	theShip->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
 	theShip->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
 	SceneGraph::GetInstance()->Update();
@@ -513,6 +530,21 @@ void SceneText::Update(double dt)
     default:
         break;
     }
+
+	//int count = SceneGraph::GetInstance()->GetRoot()->getTheChildren().size();
+	//vector<EntityBase*> listToDelete;
+	//for (int i = 0; i < count; ++i)
+	//{
+	//	EntityBase* temp = SceneGraph::GetInstance()->GetRoot()->getTheChildren()[i]->GetEntity();
+	//	if (temp->IsDone() == true)
+	//		//SceneGraph::GetInstance()->DeleteNode(temp);
+	//		listToDelete.push_back(temp);
+	//}
+	//for (std::vector<EntityBase*>::iterator it = listToDelete.begin(), end = listToDelete.end(); it != end; ++it)
+	//{
+	//	SceneGraph::GetInstance()->GetNode(*it)->DeleteAllChildren();
+	//}
+	
 }
 
 void SceneText::Render()

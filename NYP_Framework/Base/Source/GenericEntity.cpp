@@ -172,8 +172,8 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
 		}
         //std::cout << name_ << zeEvent << std::endl;
 		//SceneGraph::GetInstance()->GetNode(this)->DeleteAllChildren();
-		SceneGraph::GetInstance()->GetNode(this)->SetEntity(NULL);
-		SceneGraph::GetInstance()->DeleteNode(this);
+		//SceneGraph::GetInstance()->GetNode(this)->SetEntity(NULL);
+		//SceneGraph::GetInstance()->DeleteNode(this);
         return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
     }
     return false;
