@@ -176,7 +176,7 @@ void SceneText::Init()
 	
 	for (int i = 0; i < 2; ++i)
 	{
-		CreateSatelite2(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+		CreateSatelite2(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 5, boundaryOfScene->GetScale().x / 5), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 5, boundaryOfScene->GetScale().z / 5)), Vector3(1, 1, 1));
 	}
 	
 	//debuging for scene graph, END
@@ -427,7 +427,7 @@ void SceneText::Update(double dt)
 			textObj[7]->SetText(ss1.str());
 			//int difficulty = 16 - (int)(timeLeft_Second / 10);
 			
-			if (num_ofAsteroidsLeft <= 7)
+			if (num_ofAsteroidsLeft <= 2)
 			{
 				CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 			}
@@ -672,20 +672,20 @@ void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
     GenericEntity* base = Create::Entity("PLANET", Vector3(0.0f, 0.0f, 0.0f), zeScale);
     base->setName("planetBase");
 	base->InitLOD("PLANET", "PLANET1", "PLANET2");
-	base->onNotify(200.f, 400.f);
+	base->onNotify(400.f, 800.f);
 	SceneNode* baseNode = dummyNode->AddChild(base);
-	baseNode->ApplyTranslate(zePos.x, zePos.y + ((zeScale.y * 10)), zePos.z);
+	baseNode->ApplyTranslate(zePos.x + 100, zePos.y + ((zeScale.y * 10)), zePos.z);
 
     GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
     stand1->setName("PlanetRing1");
 	stand1->InitLOD("PLANET_RING", "PLANET_RING1", "PLANET_RING2");
-	stand1->onNotify(200.f, 400.f);
+	stand1->onNotify(400.f, 800.f);
 	SceneNode* SecondbaseNode = baseNode->AddChild(stand1);
 
 	GenericEntity* stand2 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
 	stand2->setName("PlanetRing1");
 	stand2->InitLOD("PLANET_RING", "PLANET_RING1", "PLANET_RING2");
-	stand2->onNotify(200.f, 400.f);
+	stand2->onNotify(400.f, 800.f);
 	SceneNode* ThirdbaseNode = baseNode->AddChild(stand2);
 
 	listOfOBJForLOD.push_back(base);

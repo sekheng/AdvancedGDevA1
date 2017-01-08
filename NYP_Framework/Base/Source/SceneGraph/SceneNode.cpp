@@ -108,9 +108,18 @@ SceneNode* SceneNode::AddChild(EntityBase* theEntity)
 		aNewNode->SetParent(this);
 
 		aNewNode->SetID(SceneGraph::GetInstance()->GenerateID());
+		
+		std::vector<SceneNode*>::iterator it;
+		for (it = theChildren.begin(); it != theChildren.end(); ++it)
+		{
+			if ((*it)->GetEntity() == NULL)
+			{
+				(*it) = aNewNode;
+				return aNewNode;
+			}
+		}
 
 		this->theChildren.push_back(aNewNode);
-
 		return aNewNode;
 	}
 	return NULL;
