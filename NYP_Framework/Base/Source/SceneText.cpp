@@ -270,6 +270,7 @@ void SceneText::Update(double dt)
 		}
 		if ((*it)->IsDone())
 		{
+			(*it)->removeItselfFromQuad();
 			waitingListToBeRemoved.push_back(it - m_activeList.begin());
 			if (!(*it)->IsShot())
 			{

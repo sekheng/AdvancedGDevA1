@@ -144,7 +144,7 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
 			{
 				temp->setAllChildToShot(this, true);
 			}
-            removeItselfFromQuad();
+            //removeItselfFromQuad();
             //return true;
             //std::string zeScore = "SCORE:";
             //zeScore.append(to_string(ScoreByGeneric));
@@ -168,12 +168,12 @@ bool GenericEntity::onNotify(const std::string &zeEvent)
 		if (temp != NULL)
 		{
 			temp->setAllChildToShot(this, false);
-			removeItselfFromQuad();
+			//removeItselfFromQuad();
 		}
         //std::cout << name_ << zeEvent << std::endl;
 		//SceneGraph::GetInstance()->GetNode(this)->DeleteAllChildren();
 		SceneGraph::GetInstance()->GetNode(this)->SetEntity(NULL);
-		//SceneGraph::GetInstance()->DeleteNode(this);
+		SceneGraph::GetInstance()->DeleteNode(this);
         return SceneManager::GetInstance()->GetCurrScene()->onNotify(zeScore);
     }
     return false;

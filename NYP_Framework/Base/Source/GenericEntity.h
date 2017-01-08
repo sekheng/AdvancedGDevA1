@@ -27,14 +27,14 @@ public:
 	virtual bool onNotify(const Vector3 &zeEvent);
 	virtual bool onNotify(const float &zeEvent1, const float &zeEvent2);
 	//bool isVisable()
-
+	bool removeItselfFromQuad();
 protected:
 	Mesh* modelMesh;
     QuadTree *whichQuadIsIn;
     EntityBase *boundary_;
     unsigned char howManyLives;
 
-    bool removeItselfFromQuad(); 
+    
 	bool isVisible;
 	bool isKilledByBullet;
 
