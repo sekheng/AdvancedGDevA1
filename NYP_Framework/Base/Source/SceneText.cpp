@@ -169,9 +169,9 @@ void SceneText::Init()
 	// I am testing out scene graph animation
 	CreatePlanet(Vector3(100, 0, 0), Vector3(25, 25, 25));
 
-	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
-	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
-	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	spatialPartition = new QuadTree();
+
+	
 	//CreateAsteroid(Vector3(Math::RandIntMinMax(-50, 50), 0, Math::RandIntMinMax(-50, 50)), Vector3(1, 1, 1));
 	
 	for (int i = 0; i < 2; ++i)
@@ -221,7 +221,7 @@ void SceneText::Init()
     textObj[6] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -fontSize * 2, 0), "", Vector3(fontSize * 2, fontSize * 2, fontSize), Color(0, 1, 0));
     // For GameOver Screen
 
-    spatialPartition = new QuadTree();
+    
     spatialPartition->SetScale(Vector3(1000,1000,1000));
     spatialPartition->SetPosition(Vector3(0, 1, 0));
     QuadTree *zeQuadTree = dynamic_cast<QuadTree*>(spatialPartition);
@@ -232,6 +232,10 @@ void SceneText::Init()
     }
     //zeQuadTree->Update(0);
     spatialPartition->Update(0);
+
+	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
+	CreateAsteroid(Vector3(Math::RandFloatMinMax(-boundaryOfScene->GetScale().x / 10, boundaryOfScene->GetScale().x / 10), Math::RandFloatMinMax(2, 3), Math::RandFloatMinMax(-boundaryOfScene->GetScale().z / 10, boundaryOfScene->GetScale().z / 10)), Vector3(1, 1, 1));
 
     for (size_t num = 0; num < 100; ++num)
     {
@@ -261,6 +265,8 @@ void SceneText::Update(double dt)
 	//vector<EntityBase*> listToDelete;
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
+		if ((*it)->getName().find("MAIN") != std::string::npos)
+			spatialPartition->onNotify(**it);
         (*it)->Update(dt);
 		if ((*it)->getName().find("Projectile") == std::string::npos)
 			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
@@ -707,7 +713,7 @@ void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 	base->InitLOD("PLANET", "PLANET1", "PLANET2");
 	base->onNotify(400.f, 800.f);
 	SceneNode* baseNode = dummyNode->AddChild(base);
-	baseNode->ApplyTranslate(zePos.x + 100, zePos.y + ((zeScale.y * 10)), zePos.z);
+	baseNode->ApplyTranslate(zePos.x + 150, zePos.y + ((zeScale.y * 5)), zePos.z);
 
     GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
     stand1->setName("PlanetRing1");
@@ -845,15 +851,15 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	int random = Math::RandIntMinMax(1, 4);
 	Vector3 dist;
 	
-	GenericEntity* baseCube = Create::Entity("ASTEROID", Vector3(0.0f, 0.0f, 0.0f), zeScale);
-	baseCube->setName("rock" + to_string(ROCK_ID++));
-	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseCube);
+	GenericEntity* baseRock = Create::Entity("ASTEROID", Vector3(0.0f, 0.0f, 0.0f), zeScale);
+	baseRock->setName("rock" + to_string(ROCK_ID++) +"MAIN");
+	SceneNode* baseNode = SceneGraph::GetInstance()->AddNode(baseRock);
 	baseNode->ApplyTranslate(zePos.x, zePos.y, zePos.z);
-	baseCube->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
-	baseCube->onNotify(200.f, 400.f);
+	baseRock->InitLOD("ASTEROID", "ASTEROID1", "ASTEROID2");
+	baseRock->onNotify(200.f, 400.f);
 	UpdateTransformation* baseMtx = new UpdateTransformation();
 	UpdateRotation* baseMtx1 = new UpdateRotation();
-	dist = Vector3(0, 0, 0) - baseNode->getRealPosition();
+	dist = Vector3(0, 0, 0) - zePos;
 	//baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));	  
 	baseMtx->ApplyUpdate(dist.Normalized().x / 5, dist.Normalized().y / 5, dist.Normalized().z / 5);
 	baseMtx->SetSteps(0, Math::RandFloatMinMax(120, 200));
@@ -864,62 +870,77 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	baseNode->SetUpdateTransformation(baseMtx);
 	//baseNode->SetUpdateRotation(baseMtx1);
 
-	GenericEntity* childCube = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f * zeScale.y, 0.0f), zeScale);
-	childCube->setName("rock" + to_string(ROCK_ID++));
-	childCube->InitLOD("ROCK1_1", "ROCK1_2", "ROCK1_3");
-	childCube->onNotify(200.f, 400.f);
-	SceneNode* childNode = baseNode->AddChild(childCube);
+	GenericEntity* childRock = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f * zeScale.y, 0.0f), zeScale);
+	childRock->setName("rock" + to_string(ROCK_ID++));
+	childRock->InitLOD("ROCK1_1", "ROCK1_2", "ROCK1_3");
+	childRock->onNotify(200.f, 400.f);
+	SceneNode* childNode = baseNode->AddChild(childRock);
 	UpdateRotation* childMtx = new UpdateRotation();
 	//UpdateRotation* baseMtx1 = new UpdateRotation();
-	if (random == 1)
-	{
-	 childMtx->ApplyUpdate(1, 0, 0, 1);
-	}
-	else
-	{
-	 childMtx->ApplyUpdate(1, 1, 0, 0);
-	}
-	childMtx->SetSteps(0, 1);
+	
+	childMtx->ApplyUpdate(0.5, 0, 1, 0);
+	
+	childMtx->SetSteps(-160, 160);
 	childMtx->setContinue(true);
 	childNode->SetUpdateRotation(childMtx);
+	//float test = childNode->GetRotate(childNode->temp);
 
-	GenericEntity* grandchildCube = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f* zeScale.y, 0.0f), zeScale);
-	grandchildCube->setName("rock" + to_string(ROCK_ID++));
-	grandchildCube->InitLOD("ROCK2_1", "ROCK2_2", "ROCK2_3");
-	grandchildCube->onNotify(200.f, 400.f);
-	SceneNode* grandchildNode = childNode->AddChild(grandchildCube);
+	GenericEntity* grandchildRock = Create::Entity("ASTEROID", Vector3(0.0f, -2.0f* zeScale.y, 0.0f), zeScale);
+	grandchildRock->setName("rock" + to_string(ROCK_ID++));
+	grandchildRock->InitLOD("ROCK2_1", "ROCK2_2", "ROCK2_3");
+	grandchildRock->onNotify(200.f, 400.f);
+	SceneNode* grandchildNode = baseNode->AddChild(grandchildRock);
 
-	GenericEntity* anotherchildCube = Create::Entity("ASTEROID", Vector3(0.0f, 4.f* zeScale.y, 0.0f* zeScale.z), zeScale);
-	anotherchildCube->setName("rock" + to_string(ROCK_ID++));
-	anotherchildCube->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
-	anotherchildCube->onNotify(100.f, 200.f);
-	SceneNode* anotherchildnode = childNode->AddChild(anotherchildCube);
+	GenericEntity* anotherchildRock = Create::Entity("ASTEROID", Vector3(-2.0f, 0.f* zeScale.y, 0.0f* zeScale.z), zeScale);
+	anotherchildRock->setName("rock" + to_string(ROCK_ID++));
+	anotherchildRock->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
+	anotherchildRock->onNotify(100.f, 200.f);
+	SceneNode* anotherchildnode = childNode->AddChild(anotherchildRock);
 
-	GenericEntity* anotherchildCube2 = Create::Entity("ASTEROID", Vector3(0.0f, 6.f* zeScale.y, 0.0f* zeScale.z), zeScale);
-	anotherchildCube2->setName("rock" + to_string(ROCK_ID++));
-	anotherchildCube2->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
-	anotherchildCube2->onNotify(200.f, 400.f);
-	SceneNode* anotherchildnode2 = anotherchildnode->AddChild(anotherchildCube2);
-	UpdateRotation* childMtx1 = new UpdateRotation();
-	//UpdateRotation* baseMtx1 = new UpdateRotation();
-	if (random == 1)
-	{
-		childMtx1->ApplyUpdate(1, 1, 0, 0);
-	}
-	else
-	{
-		childMtx1->ApplyUpdate(1, 0, 0, 1);
-	}
-	childMtx1->SetSteps(0, 1);
-	childMtx1->setContinue(true);
-	anotherchildnode->SetUpdateRotation(childMtx1);
+	GenericEntity* anotherchildRock2 = Create::Entity("ASTEROID", Vector3(4.0f, 0.f* zeScale.y, 0.0f* zeScale.z), zeScale);
+	anotherchildRock2->setName("rock" + to_string(ROCK_ID++));
+	anotherchildRock2->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
+	anotherchildRock2->onNotify(200.f, 400.f);
+	SceneNode* anotherchildnode2 = childNode->AddChild(anotherchildRock2);
 
-	m_activeList.push_back(baseCube);
-	m_activeList.push_back(childCube);
-	m_activeList.push_back(grandchildCube);
-	m_activeList.push_back(anotherchildCube);
-	m_activeList.push_back(anotherchildCube2);
+	/*GenericEntity* anotherchildRock3 = Create::Entity("ASTEROID", Vector3(0.0f, 0.f* zeScale.y, 4.0f), zeScale);
+	anotherchildRock3->setName("rock" + to_string(ROCK_ID++));
+	anotherchildRock3->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
+	anotherchildRock3->onNotify(100.f, 200.f);
+	SceneNode* anotherchildnode3 = childNode->AddChild(anotherchildRock3);
+
+	GenericEntity* anotherchildRock4 = Create::Entity("ASTEROID", Vector3(0.0f, 0.f* zeScale.y, -4.0f), zeScale);
+	anotherchildRock4->setName("rock" + to_string(ROCK_ID++));
+	anotherchildRock4->InitLOD("ROCK3_1", "ROCK3_2", "ROCK3_3");
+	anotherchildRock4->onNotify(200.f, 400.f);
+	SceneNode* anotherchildnode4 = childNode->AddChild(anotherchildRock4);*/
+	//UpdateRotation* childMtx1 = new UpdateRotation();
+	////UpdateRotation* baseMtx1 = new UpdateRotation();
+	//if (random == 1)
+	//{
+	//	childMtx1->ApplyUpdate(1.2, 1, 0, 0);
+	//}
+	//else
+	//{
+	//	childMtx1->ApplyUpdate(1.2, 0, 0, 1);
+	//}
+	//childMtx1->SetSteps(0, 1);
+	//childMtx1->setContinue(true);
+	//anotherchildnode->SetUpdateRotation(childMtx1);
+
+	m_activeList.push_back(baseRock);
+	m_activeList.push_back(childRock);
+	m_activeList.push_back(grandchildRock);
+	m_activeList.push_back(anotherchildRock);
+	m_activeList.push_back(anotherchildRock2);
+	/*m_activeList.push_back(anotherchildRock3);
+	m_activeList.push_back(anotherchildRock4);*/
 	num_ofAsteroidsLeft += 4;
-		
+	
+	/*spatialPartition->onNotify(*baseRock);
+	spatialPartition->onNotify(*childRock);
+	spatialPartition->onNotify(*grandchildRock);
+	spatialPartition->onNotify(*anotherchildRock);
+	spatialPartition->onNotify(*anotherchildRock2);*/
 	
 }

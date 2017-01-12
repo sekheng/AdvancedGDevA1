@@ -54,10 +54,12 @@ public:
 	SceneNode* setAllChildToShot(EntityBase* theEntity, bool toggle);
 
 	vector<SceneNode*> getTheChildren();
+	Mtx44 rotation;
 protected:
 	int ID;
 	EntityBase* theEntity;
 	SceneNode* theParent;
 
 	vector<SceneNode*> theChildren;
+	
 };

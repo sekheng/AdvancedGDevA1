@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include <iostream>
+#include "GraphicsManager.h"
 using namespace std;
 // Default Constructor
 Transform::Transform(void)
@@ -163,10 +164,39 @@ Mtx44 Transform::GetUpdateRotation()
 Vector3 Transform::getPosition()
 {
 	Vector3 position;
-	position.x = Mtx.a[12];
+
+	position.x = (Mtx.a[12]);
 	position.y = Mtx.a[13];
 	position.z = Mtx.a[14];
+	//position = GetUpdateRotation() * position;
+	/*MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
 
+	modelStack.MultMatrix(this->GetTransform());
+	MS& modelStack2 = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack2.PushMatrix();
+	modelStack2.Translate(position.x, position.y, position.z);
+	position.x = modelStack2.Top().a[12];
+	position.y = modelStack2.Top().a[13];
+	position.z = modelStack2.Top().a[14];
+	modelStack2.PopMatrix();
+	modelStack.PopMatrix();*/
+	/*if (theUpdateRotation != NULL)
+	{*/
+	/*position.x = (Mtx.a[12]);
+	position.y = Mtx.a[13];
+	position.z = Mtx.a[14];
+	position = Mtx * position;*/
+		/*position.x = (Mtx.a[12] * theUpdateRotation->GetUpdateRotation().a[0]) + (Mtx.a[13] * theUpdateRotation->GetUpdateRotation().a[4]) + (Mtx.a[14] * theUpdateRotation->GetUpdateRotation().a[8]);
+		position.y = (Mtx.a[12] * theUpdateRotation->GetUpdateRotation().a[1]) + (Mtx.a[13] * theUpdateRotation->GetUpdateRotation().a[5]) + (Mtx.a[14] * theUpdateRotation->GetUpdateRotation().a[9]);
+		position.z = (Mtx.a[12] * theUpdateRotation->GetUpdateRotation().a[2]) + (Mtx.a[13] * theUpdateRotation->GetUpdateRotation().a[6]) + (Mtx.a[14] * theUpdateRotation->GetUpdateRotation().a[10]);*/
+	//}
+	/*else
+	{
+		position.x = (Mtx.a[12]);
+		position.y = Mtx.a[13];
+		position.z = Mtx.a[14];
+	}*/
 	//position += 
 	return position;
 }

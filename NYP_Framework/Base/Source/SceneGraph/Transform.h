@@ -51,5 +51,5 @@ public:
 	void PrintSelf(void) const;
 
 	Vector3 getPosition();
-
+	AXIS temp = X_AXIS;
 };

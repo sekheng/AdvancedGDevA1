@@ -10,7 +10,7 @@ SceneNode::SceneNode()
 	, theEntity(NULL)
 	, theParent(NULL)
 {
-
+	rotation.SetToIdentity();
 }
 SceneNode::~SceneNode()
 {
@@ -417,6 +417,7 @@ void SceneNode::Update(void)
 	if (theUpdateRotation)
 	{
 		ApplyTransform(GetUpdateRotation());
+		rotation = rotation * GetUpdateRotation();
 	}
 	
 	
@@ -445,7 +446,7 @@ void SceneNode::Render(void)
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-
+	Vector3 temp;
 	if (theEntity)
 	{
 		//modelStack.LoadMatrix(this->GetTransform());
@@ -453,6 +454,7 @@ void SceneNode::Render(void)
 
 		// Render the entity
 		theEntity->Render();
+		temp = this->GetTransform() * theEntity->GetPosition();
 	}
 
 	// Render the children
@@ -467,6 +469,69 @@ void SceneNode::Render(void)
 
 Vector3 SceneNode::getRealPosition()
 {
+	//Vector3 temp, position;
+	//temp.SetZero();
+	//position = rotation * getPosition();
+	//if (theParent == NULL)
+	//	return position;
+	//else
+	//{
+	//	temp += position;
+	//	/*for (SceneNode* tempNode = this; tempNode->theParent != NULL; tempNode = tempNode->theParent)
+	//	{
+	//		temp += (tempNode->theParent->getPosition());
+	//	}*/
+	//	vector<Mtx44> allParentTransform;
+	//	SceneNode* wat = this;
+	//	if (wat != NULL)
+	//	{
+	//		for (SceneNode* tempNode = this; tempNode->theParent != NULL; tempNode = tempNode->theParent)
+	//		{
+
+	//			//temp = tempNode->theParent->Get * temp;
+	//			float x, y, z;
+	//			x = tempNode->theParent->GetRotate(X_AXIS);
+	//			y = tempNode->theParent->GetRotate(Y_AXIS);
+	//			z = tempNode->theParent->GetRotate(Z_AXIS);
+	//			Mtx44 mtx[7];
+	//			mtx[6].SetToScale(1, 1, 1);
+
+	//			mtx[5].SetToTranslation(tempNode->theParent->getPosition().x, tempNode->theParent->getPosition().y, tempNode->theParent->getPosition().z);
+
+	//			mtx[0].SetToRotation(x, 1, 0, 0);
+	//			mtx[1].SetToRotation(y, 0, 1, 0);
+	//			mtx[2].SetToRotation(x, 0, 0, 1);
+
+	//			mtx[3] = mtx[1] * mtx[0] * mtx[2];
+
+	//			Mtx44 tempTransform = mtx[5] * mtx[3] * mtx[6];//t*r*s
+	//			allParentTransform.push_back(tempTransform);
+	//		}
+	//		Mtx44 allTransform;
+	//		allTransform.SetToIdentity();
+	//		for (std::vector<Mtx44>::iterator it = allParentTransform.end() - 1; it > allParentTransform.begin(); --it)
+	//		{
+	//			allTransform = ((*it) * (*(it - 1))) * allTransform;
+	//		}
+	//		temp.Set(allTransform.a[12] + position.x, allTransform.a[13] + position.y, allTransform.a[14] + position.z);
+	//	}
+	//	return temp;
+	//}
+
+
+	///*Vector3 temp;
+	//temp.SetZero();
+	//if (theParent == NULL)
+	//	return getPosition();
+	//else
+	//{
+	//	temp += getPosition();
+	//	for (SceneNode* tempNode = this; tempNode->theParent != NULL; tempNode = tempNode->theParent)
+	//	{
+	//		temp += tempNode->theParent->getPosition();
+	//	}
+	//	return temp;
+	//}*/
 	Vector3 temp;
 	temp.SetZero();
 	if (theParent == NULL)
@@ -480,8 +545,6 @@ Vector3 SceneNode::getRealPosition()
 		}
 		return temp;
 	}
-
-
 }
 
 vector<SceneNode*> SceneNode::getTheChildren()
