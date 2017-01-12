@@ -734,7 +734,7 @@ void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 	base->InitLOD("PLANET", "PLANET1", "PLANET2");
 	base->onNotify(400.f, 800.f);
 	SceneNode* baseNode = dummyNode->AddChild(base);
-	baseNode->ApplyTranslate(zePos.x + 150, zePos.y + ((zeScale.y * 5)), zePos.z);
+	baseNode->ApplyTranslate(zePos.x + 50, zePos.y + ((zeScale.y * 5)), zePos.z);
 
     GenericEntity* stand1 = Create::Entity("PLANET_RING", Vector3(0.0f, 0.0f, 0.0f), zeScale * 2.0f);
     stand1->setName("PlanetRing1");
