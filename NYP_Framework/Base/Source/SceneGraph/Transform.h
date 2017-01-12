@@ -49,6 +49,7 @@ public:
 	Mtx44 GetUpdateRotation();
 	// Print Self
 	void PrintSelf(void) const;
+	void deleteUpdateTransform();
 
 	Vector3 getPosition();
 	AXIS temp = X_AXIS;

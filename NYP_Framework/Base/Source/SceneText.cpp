@@ -266,8 +266,11 @@ void SceneText::Update(double dt)
     for (std::vector<GenericEntity*>::iterator it = m_activeList.begin(), end = m_activeList.end(); it != end; ++it)
     {
 		if ((*it)->getName().find("MAIN") != std::string::npos)
+		{
 			spatialPartition->onNotify(**it);
-        (*it)->Update(dt);
+			
+		}
+		(*it)->Update(dt);
 		if ((*it)->getName().find("Projectile") == std::string::npos)
 			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
 		if ((*it)->GetLODStatus() == true)
@@ -285,7 +288,22 @@ void SceneText::Update(double dt)
 			if ((*it)->getName().find("rock") != std::string::npos && num_ofAsteroidsLeft > 0)
 				--num_ofAsteroidsLeft;
 
-			
+			if ((*it)->getName().find("SPECIAL") != std::string::npos)
+			{
+				SceneNode* temp = SceneGraph::GetInstance()->GetNode(*it)->GetParent();
+				
+				temp->deleteUpdateTransform();
+				UpdateTransformation* baseMtx = new UpdateTransformation();
+
+				Vector3 dist = Vector3(0, 0, 0) - temp->getRealPosition();
+				//baseMtx->ApplyUpdate(Math::RandFloatMinMax(0.01f, 0.05f), 0.0f, Math::RandFloatMinMax(0.01f, 0.05f));	  
+				baseMtx->ApplyUpdate(dist.Normalized().x / 2, dist.Normalized().y / 2, dist.Normalized().z / 2);
+				baseMtx->SetSteps(0, 400);
+				baseMtx->setContinue(true);
+
+				temp->SetUpdateTransformation(baseMtx);
+				
+			}
 			
 			/*for (std::vector<SceneNode*>::iterator it2 = SceneGraph::GetInstance()->GetRoot()->getTheChildren().begin(), end = SceneGraph::GetInstance()->GetRoot()->getTheChildren().end(); it2 != end; ++it2)
 			{
@@ -315,7 +333,10 @@ void SceneText::Update(double dt)
 		{
 			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos());
 		}
-		(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
+		if ((*it)->getName().find("Planet") == std::string::npos)
+		{
+			(*it)->onNotify(playerInfo->GetCurrCamera().GetCameraPos(), playerInfo->GetCurrCamera().GetCameraTarget());
+		}
 	}
 	/*for (std::vector<EntityBase*>::iterator it3 = listToDelete.begin(), end = listToDelete.end(); it3 != end; ++it3)
 	{
@@ -709,7 +730,7 @@ void SceneText::CreatePlanet(const Vector3 &zePos, const Vector3 &zeScale)
 	dummyNode->ApplyTranslate(5, 0, 0);
 
     GenericEntity* base = Create::Entity("PLANET", Vector3(0.0f, 0.0f, 0.0f), zeScale);
-    base->setName("planetBase");
+    base->setName("PlanetBase");
 	base->InitLOD("PLANET", "PLANET1", "PLANET2");
 	base->onNotify(400.f, 800.f);
 	SceneNode* baseNode = dummyNode->AddChild(base);
@@ -871,16 +892,16 @@ void SceneText::CreateAsteroid(const Vector3 &zePos, const Vector3 &zeScale)
 	//baseNode->SetUpdateRotation(baseMtx1);
 
 	GenericEntity* childRock = Create::Entity("ASTEROID", Vector3(0.0f, 2.0f * zeScale.y, 0.0f), zeScale);
-	childRock->setName("rock" + to_string(ROCK_ID++));
+	childRock->setName("rock" + to_string(ROCK_ID++)+ "SPECIAL");
 	childRock->InitLOD("ROCK1_1", "ROCK1_2", "ROCK1_3");
 	childRock->onNotify(200.f, 400.f);
 	SceneNode* childNode = baseNode->AddChild(childRock);
 	UpdateRotation* childMtx = new UpdateRotation();
 	//UpdateRotation* baseMtx1 = new UpdateRotation();
 	
-	childMtx->ApplyUpdate(0.5, 0, 1, 0);
+	childMtx->ApplyUpdate(1, 0, 1, 0);
 	
-	childMtx->SetSteps(-160, 160);
+	childMtx->SetSteps(-100, 100);
 	childMtx->setContinue(true);
 	childNode->SetUpdateRotation(childMtx);
 	//float test = childNode->GetRotate(childNode->temp);

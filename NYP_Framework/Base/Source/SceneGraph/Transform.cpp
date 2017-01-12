@@ -29,6 +29,15 @@ Transform::~Transform(void)
 		theUpdateRotation = NULL;
 	}
 }
+
+void Transform::deleteUpdateTransform()
+{
+	if (theUpdateTransformation)
+	{
+		delete theUpdateTransformation;
+		theUpdateTransformation = NULL;
+	}
+}
 // Apply a translation to the Transformation Matrix
 void Transform::ApplyTranslate(const float dx, const float dy, const float dz)
 {
